@@ -47,6 +47,8 @@ namespace SevenDays.unLOC.Activities.Items
                 return;
 
             DoFade(1, _fadeDuration);
+
+            _canClick = true;
         }
 
         private void OnTriggerExit2D(Collider2D other)
@@ -56,7 +58,7 @@ namespace SevenDays.unLOC.Activities.Items
 
             DoFade(0, _fadeDuration);
 
-            _canClick = true;
+            _canClick = false;
         }
 
         private void DoFade(float value, float duration)
