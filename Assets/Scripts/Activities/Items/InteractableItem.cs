@@ -5,17 +5,17 @@ using DG.Tweening;
 using SevenDays.unLOC.Core;
 
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace SevenDays.unLOC.Activities.Items
 {
     [RequireComponent(typeof(Collider2D))]
-    public class InteractableItem : MonoBehaviour, IPointerClickHandler
+    public class
+        InteractableItem : MonoBehaviour // , IPointerClickHandler // , IPointerEnterHandler, IPointerExitHandler
     {
         public event Action Clicked = delegate { };
 
         [SerializeField]
-        private SpriteRenderer _iconRenderer;
+        private IconView _iconView;
 
         [SerializeField]
         private float _fadeDuration = 0.5f;
@@ -24,21 +24,29 @@ namespace SevenDays.unLOC.Activities.Items
 
         private bool _canClick;
 
+        private void OnValidate()
+        {
+            if (_iconView == null)
+            {
+                _iconView = GetComponentInChildren<IconView>();
+            }
+        }
+
         private void Awake()
         {
             DoFade(0, 0);
         }
 
-        void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
+        private void OnEnable()
         {
-            if (!_canClick)
-                return;
+            _iconView.Clicked += OnClick;
+        }
 
-            _canClick = false;
+        private void OnDisable()
+        {
+            _iconView.Clicked -= OnClick;
 
-            DoFade(0, 0);
-
-            Clicked.Invoke();
+            ClearTween();
         }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -61,12 +69,29 @@ namespace SevenDays.unLOC.Activities.Items
             _canClick = false;
         }
 
+        private void OnClick()
+        {
+            if (!_canClick)
+                return;
+
+            _canClick = false;
+
+            DoFade(0, 0);
+
+            Clicked.Invoke();
+        }
+
         private void DoFade(float value, float duration)
+        {
+            ClearTween();
+
+            _fadeTween = _iconView.Icon.DOFade(value, duration);
+        }
+
+        private void ClearTween()
         {
             if (_fadeTween != null && _fadeTween.IsActive())
                 _fadeTween.Kill();
-
-            _fadeTween = _iconRenderer.DOFade(value, duration);
         }
     }
 }
