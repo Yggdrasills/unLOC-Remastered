@@ -24,6 +24,8 @@ namespace SevenDays.unLOC.Core.Moving.Demo
 
         public void Start()
         {
+            _playerView.IsActive = true;
+            
             _tapZoneView.Clicked += MovePlayerToPoint;
         }
 
@@ -34,7 +36,7 @@ namespace SevenDays.unLOC.Core.Moving.Demo
 
         private void MovePlayerToPoint(Vector3 position)
         {
-            _movingService.Start(_playerView, position);
+            _movingService.StartMove(_playerView, position);
         }
     }
 }

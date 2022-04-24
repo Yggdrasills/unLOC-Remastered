@@ -8,8 +8,10 @@ namespace SevenDays.unLOC.Core.Moving
 {
     public class MovingService : IMovingService
     {
-        public void Start(IMovable movableObject, Vector3 position)
+        public void StartMove(IMovable movableObject, Vector3 position)
         {
+            movableObject.IsActive = true;
+            
             movableObject.MoveToPointAsync(position, CancellationToken.None);
         }
 
