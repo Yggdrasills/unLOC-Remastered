@@ -38,9 +38,7 @@ namespace SevenDays.unLOC.Core.Moving.Demo
 
             if (translation.Equals(0)) return;
             
-            transform.localScale = translation < 0
-                ? new Vector3(-1, transform.localScale.y, 1)
-                : new Vector3(1, transform.localScale.y, 1);
+            RotatePlayer(translation, 0);
                 
             translation *= Time.deltaTime;
 
@@ -75,8 +73,7 @@ namespace SevenDays.unLOC.Core.Moving.Demo
 
         private async UniTask MoveHorizontalAsync(float horizontalPoint)
         {
-            transform.localScale = horizontalPoint < transform.position.x ?
-                new Vector3(-1,transform.localScale.y,1) : new Vector3(1,transform.localScale.y,1);
+            RotatePlayer(horizontalPoint, transform.position.x);
 
             _activeTween = transform.DOMoveX(horizontalPoint, _movingDuration);
 
@@ -85,6 +82,12 @@ namespace SevenDays.unLOC.Core.Moving.Demo
             await _activeTween.AsyncWaitForCompletion();
 
             IsMoving = false;
+        }
+
+        private void RotatePlayer(float horizontalPoint, float comparableValue)
+        {
+            transform.localScale = horizontalPoint < comparableValue ?
+                new Vector3(-1,transform.localScale.y,1) : new Vector3(1,transform.localScale.y,1);
         }
     }
 }
