@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace SevenDays.unLOC.Activities.Items
 {
-    [RequireComponent(typeof(Collider2D))]
+    [RequireComponent(typeof(BoxCollider2D))]
     public class
         InteractableItem : MonoBehaviour // , IPointerClickHandler // , IPointerEnterHandler, IPointerExitHandler
     {
