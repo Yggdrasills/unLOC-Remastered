@@ -7,6 +7,18 @@
       "dependencies": {},
       "hash": "9e2163616b9c527fa9461544e2bcc5f93fd12d83"
     },
+    "com.sevendays.dialogsystem": {
+      "version": "file:sevendays.dialog_system",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.sevendays.localization_service": {
+      "version": "file:sevendays.localization_service",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.collab-proxy": {
       "version": "1.13.5",
       "depth": 0,
