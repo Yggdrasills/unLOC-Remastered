@@ -29,13 +29,16 @@ namespace SevenDays.DialogSystem.Runtime
 
         public void Stop()
         {
+            _tagActions.Clear();
             _window.Hide();
             _story = null;
+            _window.Clicked -= UpdateWindow;
         }
 
         private void Start()
         {
             _story = new Story(_window.DialogJson.text);
+            _window.Clicked += UpdateWindow;
 
             CheckGlobalTags();
 
@@ -45,18 +48,18 @@ namespace SevenDays.DialogSystem.Runtime
 
         private void UpdateWindow()
         {
+            if(_story.canContinue == false)
+                return;
+            
             _window.Reset();
 
-            while (_story.canContinue)
-            {
-                var storyText = _story.Continue();
+            var storyText = _story.Continue();
 
-                CheckTags(_story.currentTags);
+            CheckTags(_story.currentTags);
 
-                var localizedText = _localizationService.GetLocalizedLine(storyText).Trim();
+            var localizedText = _localizationService.GetLocalizedLine(storyText).Trim();
 
-                _window.SetText(localizedText);
-            }
+            _window.SetText(localizedText);
 
             if (_story.currentChoices.Count > 0)
             {
