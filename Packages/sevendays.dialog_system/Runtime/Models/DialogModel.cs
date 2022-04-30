@@ -59,7 +59,7 @@ namespace SevenDays.DialogSystem.Runtime
 
             var localizedText = _localizationService.GetLocalizedLine(storyText).Trim();
 
-            _window.SetText(localizedText);
+            _window.ShowText(localizedText);
 
             if (_story.currentChoices.Count > 0)
             {

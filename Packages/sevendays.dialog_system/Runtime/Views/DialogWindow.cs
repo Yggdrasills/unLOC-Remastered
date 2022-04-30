@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 
 using SevenDays.unLOC.Core;
 
@@ -16,15 +17,25 @@ namespace SevenDays.DialogSystem.Runtime
         [field: SerializeField] public ChoiceView[] ChoiceViews;
         [SerializeField] private TextMeshProUGUI _textArea;
 
+        private WaitForSeconds _revealInterval = new WaitForSeconds(0.01f);
         public event Action Clicked = delegate { };
-        
-        public void SetText(string text)
+
+        void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
+        {
+            Clicked.Invoke();
+        }
+
+        public void ShowText(string text)
         {
             _textArea.text = text;
+
+            StartCoroutine(RevealText());
         }
 
         public void Reset()
         {
+            StopCoroutine(RevealText());
+
             foreach (var choiceView in ChoiceViews)
             {
                 choiceView.Hide();
@@ -32,9 +43,26 @@ namespace SevenDays.DialogSystem.Runtime
             }
         }
 
-        public void OnPointerClick(PointerEventData eventData)
+        private IEnumerator RevealText()
         {
-            Clicked.Invoke();
+            yield return _revealInterval;
+            
+            var totalVisibleCharacters = _textArea.textInfo.characterCount;
+            var counter = 0;
+
+            while (true)
+            {
+                var visibleCount = counter % (totalVisibleCharacters + 1);
+                _textArea.maxVisibleCharacters = visibleCount;
+                
+                if(visibleCount >= totalVisibleCharacters)
+                    yield break;
+
+                counter++;
+
+                yield return _revealInterval;
+            }
+
         }
     }
 }
