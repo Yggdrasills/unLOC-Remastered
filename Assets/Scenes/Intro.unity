@@ -1576,8 +1576,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New TextNew TextNew TextNew TextNew TextNew TextNew TextNew TextNew TextNew
-    TextNew TextNew TextNew TextNew TextNew Text
+  m_text: "Title\n TextNew TextNew TextNew TextNew TextNew TextNew TextNew TextNew
+    TextNew Text"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b912c7bf7e2b04d40a72e4435d1ea051, type: 2}
   m_sharedMaterial: {fileID: -7765115797781973167, guid: b912c7bf7e2b04d40a72e4435d1ea051, type: 2}
@@ -1604,7 +1604,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26.05
+  m_fontSize: 28.4
   m_fontSizeBase: 23.6
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1612,7 +1612,7 @@ MonoBehaviour:
   m_fontSizeMax: 28.4
   m_fontStyle: 0
   m_HorizontalAlignment: 1
-  m_VerticalAlignment: 512
+  m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
