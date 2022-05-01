@@ -10,7 +10,7 @@ namespace SevenDays.unLOC.Activities.Items
 {
     [RequireComponent(typeof(BoxCollider2D))]
     public class
-        InteractableItem : MonoBehaviour // , IPointerClickHandler // , IPointerEnterHandler, IPointerExitHandler
+        InteractableItem : MonoBehaviour
     {
         public event Action Clicked = delegate { };
 
