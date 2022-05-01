@@ -42,8 +42,7 @@ namespace SevenDays.unLOC.Activities.Items
 
         void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
         {
-            Debug.Log("tt2");
-            Clicked?.Invoke();
+            Clicked.Invoke();
         }
     }
 }
