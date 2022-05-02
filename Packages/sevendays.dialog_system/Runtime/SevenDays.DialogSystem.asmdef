@@ -1,0 +1,19 @@
+{
+  "name": "SevenDays.DialogSystem",
+  "rootNamespace": "",
+  "references": [
+    "Ink-Libraries",
+    "SevenDays.LocalizationService",
+    "VContainer",
+    "Unity.TextMeshPro"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}
