@@ -66,7 +66,7 @@ namespace SevenDays.unLOC.Screwdriver
 
             _text.text = ActiveNozzle.ToString();
 
-            await _moveTween;
+            await _moveTween.AsyncWaitForCompletion();
         }
 
         [Serializable]
