@@ -1,4 +1,6 @@
-﻿using SevenDays.unLOC.Services;
+﻿using SevenDays.unLOC.Core.Moving;
+using SevenDays.unLOC.Core.Moving.Demo;
+using SevenDays.unLOC.Services;
 using SevenDays.unLOC.Views;
 
 using UnityEngine;
@@ -18,6 +20,12 @@ namespace SevenDays.unLOC.Core
 
         [SerializeField]
         private PickableBaseView[] _pickables;
+        
+        [SerializeField]
+        private DemoPlayerView _demoPlayerView;
+        
+        [SerializeField]
+        private TapZoneView _tapZoneView;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -28,6 +36,13 @@ namespace SevenDays.unLOC.Core
             {
                 inventoryService.HandlePickable(pickable);
             }
+            
+            builder.RegisterInstance(_tapZoneView);
+            builder.RegisterInstance(_demoPlayerView).AsImplementedInterfaces();
+            
+            builder.Register<IMovingService, MovingService>(Lifetime.Singleton);
+            
+            builder.RegisterEntryPoint<DemoMovingController>();
         }
     }
 }
