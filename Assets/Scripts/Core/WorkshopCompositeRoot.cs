@@ -1,4 +1,7 @@
-﻿using SevenDays.unLOC.Core.Moving;
+﻿using SevenDays.DialogSystem.Components;
+using SevenDays.DialogSystem.Runtime;
+using SevenDays.Localization;
+using SevenDays.unLOC.Core.Moving;
 using SevenDays.unLOC.Core.Moving.Demo;
 using SevenDays.unLOC.Services;
 using SevenDays.unLOC.Views;
@@ -29,8 +32,13 @@ namespace SevenDays.unLOC.Core
 
         protected override void Configure(IContainerBuilder builder)
         {
+            builder.RegisterComponentInHierarchy<MonoBehaviourObjectResolver>()
+                .AsImplementedInterfaces().AsSelf();
+            builder.Register<InjectableMonoBehaviour>(Lifetime.Transient).AsSelf();
+            
             RegisterInventory(builder);
             RegisterPlayerMovement(builder);
+            RegisterDialogues(builder);
         }
 
         private void RegisterInventory(IContainerBuilder builder)
@@ -53,6 +61,12 @@ namespace SevenDays.unLOC.Core
             builder.Register<IMovingService, MovingService>(Lifetime.Singleton);
 
             builder.RegisterEntryPoint<DemoMovingController>();
+        }
+
+        private void RegisterDialogues(IContainerBuilder builder)
+        {
+            builder.Register<LocalizationService>(Lifetime.Singleton).AsSelf();
+            builder.Register<DialogService>(Lifetime.Singleton).AsSelf();
         }
     }
 }

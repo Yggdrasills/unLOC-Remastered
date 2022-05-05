@@ -5,6 +5,7 @@ using DG.Tweening;
 using SevenDays.unLOC.Core;
 
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace SevenDays.unLOC.Activities.Items
 {
@@ -12,6 +13,7 @@ namespace SevenDays.unLOC.Activities.Items
     public class
         InteractableItem : MonoBehaviour
     {
+        [SerializeField] private UnityEvent _clickedUnityEvent;
         public event Action Clicked = delegate { };
 
         [SerializeField]
@@ -82,6 +84,7 @@ namespace SevenDays.unLOC.Activities.Items
             DoFade(0, 0);
 
             Clicked.Invoke();
+            _clickedUnityEvent.Invoke();
         }
 
         private void DoFade(float value, float duration)
