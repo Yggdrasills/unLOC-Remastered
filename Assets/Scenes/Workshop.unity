@@ -360,9 +360,8 @@ Transform:
   m_Children:
   - {fileID: 38072255}
   - {fileID: 44991339}
-  - {fileID: 1308296393}
   m_Father: {fileID: 2144195030}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &24901137
 GameObject:
@@ -708,6 +707,7 @@ GameObject:
   - component: {fileID: 38072256}
   - component: {fileID: 38072258}
   - component: {fileID: 38072257}
+  - component: {fileID: 38072259}
   m_Layer: 0
   m_Name: Poster_Skull_1
   m_TagString: Untagged
@@ -795,7 +795,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _clickedUnityEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 38072259}
+        m_TargetAssemblyTypeName: SevenDays.DialogSystem.Components.DialogProxyComponent,
+          SevenDays.DialogSystem
+        m_MethodName: StartDialog
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _iconView: {fileID: 892344698}
   _fadeDuration: 0.5
 --- !u!61 &38072258
@@ -824,6 +837,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 6, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &38072259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 38072254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51931d75ffee4358b754c230f3c238c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dialogWindow: {fileID: 1318779885}
+  _dialogJson: {fileID: 4900000, guid: 8da6c8468874f7e4abe8d691ff87669e, type: 3}
 --- !u!1 &44991338
 GameObject:
   m_ObjectHideFlags: 0
@@ -836,6 +863,7 @@ GameObject:
   - component: {fileID: 44991340}
   - component: {fileID: 44991342}
   - component: {fileID: 44991341}
+  - component: {fileID: 44991343}
   m_Layer: 0
   m_Name: Poster_Skull_2
   m_TagString: Untagged
@@ -923,7 +951,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _clickedUnityEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 38072259}
+        m_TargetAssemblyTypeName: SevenDays.DialogSystem.Components.DialogProxyComponent,
+          SevenDays.DialogSystem
+        m_MethodName: StartDialog
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _iconView: {fileID: 1472318832}
   _fadeDuration: 0.5
 --- !u!61 &44991342
@@ -952,6 +993,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 6, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &44991343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 44991338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51931d75ffee4358b754c230f3c238c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dialogWindow: {fileID: 1318779885}
+  _dialogJson: {fileID: 4900000, guid: 368e07bc78a38214a807744116fb41e0, type: 3}
 --- !u!1 &49913875
 GameObject:
   m_ObjectHideFlags: 0
@@ -4220,6 +4275,7 @@ GameObject:
   - component: {fileID: 473819241}
   - component: {fileID: 473819243}
   - component: {fileID: 473819242}
+  - component: {fileID: 473819244}
   m_Layer: 0
   m_Name: Part 3
   m_TagString: Untagged
@@ -4256,7 +4312,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _clickedUnityEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 473819244}
+        m_TargetAssemblyTypeName: SevenDays.DialogSystem.Components.DialogProxyComponent,
+          SevenDays.DialogSystem
+        m_MethodName: StartDialog
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _iconView: {fileID: 1060848791}
   _fadeDuration: 0.5
 --- !u!61 &473819243
@@ -4285,6 +4354,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 5.5, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &473819244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 473819240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51931d75ffee4358b754c230f3c238c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dialogWindow: {fileID: 1318779885}
+  _dialogJson: {fileID: 4900000, guid: 1e78a2bce49554f4db7c39d3d096b525, type: 3}
 --- !u!1 &487462942
 GameObject:
   m_ObjectHideFlags: 0
@@ -5391,7 +5474,7 @@ Transform:
   - {fileID: 712299350}
   - {fileID: 2039964316}
   m_Father: {fileID: 2144195030}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &648217581
 GameObject:
@@ -6637,6 +6720,7 @@ GameObject:
   - component: {fileID: 832509915}
   - component: {fileID: 832509917}
   - component: {fileID: 832509916}
+  - component: {fileID: 832509918}
   m_Layer: 0
   m_Name: Part 5
   m_TagString: Untagged
@@ -6673,7 +6757,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _clickedUnityEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 473819244}
+        m_TargetAssemblyTypeName: SevenDays.DialogSystem.Components.DialogProxyComponent,
+          SevenDays.DialogSystem
+        m_MethodName: StartDialog
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _iconView: {fileID: 273607393}
   _fadeDuration: 0.5
 --- !u!61 &832509917
@@ -6702,6 +6799,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 5.5, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &832509918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 832509914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51931d75ffee4358b754c230f3c238c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dialogWindow: {fileID: 1318779885}
+  _dialogJson: {fileID: 4900000, guid: 4b8367740246d254895dca809289d403, type: 3}
 --- !u!1 &852363964
 GameObject:
   m_ObjectHideFlags: 0
@@ -7096,6 +7207,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _injectableMonoBehaviours:
   - {fileID: 487787509}
+  - {fileID: 1308296396}
 --- !u!1 &899883469
 GameObject:
   m_ObjectHideFlags: 0
@@ -8352,7 +8464,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2144195030}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1120220613
 SpriteRenderer:
@@ -8560,7 +8672,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2144195030}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1174246973
 SpriteRenderer:
@@ -9032,13 +9144,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1308296392}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10.94, y: 0.15, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.5600004, y: 2.7800002, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1844461175}
-  m_Father: {fileID: 6961797}
-  m_RootOrder: 2
+  m_Father: {fileID: 2144195030}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1308296394
 MonoBehaviour:
@@ -9421,7 +9533,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2144195030}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1325420356
 SpriteRenderer:
@@ -10002,7 +10114,7 @@ Transform:
   - {fileID: 579458984}
   - {fileID: 1999048893}
   m_Father: {fileID: 2144195030}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1431822810
 GameObject:
@@ -10649,6 +10761,7 @@ GameObject:
   - component: {fileID: 1497171199}
   - component: {fileID: 1497171201}
   - component: {fileID: 1497171200}
+  - component: {fileID: 1497171202}
   m_Layer: 0
   m_Name: Part 6
   m_TagString: Untagged
@@ -10685,7 +10798,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _clickedUnityEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 473819244}
+        m_TargetAssemblyTypeName: SevenDays.DialogSystem.Components.DialogProxyComponent,
+          SevenDays.DialogSystem
+        m_MethodName: StartDialog
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _iconView: {fileID: 309316371}
   _fadeDuration: 0.5
 --- !u!61 &1497171201
@@ -10714,6 +10840,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 5.5, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &1497171202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1497171198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51931d75ffee4358b754c230f3c238c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dialogWindow: {fileID: 1318779885}
+  _dialogJson: {fileID: 4900000, guid: a665c9b50baba9e45971e96ab48a5180, type: 3}
 --- !u!1 &1508726409
 GameObject:
   m_ObjectHideFlags: 0
@@ -10945,6 +11085,7 @@ GameObject:
   - component: {fileID: 1554222210}
   - component: {fileID: 1554222211}
   - component: {fileID: 1554222212}
+  - component: {fileID: 1554222213}
   m_Layer: 0
   m_Name: Note
   m_TagString: Untagged
@@ -11008,9 +11149,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _clickedUnityEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1554222213}
+        m_TargetAssemblyTypeName: SevenDays.DialogSystem.Components.DialogProxyComponent,
+          SevenDays.DialogSystem
+        m_MethodName: StartDialog
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _iconView: {fileID: 408104368}
   _fadeDuration: 0.5
+--- !u!114 &1554222213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1554222209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51931d75ffee4358b754c230f3c238c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dialogWindow: {fileID: 1318779885}
+  _dialogJson: {fileID: 4900000, guid: 07ad0ffc6236839429bdb211c3f6a4e6, type: 3}
 --- !u!1 &1558497808
 GameObject:
   m_ObjectHideFlags: 0
@@ -13080,6 +13248,7 @@ GameObject:
   - component: {fileID: 1888535562}
   - component: {fileID: 1888535564}
   - component: {fileID: 1888535563}
+  - component: {fileID: 1888535565}
   m_Layer: 0
   m_Name: Part 4
   m_TagString: Untagged
@@ -13116,7 +13285,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _clickedUnityEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 473819244}
+        m_TargetAssemblyTypeName: SevenDays.DialogSystem.Components.DialogProxyComponent,
+          SevenDays.DialogSystem
+        m_MethodName: StartDialog
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _iconView: {fileID: 379639100}
   _fadeDuration: 0.5
 --- !u!61 &1888535564
@@ -13145,6 +13327,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 5.5, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &1888535565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1888535561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51931d75ffee4358b754c230f3c238c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dialogWindow: {fileID: 1318779885}
+  _dialogJson: {fileID: 4900000, guid: 85ded6c0818f26c4da4b793f946facad, type: 3}
 --- !u!1 &1894409837
 GameObject:
   m_ObjectHideFlags: 0
@@ -13529,6 +13725,7 @@ GameObject:
   - component: {fileID: 1917448158}
   - component: {fileID: 1917448159}
   - component: {fileID: 1917448160}
+  - component: {fileID: 1917448161}
   m_Layer: 0
   m_Name: Part 2
   m_TagString: Untagged
@@ -13565,7 +13762,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _clickedUnityEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 473819244}
+        m_TargetAssemblyTypeName: SevenDays.DialogSystem.Components.DialogProxyComponent,
+          SevenDays.DialogSystem
+        m_MethodName: StartDialog
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _iconView: {fileID: 143605888}
   _fadeDuration: 0.5
 --- !u!61 &1917448160
@@ -13594,6 +13804,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 5.5, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &1917448161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1917448157}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51931d75ffee4358b754c230f3c238c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dialogWindow: {fileID: 1318779885}
+  _dialogJson: {fileID: 4900000, guid: 9a938d1c167560f429dc34be71dde066, type: 3}
 --- !u!1 &1939468992
 GameObject:
   m_ObjectHideFlags: 0
@@ -14485,6 +14709,7 @@ GameObject:
   - component: {fileID: 2093623584}
   - component: {fileID: 2093623586}
   - component: {fileID: 2093623585}
+  - component: {fileID: 2093623587}
   m_Layer: 0
   m_Name: Part 1
   m_TagString: Untagged
@@ -14521,7 +14746,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _clickedUnityEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 473819244}
+        m_TargetAssemblyTypeName: SevenDays.DialogSystem.Components.DialogProxyComponent,
+          SevenDays.DialogSystem
+        m_MethodName: StartDialog
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _iconView: {fileID: 392238930}
   _fadeDuration: 0.5
 --- !u!61 &2093623586
@@ -14550,6 +14788,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 5.5, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &2093623587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2093623583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51931d75ffee4358b754c230f3c238c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dialogWindow: {fileID: 1318779885}
+  _dialogJson: {fileID: 4900000, guid: ffdec43ac11308645a4b6c4b8358df3d, type: 3}
 --- !u!1 &2100321804
 GameObject:
   m_ObjectHideFlags: 0
@@ -15123,6 +15375,7 @@ Transform:
   - {fileID: 1601422223}
   - {fileID: 487787505}
   - {fileID: 1308355247}
+  - {fileID: 1308296393}
   - {fileID: 6961797}
   - {fileID: 1120220612}
   - {fileID: 1426680730}
