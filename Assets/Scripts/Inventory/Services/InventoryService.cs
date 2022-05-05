@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Cysharp.Threading.Tasks;
 
 using SevenDays.unLOC.Views;
 
-using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace SevenDays.unLOC.Services
 {
-    public class InventoryService
+    public class InventoryService : IInventoryService
     {
         private readonly Dictionary<InventoryItem, InventoryCellView> _inventoryItems;
 
@@ -16,19 +17,24 @@ namespace SevenDays.unLOC.Services
 
         private readonly InventoryView _inventoryView;
 
-        private readonly List<PickableBaseView> _pickableBaseViews;
+        private readonly List<PickableBase> _pickableBaseViews;
 
         public InventoryService(
             InventoryCellView cellPrefab,
             InventoryView inventoryView)
         {
             _inventoryItems = new Dictionary<InventoryItem, InventoryCellView>();
-            _pickableBaseViews = new List<PickableBaseView>();
+            _pickableBaseViews = new List<PickableBase>();
             _cellPrefab = cellPrefab;
             _inventoryView = inventoryView;
         }
 
-        public bool Use(InventoryItem type)
+        bool IInventoryService.Contains(InventoryItem type)
+        {
+            return _inventoryItems.ContainsKey(type);
+        }
+
+        void IInventoryService.Use(InventoryItem type)
         {
             if (_inventoryItems.ContainsKey(type))
             {
@@ -39,45 +45,46 @@ namespace SevenDays.unLOC.Services
                     Object.Destroy(_inventoryItems[type].gameObject);
                     _inventoryItems.Remove(type);
                 }
-
-                return true;
             }
-
-            return false;
+            else
+            {
+                throw new Exception(
+                    $"Method: {nameof(IInventoryService.Use)}. Dictionary doesn't contains typeof {type.ToString()}");
+            }
         }
 
-        public void HandlePickable(PickableBaseView pickableBaseView)
+        public void HandlePickable(PickableBase pickableBase)
         {
-            pickableBaseView.Clicked += () => OnPickableClickAsync(pickableBaseView).Forget();
+            pickableBase.Clicked += () => OnPickableClickAsync(pickableBase).Forget();
         }
 
-        private async UniTaskVoid OnPickableClickAsync(PickableBaseView pickableBaseView)
+        private async UniTaskVoid OnPickableClickAsync(PickableBase pickableBase)
         {
-            if (_pickableBaseViews.Contains(pickableBaseView))
+            if (_pickableBaseViews.Contains(pickableBase))
                 return;
 
-            await pickableBaseView.VisualisePickAsync();
+            await pickableBase.VisualisePickAsync();
 
-            var key = pickableBaseView.Type;
+            var key = pickableBase.Type;
 
             if (!_inventoryItems.ContainsKey(key))
             {
-                var cellItem = CreateItemAsync(pickableBaseView);
+                var cellItem = CreateItemAsync(pickableBase);
                 _inventoryItems.Add(key, cellItem);
             }
 
             _inventoryItems[key].IncrementAmount();
 
-            _pickableBaseViews.Add(pickableBaseView);
+            _pickableBaseViews.Add(pickableBase);
         }
 
-        private InventoryCellView CreateItemAsync(PickableBaseView pickableBaseView)
+        private InventoryCellView CreateItemAsync(PickableBase pickableBase)
         {
             var cellItem = Object.Instantiate(_cellPrefab, _inventoryView.Container);
 
-            cellItem.SetIcon(pickableBaseView.Icon);
+            cellItem.SetIcon(pickableBase.Icon);
 
-            cellItem.SetClickAction(pickableBaseView.GetInventoryClickStrategy());
+            cellItem.SetClickAction(pickableBase.GetInventoryClickStrategy());
 
             return cellItem;
         }

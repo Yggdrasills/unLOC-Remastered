@@ -40,6 +40,8 @@ namespace SevenDays.unLOC.Activities.Items
         private void OnEnable()
         {
             _iconView.Clicked += OnClick;
+
+            Enabled();
         }
 
         private void OnDisable()
@@ -47,6 +49,7 @@ namespace SevenDays.unLOC.Activities.Items
             _iconView.Clicked -= OnClick;
 
             ClearTween();
+            Disabled();
         }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -92,6 +95,14 @@ namespace SevenDays.unLOC.Activities.Items
         {
             if (_fadeTween != null && _fadeTween.IsActive())
                 _fadeTween.Kill();
+        }
+
+        protected virtual void Enabled()
+        {
+        }
+
+        protected virtual void Disabled()
+        {
         }
     }
 }

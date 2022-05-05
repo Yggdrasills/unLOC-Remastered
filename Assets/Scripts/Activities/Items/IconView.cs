@@ -30,12 +30,12 @@ namespace SevenDays.unLOC.Activities.Items
             }
         }
 
-        public void OnPointerEnter(PointerEventData eventData)
+        void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
         {
             _iconRenderer.color = _highlightColor;
         }
 
-        public void OnPointerExit(PointerEventData eventData)
+        void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
         {
             _iconRenderer.color = _defaultColor;
         }

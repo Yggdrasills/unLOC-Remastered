@@ -3,6 +3,7 @@
     public enum InventoryItem
     {
         None,
-        Screwdriver
+        Screwdriver,
+        FlowerScrew
     }
 }
