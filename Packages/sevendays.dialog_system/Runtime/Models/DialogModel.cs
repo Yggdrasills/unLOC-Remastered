@@ -48,8 +48,11 @@ namespace SevenDays.DialogSystem.Runtime
 
         private void UpdateWindow()
         {
-            if(_story.canContinue == false)
-                return;
+            if (_story.canContinue == false)
+            {
+               _window.Hide();
+               return;
+            }
             
             _window.Reset();
 

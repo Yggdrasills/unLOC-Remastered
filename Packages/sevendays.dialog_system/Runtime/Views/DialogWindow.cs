@@ -13,7 +13,7 @@ namespace SevenDays.DialogSystem.Runtime
 {
     public class DialogWindow : UIWindowBase, IPointerClickHandler
     {
-        [field: SerializeField] public TextAsset DialogJson { get; private set; }
+        [field: SerializeField] public TextAsset DialogJson { get; set; }
         [field: SerializeField] public ChoiceView[] ChoiceViews;
         [SerializeField] private TextMeshProUGUI _textArea;
 
