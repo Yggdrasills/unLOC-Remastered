@@ -19,10 +19,10 @@ namespace SevenDays.unLOC.Screwdriver
         private NozzlePair[] _nozzlePairs;
 
         [SerializeField]
-        private Transform _targetPoint;
+        private float _targetPositionY = 220;
 
         [SerializeField]
-        private Transform _initPoint;
+        private float _initPositionY = 0;
 
         [SerializeField]
         private TextMeshProUGUI _text;
@@ -47,26 +47,26 @@ namespace SevenDays.unLOC.Screwdriver
 
             if (ActiveNozzle != Nozzle.None)
             {
-                await AnimateAsync(ActiveNozzle, _initPoint.position);
+                await AnimateAsync(ActiveNozzle, _initPositionY);
             }
 
-            AnimateAsync(nozzle, _targetPoint.position).Forget();
+            AnimateAsync(nozzle, _targetPositionY).Forget();
         }
 
-        private async UniTask AnimateAsync(Nozzle nozzle, Vector3 position)
+        private async UniTask AnimateAsync(Nozzle nozzle, float positionY)
         {
             var targetPair = _nozzlePairs.First(t => t.Nozzle == nozzle);
 
             if (targetPair.Transform == null)
                 return;
 
-            _moveTween = targetPair.Transform.DOLocalMoveY(position.y, _duration);
+            _moveTween = targetPair.Transform.DOAnchorPosY(positionY, _duration);
 
             ActiveNozzle = nozzle;
 
             _text.text = ActiveNozzle.ToString();
 
-            await _moveTween.AsyncWaitForCompletion();
+            await _moveTween;
         }
 
         [Serializable]
@@ -74,10 +74,10 @@ namespace SevenDays.unLOC.Screwdriver
         {
             public Nozzle Nozzle => _nozzle;
 
-            public Transform Transform => _transform;
+            public RectTransform Transform => _transform;
 
             [SerializeField]
-            private Transform _transform;
+            private RectTransform _transform;
 
             [SerializeField]
             private Nozzle _nozzle = Nozzle.None;

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace SevenDays.unLOC.Screwdriver
 {
@@ -12,7 +13,7 @@ namespace SevenDays.unLOC.Screwdriver
         private ScrewdriverView _screwdriverView;
 
         [SerializeField]
-        private SpriteRenderer[] _sprites;
+        private Image[] _images;
 
         [SerializeField]
         private Color _targetColor = Color.green;
@@ -21,13 +22,13 @@ namespace SevenDays.unLOC.Screwdriver
 
         private void Awake()
         {
-            _initColor = _sprites[0].color;
+            _initColor = _images[0].color;
         }
 
         private void OnValidate()
         {
-            if (_sprites == null)
-                _sprites = GetComponentsInChildren<SpriteRenderer>();
+            if (_images == null)
+                _images = GetComponentsInChildren<Image>();
 
             if (_screwdriverView == null)
                 _screwdriverView = GetComponentInParent<ScrewdriverView>();
@@ -50,9 +51,9 @@ namespace SevenDays.unLOC.Screwdriver
 
         private void Colorize(Color color)
         {
-            for (int i = 0; i < _sprites.Length; i++)
+            for (int i = 0; i < _images.Length; i++)
             {
-                _sprites[i].color = color;
+                _images[i].color = color;
             }
         }
     }
