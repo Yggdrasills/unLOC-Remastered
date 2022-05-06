@@ -9,6 +9,11 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
         [SerializeField]
         private TextMeshProUGUI _text;
 
+        private void OnEnable()
+        {
+            _text.text = string.Empty;
+        }
+
         public void DisplayScrewdriverNotFound()
         {
             _text.text = "Тут нужна отвертка";
@@ -27,6 +32,11 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
         public void DisplayNeedNewScrew()
         {
             _text.text = "Нужен новый болтик";
+        }
+
+        public void DisplayIncorrectBolt()
+        {
+            _text.text = "Неправильный болт";
         }
     }
 }

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 using Cysharp.Threading.Tasks;
 
-using SevenDays.unLOC.Views;
+using SevenDays.unLOC.Inventory.Views;
 
 using Object = UnityEngine.Object;
 
-namespace SevenDays.unLOC.Services
+namespace SevenDays.unLOC.Inventory.Services
 {
     public class InventoryService : IInventoryService
     {
@@ -42,8 +42,7 @@ namespace SevenDays.unLOC.Services
 
                 if (_inventoryItems[type].Amount <= 0)
                 {
-                    Object.Destroy(_inventoryItems[type].gameObject);
-                    _inventoryItems.Remove(type);
+                    RemoveItem(type);
                 }
             }
             else
@@ -53,16 +52,27 @@ namespace SevenDays.unLOC.Services
             }
         }
 
-        public void HandlePickable(PickableBase pickableBase)
+        async UniTask IInventoryService.AddAsync(PickableBase pickable)
         {
-            pickableBase.Clicked += () => OnPickableClickAsync(pickableBase).Forget();
+            await AddPickableAsync(pickable);
         }
 
-        private async UniTaskVoid OnPickableClickAsync(PickableBase pickableBase)
+        void IInventoryService.Remove(InventoryItem type)
         {
-            if (_pickableBaseViews.Contains(pickableBase))
-                return;
+            if (_inventoryItems.ContainsKey(type))
+            {
+                RemoveItem(type);
+            }
+        }
 
+        private void RemoveItem(InventoryItem type)
+        {
+            Object.Destroy(_inventoryItems[type].gameObject);
+            _inventoryItems.Remove(type);
+        }
+
+        private async UniTask AddPickableAsync(PickableBase pickableBase)
+        {
             await pickableBase.VisualisePickAsync();
 
             var key = pickableBase.Type;
@@ -75,7 +85,8 @@ namespace SevenDays.unLOC.Services
 
             _inventoryItems[key].IncrementAmount();
 
-            _pickableBaseViews.Add(pickableBase);
+            if (!_pickableBaseViews.Contains(pickableBase))
+                _pickableBaseViews.Add(pickableBase);
         }
 
         private InventoryCellView CreateItemAsync(PickableBase pickableBase)

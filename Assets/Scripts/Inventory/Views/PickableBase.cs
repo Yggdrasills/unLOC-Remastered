@@ -2,14 +2,11 @@
 
 using Cysharp.Threading.Tasks;
 
-using SevenDays.unLOC.Activities.Items;
-using SevenDays.unLOC.Services;
-
 using UnityEngine;
 
-namespace SevenDays.unLOC.Views
+namespace SevenDays.unLOC.Inventory.Views
 {
-    public abstract class PickableBase : InteractableItem
+    public abstract class PickableBase : MonoBehaviour
     {
         [SerializeField]
         private Sprite _icon;

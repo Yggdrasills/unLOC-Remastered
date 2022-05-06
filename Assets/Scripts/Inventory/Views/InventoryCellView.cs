@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace SevenDays.unLOC.Views
+namespace SevenDays.unLOC.Inventory.Views
 {
     public class InventoryCellView : MonoBehaviour
     {
