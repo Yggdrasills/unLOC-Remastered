@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace SevenDays.unLOC.Views
+namespace SevenDays.unLOC.Inventory.Views
 {
     public class InventoryView : MonoBehaviour
     {

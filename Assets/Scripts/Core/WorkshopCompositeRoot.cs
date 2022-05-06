@@ -1,10 +1,13 @@
-﻿using SevenDays.DialogSystem.Components;
+﻿using Cysharp.Threading.Tasks;
+
+using SevenDays.DialogSystem.Components;
 using SevenDays.DialogSystem.Runtime;
 using SevenDays.Localization;
+using SevenDays.unLOC.Activities.Items;
 using SevenDays.unLOC.Core.Moving;
 using SevenDays.unLOC.Core.Moving.Demo;
-using SevenDays.unLOC.Services;
-using SevenDays.unLOC.Views;
+using SevenDays.unLOC.Inventory.Services;
+using SevenDays.unLOC.Inventory.Views;
 
 using UnityEngine;
 
@@ -35,7 +38,7 @@ namespace SevenDays.unLOC.Core
             builder.RegisterComponentInHierarchy<MonoBehaviourObjectResolver>()
                 .AsImplementedInterfaces().AsSelf();
             builder.Register<InjectableMonoBehaviour>(Lifetime.Transient).AsSelf();
-            
+
             RegisterInventory(builder);
             RegisterPlayerMovement(builder);
             RegisterDialogues(builder);
@@ -45,12 +48,14 @@ namespace SevenDays.unLOC.Core
         {
             var inventoryService = new InventoryService(_cellPrefab, _inventoryView);
 
-            foreach (var pickable in _pickables)
+            /*foreach (var pickable in _pickables)
             {
-                inventoryService.HandlePickable(pickable);
-            }
+                var clickable = pickable.GetComponent<ClickableItem>();
 
-            builder.RegisterInstance(inventoryService).AsImplementedInterfaces();
+                clickable.Clicked += () => inventoryService.AddAsync(pickable).Forget();
+            }*/
+
+            builder.RegisterInstance(inventoryService).AsImplementedInterfaces().AsSelf();
         }
 
         private void RegisterPlayerMovement(IContainerBuilder builder)
