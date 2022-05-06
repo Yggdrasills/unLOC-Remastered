@@ -3,9 +3,9 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace SevenDays.unLOC.Core.Moving.Demo
+namespace SevenDays.unLOC.Core.Movement.Demo
 {
-    public class DemoMovingLifetimeScope : LifetimeScope
+    public class DemoMovementLifetimeScope : LifetimeScope
     {
         [SerializeField] private TapZoneView _tapZoneView;
         [SerializeField] private DemoPlayerView _demoPlayerView;
@@ -14,8 +14,8 @@ namespace SevenDays.unLOC.Core.Moving.Demo
         {
             builder.RegisterInstance(_tapZoneView);
             builder.RegisterInstance(_demoPlayerView).AsImplementedInterfaces();
-            builder.Register<IMovingService, MovingService>(Lifetime.Singleton);
-            builder.RegisterEntryPoint<DemoMovingController>();
+            builder.Register<IMovementService, MovementService>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<DemoMovementController>();
         }
     }
 }

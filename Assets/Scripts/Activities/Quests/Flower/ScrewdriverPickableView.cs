@@ -14,7 +14,7 @@ using VContainer;
 namespace SevenDays.unLOC.Activities.Quests.Flower
 {
     [RequireComponent(typeof(ClickableItem))]
-    public class ScrewdriverPickable : PickableBase
+    public class ScrewdriverPickableView : PickableBase
     {
         [SerializeField]
         private ClickableItem _clickableItem;

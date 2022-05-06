@@ -4,9 +4,9 @@ using System.Threading;
 
 using UnityEngine;
 
-namespace SevenDays.unLOC.Core.Moving
+namespace SevenDays.unLOC.Core.Movement
 {
-    public class MovingService : IMovingService
+    public class MovementService : IMovementService
     {
         public void StartMove(IMovable movableObject, Vector3 position)
         {
