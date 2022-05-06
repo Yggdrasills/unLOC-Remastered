@@ -2,7 +2,7 @@
 
 using VContainer.Unity;
 
-namespace Activities.Intro
+namespace SevenDays.unLOC.Activities.Intro
 {
     public class IntroController : IStartable
     {

@@ -2,11 +2,11 @@
 
 using UnityEngine;
 
-namespace Activities.Intro
+namespace SevenDays.unLOC.Activities.Intro
 {
     public class IntroView : MonoBehaviour
     {
-        [field: SerializeField] public DialogWindow DialogWindow { get; private set; }
-        
+        [field: SerializeField]
+        public DialogWindow DialogWindow { get; private set; }
     }
 }

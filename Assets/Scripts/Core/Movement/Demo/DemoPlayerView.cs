@@ -9,7 +9,7 @@ using UnityEngine;
 
 using VContainer.Unity;
 
-namespace SevenDays.unLOC.Core.Moving.Demo
+namespace SevenDays.unLOC.Core.Movement.Demo
 {
     public class DemoPlayerView : MonoBehaviour, IInitializable, IMovable, ITickable
     {
