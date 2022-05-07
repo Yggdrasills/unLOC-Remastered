@@ -45,6 +45,7 @@ namespace SevenDays.DialogSystem.Runtime
 
         private IEnumerator RevealText()
         {
+            _textArea.maxVisibleCharacters = 0;
             yield return _revealInterval;
             
             var totalVisibleCharacters = _textArea.textInfo.characterCount;
