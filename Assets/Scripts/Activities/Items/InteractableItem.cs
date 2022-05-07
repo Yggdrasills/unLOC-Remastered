@@ -10,11 +10,12 @@ using UnityEngine.Events;
 namespace SevenDays.unLOC.Activities.Items
 {
     [RequireComponent(typeof(BoxCollider2D))]
-    public class
-        InteractableItem : MonoBehaviour
+    public class InteractableItem : MonoBehaviour
     {
-        [SerializeField] private UnityEvent _clickedUnityEvent;
         public event Action Clicked = delegate { };
+
+        [SerializeField]
+        private UnityEvent _clickedUnityEvent;
 
         [SerializeField]
         private IconView _iconView;
@@ -32,6 +33,8 @@ namespace SevenDays.unLOC.Activities.Items
             {
                 _iconView = GetComponentInChildren<IconView>();
             }
+
+            Validated();
         }
 
         private void Awake()
@@ -105,6 +108,10 @@ namespace SevenDays.unLOC.Activities.Items
         }
 
         protected virtual void Disabled()
+        {
+        }
+
+        protected virtual void Validated()
         {
         }
     }

@@ -1,16 +1,12 @@
-﻿using System;
-
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace SevenDays.unLOC.Activities.Items
 {
     [RequireComponent(typeof(SpriteRenderer),
         typeof(BoxCollider2D))]
-    public class IconView : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
+    public class IconView : ClickableItem, IPointerEnterHandler, IPointerExitHandler
     {
-        public event Action Clicked = delegate { };
-
         public SpriteRenderer Icon => _iconRenderer;
 
         [SerializeField]
@@ -38,11 +34,6 @@ namespace SevenDays.unLOC.Activities.Items
         void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
         {
             _iconRenderer.color = _defaultColor;
-        }
-
-        void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
-        {
-            Clicked.Invoke();
         }
     }
 }

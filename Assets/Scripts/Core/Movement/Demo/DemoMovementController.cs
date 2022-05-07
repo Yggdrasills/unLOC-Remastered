@@ -4,21 +4,21 @@ using UnityEngine;
 
 using VContainer.Unity;
 
-namespace SevenDays.unLOC.Core.Moving.Demo
+namespace SevenDays.unLOC.Core.Movement.Demo
 {
-    public class DemoMovingController : IStartable, IDisposable
+    public class DemoMovementController : IStartable, IDisposable
     {
         private readonly TapZoneView _tapZoneView;
-        private readonly IMovingService _movingService;
+        private readonly IMovementService _movementService;
         private readonly DemoPlayerView _playerView;
 
-        public DemoMovingController(
+        public DemoMovementController(
             TapZoneView tapZoneView,
-            IMovingService movingService,
+            IMovementService movementService,
             DemoPlayerView playerView)
         {
             _tapZoneView = tapZoneView;
-            _movingService = movingService;
+            _movementService = movementService;
             _playerView = playerView;
         }
 
@@ -36,7 +36,7 @@ namespace SevenDays.unLOC.Core.Moving.Demo
 
         private void MovePlayerToPoint(Vector3 position)
         {
-            _movingService.StartMove(_playerView, position);
+            _movementService.StartMove(_playerView, position);
         }
     }
 }

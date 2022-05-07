@@ -4,7 +4,7 @@ using Cysharp.Threading.Tasks;
 
 using UnityEngine;
 
-namespace SevenDays.unLOC.Core.Moving
+namespace SevenDays.unLOC.Core.Movement
 {
     public interface IMovable
     {

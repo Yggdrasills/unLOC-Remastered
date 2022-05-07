@@ -1,8 +1,8 @@
 using UnityEngine;
 
-namespace SevenDays.unLOC.Core.Moving
+namespace SevenDays.unLOC.Core.Movement
 {
-    public interface IMovingService
+    public interface IMovementService
     {
         void StartMove(IMovable movable, Vector3 movingPosition);
         
