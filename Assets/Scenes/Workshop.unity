@@ -952,7 +952,7 @@ MonoBehaviour:
   _clickedUnityEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 38072259}
+      - m_Target: {fileID: 44991343}
         m_TargetAssemblyTypeName: SevenDays.DialogSystem.Components.DialogProxyComponent,
           SevenDays.DialogSystem
         m_MethodName: StartDialog
@@ -6083,6 +6083,7 @@ GameObject:
   - component: {fileID: 712299350}
   - component: {fileID: 712299352}
   - component: {fileID: 712299351}
+  - component: {fileID: 712299353}
   m_Layer: 0
   m_Name: Box First Cell
   m_TagString: Untagged
@@ -6119,7 +6120,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _clickedUnityEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 712299353}
+        m_TargetAssemblyTypeName: SevenDays.DialogSystem.Components.DialogProxyComponent,
+          SevenDays.DialogSystem
+        m_MethodName: StartDialog
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _iconView: {fileID: 1169052533}
   _fadeDuration: 0.5
 --- !u!61 &712299352
@@ -6148,6 +6162,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 5, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &712299353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 712299349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51931d75ffee4358b754c230f3c238c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dialogWindow: {fileID: 1318779885}
+  _dialogJson: {fileID: 4900000, guid: c4fb43bd13c9dd94f8417a3d34303717, type: 3}
 --- !u!1 &722810799
 GameObject:
   m_ObjectHideFlags: 0
@@ -6758,7 +6786,7 @@ MonoBehaviour:
   _clickedUnityEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 473819244}
+      - m_Target: {fileID: 832509918}
         m_TargetAssemblyTypeName: SevenDays.DialogSystem.Components.DialogProxyComponent,
           SevenDays.DialogSystem
         m_MethodName: StartDialog
@@ -7206,8 +7234,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _injectableMonoBehaviours:
+  - {fileID: 712299353}
+  - {fileID: 1999048896}
+  - {fileID: 38072259}
+  - {fileID: 44991343}
+  - {fileID: 473819244}
   - {fileID: 487787509}
+  - {fileID: 832509918}
   - {fileID: 1308296396}
+  - {fileID: 1497171202}
+  - {fileID: 1554222213}
+  - {fileID: 1888535565}
+  - {fileID: 1917448161}
+  - {fileID: 2093623587}
 --- !u!1 &899883469
 GameObject:
   m_ObjectHideFlags: 0
@@ -9269,19 +9308,23 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4568283786967087016, guid: d726d2f15175462469f7f136c87bb6e7, type: 3}
       propertyPath: m_text
-      value: text
+      value: texttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttext
       objectReference: {fileID: 0}
     - target: {fileID: 4568283786967087016, guid: d726d2f15175462469f7f136c87bb6e7, type: 3}
       propertyPath: m_margin.w
-      value: 4.25898
+      value: -3.7492294
       objectReference: {fileID: 0}
     - target: {fileID: 4568283786967087016, guid: d726d2f15175462469f7f136c87bb6e7, type: 3}
       propertyPath: m_margin.x
-      value: 6.3884277
+      value: 13.39563
       objectReference: {fileID: 0}
     - target: {fileID: 4568283786967087016, guid: d726d2f15175462469f7f136c87bb6e7, type: 3}
       propertyPath: m_margin.y
       value: 4.258995
+      objectReference: {fileID: 0}
+    - target: {fileID: 4568283786967087016, guid: d726d2f15175462469f7f136c87bb6e7, type: 3}
+      propertyPath: m_margin.z
+      value: 1.0010376
       objectReference: {fileID: 0}
     - target: {fileID: 4568283786967087016, guid: d726d2f15175462469f7f136c87bb6e7, type: 3}
       propertyPath: m_fontAsset
@@ -9297,23 +9340,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4568283786967087016, guid: d726d2f15175462469f7f136c87bb6e7, type: 3}
       propertyPath: m_hasFontAssetChanged
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4568283786967087017, guid: d726d2f15175462469f7f136c87bb6e7, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 314.53
+      value: 481.8972
       objectReference: {fileID: 0}
     - target: {fileID: 4568283786967087017, guid: d726d2f15175462469f7f136c87bb6e7, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 132.66
+      value: 122.6497
       objectReference: {fileID: 0}
     - target: {fileID: 4568283786967087017, guid: d726d2f15175462469f7f136c87bb6e7, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -104.24
+      value: -112.851456
       objectReference: {fileID: 0}
     - target: {fileID: 4568283786967087017, guid: d726d2f15175462469f7f136c87bb6e7, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00055218
+      value: 5.0057
       objectReference: {fileID: 0}
     - target: {fileID: 4568283787800560546, guid: d726d2f15175462469f7f136c87bb6e7, type: 3}
       propertyPath: m_LocalScale.x
@@ -9329,11 +9372,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4568283787800560546, guid: d726d2f15175462469f7f136c87bb6e7, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 156.20001
+      value: 243
       objectReference: {fileID: 0}
     - target: {fileID: 4568283787800560546, guid: d726d2f15175462469f7f136c87bb6e7, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -44.97
+      value: -98
       objectReference: {fileID: 0}
     - target: {fileID: 4568283788036414948, guid: d726d2f15175462469f7f136c87bb6e7, type: 3}
       propertyPath: m_Name
@@ -9429,19 +9472,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4568283788300199416, guid: d726d2f15175462469f7f136c87bb6e7, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 523
+      value: 707.5986
       objectReference: {fileID: 0}
     - target: {fileID: 4568283788300199416, guid: d726d2f15175462469f7f136c87bb6e7, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 132.6638
+      value: 127.82
       objectReference: {fileID: 0}
     - target: {fileID: 4568283788300199416, guid: d726d2f15175462469f7f136c87bb6e7, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 3.7993
       objectReference: {fileID: 0}
     - target: {fileID: 4568283788300199416, guid: d726d2f15175462469f7f136c87bb6e7, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -243.29486
+      value: -330.09
       objectReference: {fileID: 0}
     - target: {fileID: 4568283788948486976, guid: d726d2f15175462469f7f136c87bb6e7, type: 3}
       propertyPath: m_IsActive
@@ -9465,11 +9508,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7040041938230123616, guid: d726d2f15175462469f7f136c87bb6e7, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 156.2
+      value: 242.99998
       objectReference: {fileID: 0}
     - target: {fileID: 7040041938230123616, guid: d726d2f15175462469f7f136c87bb6e7, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -79.5
+      value: -132.53
       objectReference: {fileID: 0}
     - target: {fileID: 7040041938715375342, guid: d726d2f15175462469f7f136c87bb6e7, type: 3}
       propertyPath: m_LocalScale.x
@@ -9485,11 +9528,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7040041938715375342, guid: d726d2f15175462469f7f136c87bb6e7, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 156.20001
+      value: 243
       objectReference: {fileID: 0}
     - target: {fileID: 7040041938715375342, guid: d726d2f15175462469f7f136c87bb6e7, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -115.94
+      value: -168.97
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d726d2f15175462469f7f136c87bb6e7, type: 3}
@@ -10799,7 +10842,7 @@ MonoBehaviour:
   _clickedUnityEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 473819244}
+      - m_Target: {fileID: 1497171202}
         m_TargetAssemblyTypeName: SevenDays.DialogSystem.Components.DialogProxyComponent,
           SevenDays.DialogSystem
         m_MethodName: StartDialog
@@ -13286,7 +13329,7 @@ MonoBehaviour:
   _clickedUnityEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 473819244}
+      - m_Target: {fileID: 1888535565}
         m_TargetAssemblyTypeName: SevenDays.DialogSystem.Components.DialogProxyComponent,
           SevenDays.DialogSystem
         m_MethodName: StartDialog
@@ -13763,7 +13806,7 @@ MonoBehaviour:
   _clickedUnityEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 473819244}
+      - m_Target: {fileID: 1917448161}
         m_TargetAssemblyTypeName: SevenDays.DialogSystem.Components.DialogProxyComponent,
           SevenDays.DialogSystem
         m_MethodName: StartDialog
@@ -14127,6 +14170,7 @@ GameObject:
   - component: {fileID: 1999048893}
   - component: {fileID: 1999048895}
   - component: {fileID: 1999048894}
+  - component: {fileID: 1999048896}
   m_Layer: 0
   m_Name: Books
   m_TagString: Untagged
@@ -14163,7 +14207,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _clickedUnityEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1999048896}
+        m_TargetAssemblyTypeName: SevenDays.DialogSystem.Components.DialogProxyComponent,
+          SevenDays.DialogSystem
+        m_MethodName: StartDialog
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _iconView: {fileID: 517911502}
   _fadeDuration: 0.5
 --- !u!61 &1999048895
@@ -14192,6 +14249,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 5, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &1999048896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1999048892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51931d75ffee4358b754c230f3c238c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dialogWindow: {fileID: 1318779885}
+  _dialogJson: {fileID: 4900000, guid: 7bc74b8f109e175488cdaa5fce816f10, type: 3}
 --- !u!1 &2024538499
 GameObject:
   m_ObjectHideFlags: 0
@@ -14747,7 +14818,7 @@ MonoBehaviour:
   _clickedUnityEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 473819244}
+      - m_Target: {fileID: 2093623587}
         m_TargetAssemblyTypeName: SevenDays.DialogSystem.Components.DialogProxyComponent,
           SevenDays.DialogSystem
         m_MethodName: StartDialog
