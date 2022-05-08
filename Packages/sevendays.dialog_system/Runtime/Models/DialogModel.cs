@@ -14,6 +14,7 @@ namespace SevenDays.DialogSystem.Runtime
 
         private Story _story;
         private Dictionary<string, Queue<Action>> _tagActions;
+        public event Action Ended = delegate { };
 
         public DialogModel(
             DialogWindow window,
@@ -51,6 +52,7 @@ namespace SevenDays.DialogSystem.Runtime
             if (_story.canContinue == false)
             {
                _window.Hide();
+               Ended?.Invoke();
                return;
             }
             
