@@ -36,6 +36,9 @@ namespace SevenDays.DialogSystem.Runtime
         {
             StopCoroutine(RevealText());
 
+            if(ChoiceViews.Length is 0)
+                return;
+            
             foreach (var choiceView in ChoiceViews)
             {
                 choiceView.Hide();
