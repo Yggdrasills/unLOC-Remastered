@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+using JetBrains.Annotations;
+
 using SevenDays.unLOC.Activities.Items;
 using SevenDays.unLOC.Activities.Quests.Flower.Screwdriver;
 using SevenDays.unLOC.Inventory;
@@ -12,7 +14,7 @@ using VContainer;
 
 namespace SevenDays.unLOC.Activities.Quests.Flower
 {
-    public class FlowerQuest : MonoBehaviour
+    public class FlowerQuest : QuestBase
     {
         public bool FirstStagePassed { get; private set; }
 
@@ -42,8 +44,8 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
         private List<GameObject> _brokenPlugList;
         private List<EmptyPlugView> _emptyPlugList;
 
-        [Inject]
-        private void Construct(IInventoryService inventory)
+        [Inject, UsedImplicitly]
+        private void Construct([NotNull] IInventoryService inventory)
         {
             _inventory = inventory;
         }
@@ -114,17 +116,17 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
 
                 _emptyPlugList.Remove(plug);
 
-                if (!_emptyPlugList.Any())
-                {
-                    // todo: complete quest
-                    gameObject.SetActive(false);
+                if (_emptyPlugList.Any())
+                    return;
 
-                    if (_inventory.Contains(InventoryItem.ScrewEdge3))
-                        _inventory.Remove(InventoryItem.ScrewEdge3);
+                CompleteQuest();
+                gameObject.SetActive(false);
 
-                    if (_inventory.Contains(InventoryItem.ScrewRadiation))
-                        _inventory.Remove(InventoryItem.ScrewRadiation);
-                }
+                if (_inventory.Contains(InventoryItem.ScrewEdge3))
+                    _inventory.Remove(InventoryItem.ScrewEdge3);
+
+                if (_inventory.Contains(InventoryItem.ScrewRadiation))
+                    _inventory.Remove(InventoryItem.ScrewRadiation);
             }
 
             else if (_inventory.Contains(InventoryItem.ScrewEdge3) ||
