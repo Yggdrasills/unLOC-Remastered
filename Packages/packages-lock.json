@@ -7,6 +7,13 @@
       "dependencies": {},
       "hash": "9e2163616b9c527fa9461544e2bcc5f93fd12d83"
     },
+    "com.intothedev.savesystem": {
+      "version": "https://github.com/IntoTheDev/Save-System-for-Unity.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "adb145f538d83254b34864897a5aaeb0b054abdc"
+    },
     "com.sevendays.dialogsystem": {
       "version": "file:sevendays.dialog_system",
       "depth": 0,
