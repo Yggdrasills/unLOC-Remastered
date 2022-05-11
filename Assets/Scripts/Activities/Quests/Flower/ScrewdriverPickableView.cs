@@ -2,6 +2,8 @@
 
 using Cysharp.Threading.Tasks;
 
+using JetBrains.Annotations;
+
 using SevenDays.unLOC.Activities.Items;
 using SevenDays.unLOC.Inventory;
 using SevenDays.unLOC.Inventory.Services;
@@ -32,7 +34,7 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
                 _clickableItem = GetComponent<ClickableItem>();
         }
 
-        [Inject]
+        [Inject, UsedImplicitly]
         private void Construct(IInventoryService inventory)
         {
             _inventory = inventory;
