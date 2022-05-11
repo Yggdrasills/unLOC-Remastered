@@ -5,7 +5,6 @@ using UnityEngine.EventSystems;
 
 namespace SevenDays.unLOC.Activities.Items
 {
-    [RequireComponent(typeof(Collider2D))]
     public class ClickableItem : MonoBehaviour, IPointerClickHandler
     {
         public event Action Clicked = delegate { };
