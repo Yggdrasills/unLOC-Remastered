@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using SevenDays.Localization;
-
 using Ink.Runtime;
+
+using SevenDays.Localization;
 
 namespace SevenDays.DialogSystem.Runtime
 {
@@ -11,10 +11,9 @@ namespace SevenDays.DialogSystem.Runtime
     {
         private readonly DialogWindow _window;
         private readonly LocalizationService _localizationService;
+        private readonly Dictionary<string, Queue<Action>> _tagActions;
 
         private Story _story;
-        private Dictionary<string, Queue<Action>> _tagActions;
-        public event Action Ended = delegate { };
 
         public DialogModel(
             DialogWindow window,
@@ -24,7 +23,6 @@ namespace SevenDays.DialogSystem.Runtime
             _window = window;
             _localizationService = localizationService;
             _tagActions = tagActions;
-
             Start();
         }
 
@@ -51,11 +49,11 @@ namespace SevenDays.DialogSystem.Runtime
         {
             if (_story.canContinue == false)
             {
-               _window.Hide();
-               Ended?.Invoke();
-               return;
+                _window.Hide();
+                _window.GetDialogueEndAction().Invoke();
+                return;
             }
-            
+
             _window.Reset();
 
             var storyText = _story.Continue();
