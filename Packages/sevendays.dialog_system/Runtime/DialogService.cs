@@ -11,8 +11,6 @@ namespace SevenDays.DialogSystem.Runtime
         private DialogModel _currentDialog;
         private Dictionary<string, Queue<Action>> _tagActions;
 
-        public event Action DialogEnded;
-
         public DialogService(LocalizationService localizationService)
         {
             _localizationService = localizationService;
@@ -24,7 +22,6 @@ namespace SevenDays.DialogSystem.Runtime
 
             _tagActions ??= new Dictionary<string, Queue<Action>>();
             _currentDialog = new DialogModel(dialogWindow, _localizationService, _tagActions);
-            _currentDialog.Ended += DialogEnded;
         }
 
         public void StopCurrentDialog()

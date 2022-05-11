@@ -18,6 +18,11 @@ namespace SevenDays.unLOC.Activities.Items
         [SerializeField]
         private Color _defaultColor = Color.white;
 
+        private void Awake()
+        {
+            CanInteract = false;
+        }
+
         private void OnValidate()
         {
             if (_iconRenderer == null)
@@ -28,11 +33,17 @@ namespace SevenDays.unLOC.Activities.Items
 
         void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
         {
+            if (!CanInteract)
+                return;
+
             _iconRenderer.color = _highlightColor;
         }
 
         void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
         {
+            if (!CanInteract)
+                return;
+
             _iconRenderer.color = _defaultColor;
         }
     }

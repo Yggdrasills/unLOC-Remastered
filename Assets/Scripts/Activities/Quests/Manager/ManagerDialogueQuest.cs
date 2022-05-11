@@ -2,6 +2,9 @@
 {
     public class ManagerDialogueQuest : QuestBase
     {
-        // todo: subscribe to dialogue end
+        public void CompleteDialogue()
+        {
+            CompleteQuest();
+        }
     }
 }

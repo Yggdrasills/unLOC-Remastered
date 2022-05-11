@@ -62,9 +62,7 @@ namespace SevenDays.unLOC.Activities.Items
             if (!other.GetComponent<PlayerTag>())
                 return;
 
-            DoFade(1, _fadeDuration);
-
-            _canClick = true;
+            ToggleEntry(true);
         }
 
         private void OnTriggerExit2D(Collider2D other)
@@ -72,9 +70,7 @@ namespace SevenDays.unLOC.Activities.Items
             if (!other.GetComponent<PlayerTag>())
                 return;
 
-            DoFade(0, _fadeDuration);
-
-            _canClick = false;
+            ToggleEntry(false);
         }
 
         private void OnClick()
@@ -84,10 +80,18 @@ namespace SevenDays.unLOC.Activities.Items
 
             _canClick = false;
 
-            DoFade(0, 0);
+            ToggleEntry(false);
 
             Clicked.Invoke();
             _clickedUnityEvent.Invoke();
+        }
+
+        private void ToggleEntry(bool isEnter)
+        {
+            DoFade(isEnter ? 1 : 0, _fadeDuration);
+
+            _canClick = isEnter;
+            _iconView.CanInteract = isEnter;
         }
 
         private void DoFade(float value, float duration)
