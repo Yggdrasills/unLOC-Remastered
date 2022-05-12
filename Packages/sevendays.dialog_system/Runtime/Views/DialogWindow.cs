@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 
+using Cysharp.Threading.Tasks;
+
 using SevenDays.unLOC.Core;
 
 using TMPro;
@@ -25,8 +27,14 @@ namespace SevenDays.DialogSystem.Runtime
         [SerializeField]
         private TextMeshProUGUI _textArea;
 
-        private WaitForSeconds _revealInterval = new WaitForSeconds(0.01f);
+        private WaitForSeconds _revealInterval = new WaitForSeconds(0.1f);
         public event Action Clicked = delegate { };
+
+        private UniTaskCompletionSource _revealCompletionSource;
+
+        private int _totalVisibleCharacters;
+
+        private Coroutine _revealRoutine;
 
         void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
         {
@@ -38,16 +46,29 @@ namespace SevenDays.DialogSystem.Runtime
             return delegate { _dialogueEnded?.Invoke(); };
         }
 
-        public void ShowText(string text)
+        public async UniTask ShowTextAsync(string text)
         {
-            _textArea.text = text;
+            _revealCompletionSource = new UniTaskCompletionSource();
 
-            StartCoroutine(RevealText());
+            _textArea.text = text;
+            _totalVisibleCharacters = _textArea.textInfo.characterCount;
+
+            _revealRoutine = StartCoroutine(RevealText());
+
+            await _revealCompletionSource.Task;
         }
 
-        public void Reset()
+        public void RevealImmediately()
         {
-            StopCoroutine(RevealText());
+            StopRevealing();
+
+            _textArea.maxVisibleCharacters = _totalVisibleCharacters;
+            _revealCompletionSource.TrySetCanceled();
+        }
+
+        public void ResetToDefault()
+        {
+            StopRevealing();
 
             if (ChoiceViews.Length is 0)
                 return;
@@ -59,21 +80,31 @@ namespace SevenDays.DialogSystem.Runtime
             }
         }
 
+        private void StopRevealing()
+        {
+            if (_revealRoutine != null)
+            {
+                StopCoroutine(_revealRoutine);
+                _revealRoutine = null;
+            }
+        }
+
         private IEnumerator RevealText()
         {
             _textArea.maxVisibleCharacters = 0;
             yield return _revealInterval;
 
-            var totalVisibleCharacters = _textArea.textInfo.characterCount;
             var visibleCount = 0;
 
-            for (int counter = 0; visibleCount < totalVisibleCharacters; counter++)
+            for (int counter = 0; visibleCount < _totalVisibleCharacters; counter++)
             {
-                visibleCount = counter % (totalVisibleCharacters + 1);
+                visibleCount = counter % (_totalVisibleCharacters + 1);
                 _textArea.maxVisibleCharacters = visibleCount;
 
                 yield return _revealInterval;
             }
+
+            _revealCompletionSource.TrySetResult();
         }
     }
 }

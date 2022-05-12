@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Cysharp.Threading.Tasks;
+
 using Ink.Runtime;
 
 using SevenDays.Localization;
@@ -14,6 +16,8 @@ namespace SevenDays.DialogSystem.Runtime
         private readonly Dictionary<string, Queue<Action>> _tagActions;
 
         private Story _story;
+
+        private bool _isRevealing;
 
         public DialogModel(
             DialogWindow window,
@@ -45,8 +49,18 @@ namespace SevenDays.DialogSystem.Runtime
             UpdateWindow();
         }
 
+        // todo: add delay between clicks
         private void UpdateWindow()
         {
+            if (_isRevealing)
+            {
+                _window.RevealImmediately();
+                _isRevealing = false;
+
+                ShowChoices();
+                return;
+            }
+
             if (_story.canContinue == false)
             {
                 _window.Hide();
@@ -54,7 +68,7 @@ namespace SevenDays.DialogSystem.Runtime
                 return;
             }
 
-            _window.Reset();
+            _window.ResetToDefault();
 
             var storyText = _story.Continue();
 
@@ -62,21 +76,34 @@ namespace SevenDays.DialogSystem.Runtime
 
             var localizedText = _localizationService.GetLocalizedLine(storyText).Trim();
 
-            _window.ShowText(localizedText);
-
-            if (_story.currentChoices.Count > 0)
+            async UniTaskVoid UpdateWindowAsync()
             {
-                for (int i = 0; i < _story.currentChoices.Count; i++)
-                {
-                    var choice = _story.currentChoices[i];
+                _isRevealing = true;
 
-                    var choiceText = _localizationService.GetLocalizedLine(choice.text).Trim();
-                    var choiceView = _window.ChoiceViews[i];
-                    choiceView.SetText(choiceText);
-                    choiceView.Show();
+                await _window.ShowTextAsync(localizedText);
 
-                    choiceView.Button.onClick.AddListener(() => OnClickChoiceButton(choice));
-                }
+                _isRevealing = false;
+                ShowChoices();
+            }
+
+            UpdateWindowAsync().Forget();
+        }
+
+        private void ShowChoices()
+        {
+            if (_story.currentChoices.Count <= 0)
+                return;
+
+            for (int i = 0; i < _story.currentChoices.Count; i++)
+            {
+                var choice = _story.currentChoices[i];
+
+                var choiceText = _localizationService.GetLocalizedLine(choice.text).Trim();
+                var choiceView = _window.ChoiceViews[i];
+                choiceView.SetText(choiceText);
+                choiceView.Show();
+
+                choiceView.Button.onClick.AddListener(() => OnClickChoiceButton(choice));
             }
         }
 
