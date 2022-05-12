@@ -1,8 +1,8 @@
 ﻿using SevenDays.DialogSystem.Components;
 using SevenDays.DialogSystem.Runtime;
 using SevenDays.Localization;
-using SevenDays.unLOC.Core.Movement;
-using SevenDays.unLOC.Core.Movement.Demo;
+/*using SevenDays.unLOC.Core.Movement;
+using SevenDays.unLOC.Core.Movement.Demo;*/
 using SevenDays.unLOC.Inventory.Services;
 using SevenDays.unLOC.Inventory.Views;
 
@@ -21,11 +21,11 @@ namespace SevenDays.unLOC.Core
         [SerializeField]
         private InventoryView _inventoryView;
 
-        [SerializeField]
+        /*[SerializeField]
         private DemoPlayerView _demoPlayerView;
 
         [SerializeField]
-        private TapZoneView _tapZoneView;
+        private TapZoneView _tapZoneView;*/
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -36,7 +36,7 @@ namespace SevenDays.unLOC.Core
             builder.Register<InjectableMonoBehaviour>(Lifetime.Transient).AsSelf();
 
             RegisterInventory(builder);
-            RegisterPlayerMovement(builder);
+            // RegisterPlayerMovement(builder);
             RegisterDialogues(builder);
         }
 
@@ -48,7 +48,7 @@ namespace SevenDays.unLOC.Core
                 .AsImplementedInterfaces();
         }
 
-        private void RegisterPlayerMovement(IContainerBuilder builder)
+        /*private void RegisterPlayerMovement(IContainerBuilder builder)
         {
             builder.RegisterInstance(_tapZoneView);
             builder.RegisterInstance(_demoPlayerView).AsImplementedInterfaces();
@@ -56,7 +56,7 @@ namespace SevenDays.unLOC.Core
             builder.Register<IMovementService, MovementService>(Lifetime.Singleton);
 
             builder.RegisterEntryPoint<DemoMovementController>();
-        }
+        }*/
 
         private void RegisterDialogues(IContainerBuilder builder)
         {
