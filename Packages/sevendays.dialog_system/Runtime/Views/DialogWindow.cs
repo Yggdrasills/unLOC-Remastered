@@ -27,7 +27,7 @@ namespace SevenDays.DialogSystem.Runtime
         [SerializeField]
         private TextMeshProUGUI _textArea;
 
-        private WaitForSeconds _revealInterval = new WaitForSeconds(0.1f);
+        private WaitForSeconds _revealInterval = new WaitForSeconds(0.01f);
         public event Action Clicked = delegate { };
 
         private UniTaskCompletionSource _revealCompletionSource;
@@ -51,7 +51,7 @@ namespace SevenDays.DialogSystem.Runtime
             _revealCompletionSource = new UniTaskCompletionSource();
 
             _textArea.text = text;
-            _totalVisibleCharacters = _textArea.textInfo.characterCount;
+            
 
             _revealRoutine = StartCoroutine(RevealText());
 
@@ -93,6 +93,8 @@ namespace SevenDays.DialogSystem.Runtime
         {
             _textArea.maxVisibleCharacters = 0;
             yield return _revealInterval;
+            
+            _totalVisibleCharacters = _textArea.textInfo.characterCount;
 
             var visibleCount = 0;
 

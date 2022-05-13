@@ -62,6 +62,10 @@ namespace SevenDays.DialogSystem.Runtime
             }
 
             if (_story.canContinue == false)
+                return;
+
+            if (_story.canContinue == false &&
+                _story.currentChoices.Count == 0)
             {
                 _window.Hide();
                 _window.GetDialogueEndAction().Invoke();
