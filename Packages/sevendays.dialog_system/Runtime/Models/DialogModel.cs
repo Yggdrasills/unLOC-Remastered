@@ -7,6 +7,8 @@ using Ink.Runtime;
 
 using SevenDays.Localization;
 
+using UnityEngine;
+
 namespace SevenDays.DialogSystem.Runtime
 {
     public class DialogModel
@@ -16,8 +18,9 @@ namespace SevenDays.DialogSystem.Runtime
         private readonly Dictionary<string, Queue<Action>> _tagActions;
 
         private Story _story;
-
         private bool _isRevealing;
+        private float _delayBetweenClicks = 0.1f;
+        private float _lastClickTime;
 
         public DialogModel(
             DialogWindow window,
@@ -49,9 +52,11 @@ namespace SevenDays.DialogSystem.Runtime
             UpdateWindow();
         }
 
-        // todo: add delay between clicks
         private void UpdateWindow()
         {
+            if(ClicksIsTooOften())
+                return;
+
             if (_isRevealing)
             {
                 _window.RevealImmediately();
@@ -140,6 +145,16 @@ namespace SevenDays.DialogSystem.Runtime
         {
             _story.ChooseChoiceIndex(choice.index);
             UpdateWindow();
+        }
+
+        private bool ClicksIsTooOften()
+        {
+            if (Time.time == 0) 
+                return false;
+            
+            var value = Time.time - _lastClickTime < _delayBetweenClicks;
+            _lastClickTime = Time.time;
+            return value;
         }
     }
 }
