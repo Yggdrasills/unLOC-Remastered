@@ -51,10 +51,5 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
 
             return UniTask.CompletedTask;
         }
-
-        public override Action GetInventoryClickStrategy()
-        {
-            return delegate { };
-        }
     }
 }
