@@ -54,7 +54,7 @@ namespace SevenDays.DialogSystem.Runtime
 
         private void UpdateWindow()
         {
-            if(ClicksIsTooOften())
+            if (ClicksIsTooOften())
                 return;
 
             if (_isRevealing)
@@ -66,8 +66,6 @@ namespace SevenDays.DialogSystem.Runtime
                 return;
             }
 
-            if (_story.canContinue == false)
-                return;
 
             if (_story.canContinue == false &&
                 _story.currentChoices.Count == 0)
@@ -77,6 +75,9 @@ namespace SevenDays.DialogSystem.Runtime
                 return;
             }
 
+            if (_story.canContinue == false)
+                return;
+            
             _window.ResetToDefault();
 
             var storyText = _story.Continue();
@@ -149,9 +150,9 @@ namespace SevenDays.DialogSystem.Runtime
 
         private bool ClicksIsTooOften()
         {
-            if (Time.time == 0) 
+            if (Time.time == 0)
                 return false;
-            
+
             var value = Time.time - _lastClickTime < _delayBetweenClicks;
             _lastClickTime = Time.time;
             return value;
