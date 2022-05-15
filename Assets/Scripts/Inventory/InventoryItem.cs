@@ -6,6 +6,8 @@
         Screwdriver,
         ScrewEdge3,
         ScrewRadiation,
-        ScrewSpanner
+        ScrewSpanner,
+        Bottle,
+        Wires
     }
 }

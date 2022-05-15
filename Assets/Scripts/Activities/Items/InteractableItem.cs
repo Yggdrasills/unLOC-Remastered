@@ -21,6 +21,9 @@ namespace SevenDays.unLOC.Activities.Items
         private IconView _iconView;
 
         [SerializeField]
+        private BoxCollider2D _collider;
+
+        [SerializeField]
         private float _fadeDuration = 0.5f;
 
         private Tween _fadeTween;
@@ -29,6 +32,11 @@ namespace SevenDays.unLOC.Activities.Items
 
         private void OnValidate()
         {
+            if (_collider == null)
+            {
+                _collider = GetComponent<BoxCollider2D>();
+            }
+
             if (_iconView == null)
             {
                 _iconView = GetComponentInChildren<IconView>();
@@ -55,6 +63,13 @@ namespace SevenDays.unLOC.Activities.Items
 
             ClearTween();
             Disabled();
+        }
+
+        public void Disable()
+        {
+            _iconView.gameObject.SetActive(false);
+            _collider.enabled = false;
+            enabled = false;
         }
 
         private void OnTriggerEnter2D(Collider2D other)
