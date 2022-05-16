@@ -4,6 +4,7 @@
     {
         public static DialogTag EngLocalization = new DialogTag(1, "engLocalization");
         public static DialogTag DefaultLocalization = new DialogTag(2, "defaultLocalization");
+        public static DialogTag GrandmaQuestStart = new DialogTag(3, "grandma_quest_start");
 
         public DialogTag(int id, string name) : base(id, name)
         {

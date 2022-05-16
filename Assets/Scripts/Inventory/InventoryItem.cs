@@ -8,6 +8,7 @@
         ScrewRadiation,
         ScrewSpanner,
         Bottle,
-        Wires
+        Wires,
+        Glasses
     }
 }

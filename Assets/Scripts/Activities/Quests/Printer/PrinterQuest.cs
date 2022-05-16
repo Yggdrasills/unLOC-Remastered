@@ -1,4 +1,6 @@
-﻿using JetBrains.Annotations;
+﻿using Cysharp.Threading.Tasks;
+
+using JetBrains.Annotations;
 
 using SevenDays.unLOC.Activities.Items;
 using SevenDays.unLOC.Inventory;
@@ -49,7 +51,7 @@ namespace SevenDays.unLOC.Activities.Quests.Printer
 
             var wires = Instantiate(_wiresPrefab);
 
-            _inventory.AddAsync(wires);
+            _inventory.AddAsync(wires).Forget();
 
             _printerView.Disable();
 
