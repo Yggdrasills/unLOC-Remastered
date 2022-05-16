@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &3461947941122586992
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4005549803729193056, guid: 46d790d1552ff7d4ca0e966bef1ce604, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 3137071193885061955, guid: b40a0b3ea7acf9d418865d90a9a51fc3, type: 3}
+    - target: {fileID: 4005549803729193056, guid: 46d790d1552ff7d4ca0e966bef1ce604, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005549803729193057, guid: 46d790d1552ff7d4ca0e966bef1ce604, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005549803729193057, guid: 46d790d1552ff7d4ca0e966bef1ce604, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005549803729193057, guid: 46d790d1552ff7d4ca0e966bef1ce604, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005549803729193057, guid: 46d790d1552ff7d4ca0e966bef1ce604, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005549803729193057, guid: 46d790d1552ff7d4ca0e966bef1ce604, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005549803729193057, guid: 46d790d1552ff7d4ca0e966bef1ce604, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005549803729193057, guid: 46d790d1552ff7d4ca0e966bef1ce604, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005549803729193057, guid: 46d790d1552ff7d4ca0e966bef1ce604, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005549803729193057, guid: 46d790d1552ff7d4ca0e966bef1ce604, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005549803729193057, guid: 46d790d1552ff7d4ca0e966bef1ce604, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005549803729193057, guid: 46d790d1552ff7d4ca0e966bef1ce604, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005549803729193061, guid: 46d790d1552ff7d4ca0e966bef1ce604, type: 3}
+      propertyPath: m_Name
+      value: TrashCan_Lego
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005549803729193062, guid: 46d790d1552ff7d4ca0e966bef1ce604, type: 3}
+      propertyPath: _bindItem
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 46d790d1552ff7d4ca0e966bef1ce604, type: 3}
