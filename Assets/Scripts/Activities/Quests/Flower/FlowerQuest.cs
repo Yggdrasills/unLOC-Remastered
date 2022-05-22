@@ -120,6 +120,7 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
                     return;
 
                 CompleteQuest();
+                // todo: switch flower sprite
                 gameObject.SetActive(false);
 
                 if (_inventory.Contains(InventoryItem.ScrewEdge3))
