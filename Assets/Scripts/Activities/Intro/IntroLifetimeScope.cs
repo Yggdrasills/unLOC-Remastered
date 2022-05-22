@@ -1,3 +1,5 @@
+using SaveSystem;
+
 using SevenDays.DialogSystem.Runtime;
 using SevenDays.Localization;
 
@@ -22,6 +24,8 @@ namespace SevenDays.unLOC.Activities.Intro
 
             builder.Register<LocalizationService>(Lifetime.Singleton).AsSelf();
             builder.Register<DialogService>(Lifetime.Singleton).AsSelf();
+            
+            builder.UseSaveSystem();
         }
     }
 }
