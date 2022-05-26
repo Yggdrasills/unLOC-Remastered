@@ -63,7 +63,7 @@ namespace SevenDays.DialogSystem.Runtime
             StopRevealing();
 
             _textArea.maxVisibleCharacters = _totalVisibleCharacters;
-            _revealCompletionSource.TrySetCanceled();
+            _revealCompletionSource?.TrySetCanceled();
         }
 
         public void ResetToDefault()

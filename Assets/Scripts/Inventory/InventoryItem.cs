@@ -9,6 +9,7 @@
         ScrewSpanner,
         Bottle,
         Wires,
-        Glasses
+        Glasses,
+        Condenser
     }
 }
