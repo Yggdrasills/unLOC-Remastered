@@ -2,16 +2,16 @@
 
 using UnityEngine;
 
-namespace SevenDays.unLOC.Activities.Quests.Flower
+namespace SevenDays.unLOC.Activities.Quests.Mechanoid
 {
-    [AddComponentMenu(nameof(LocBoxView) + " [Flower Quest]")]
+    [AddComponentMenu(nameof(LocBoxView) + " [Mechanoid Quest]")]
     public class LocBoxView : InteractableItem
     {
         [SerializeField]
-        private FlowerQuest _flowerQuest;
+        private MechanoidQuest _mechanoidQuest;
 
         [SerializeField]
-        private GameObject _screwCanvas;
+        private GameObject _condenserCanvas;
 
         protected override void Enabled()
         {
@@ -25,13 +25,9 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
 
         private void OnClick()
         {
-            if (_flowerQuest.FirstStagePassed)
+            if (_mechanoidQuest.IsLastStage())
             {
-                _screwCanvas.SetActive(true);
-            }
-            else
-            {
-                // todo: play dialogue
+                _condenserCanvas.SetActive(true);
             }
         }
     }

@@ -1,8 +1,9 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+
+using Cysharp.Threading.Tasks;
 
 using JetBrains.Annotations;
 
-using SevenDays.unLOC.Activities.Items;
 using SevenDays.unLOC.Inventory;
 using SevenDays.unLOC.Inventory.Services;
 
@@ -14,6 +15,16 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
 {
     public class MechanoidQuest : QuestBase
     {
+        private enum Stages
+        {
+            None,
+            Wires,
+            PowerButton,
+            PullOffCondenser,
+            SetCondenser,
+            RunMechanoid
+        }
+
         [SerializeField]
         private MechanoidTextDisplayer _textDisplayer;
 
@@ -21,44 +32,21 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
         private MechanoidView _mechanoidView;
 
         [SerializeField]
-        private ClickableItem _powerButton;
+        private MechanoidItemView _powerButtonView;
 
         [SerializeField]
-        private ClickableItem _wires;
+        private MechanoidItemView _wiresView;
 
         [SerializeField]
-        private ClickableItem _condenser;
-
-        // todo: вынести работу со спрайтами в отдельный класс
-        [SerializeField]
-        private SpriteRenderer _powerButtonRenderer;
+        private MechanoidItemView _condenserView;
 
         [SerializeField]
-        private SpriteRenderer _motherboardRenderer;
+        private MechanoidItemView _motherBoardView;
 
         [SerializeField]
-        private SpriteRenderer _wiresRenderer;
+        private MechanoidItemView _rivetView;
 
-        [SerializeField]
-        private SpriteRenderer _condenserRenderer;
-
-        [SerializeField]
-        private SpriteRenderer _rivetRenderer;
-
-        [SerializeField]
-        private Sprite _burntMotherboardSprite;
-
-        [SerializeField]
-        private Sprite _wiresSprite;
-
-        [SerializeField]
-        private Sprite _burntCondenserSprite;
-
-        [SerializeField]
-        private Sprite _activePowerButtonSprite;
-
-        [SerializeField]
-        private Sprite _inactivePowerButtonSprite;
+        private Stages _activeStage = Stages.Wires;
 
         private IInventoryService _inventoryService;
 
@@ -71,34 +59,61 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
 
         private void OnEnable()
         {
-            _powerButton.Clicked += OnPowerClick;
-            _wires.Clicked += OnWiresClick;
-            _condenser.Clicked += OnCondenserClick;
+            _powerButtonView.Clicked += OnPowerClick;
+            _wiresView.Clicked += OnWiresClick;
+            _condenserView.Clicked += OnCondenserClick;
+
+            _textDisplayer.ResetToDefault();
         }
 
         private void OnDisable()
         {
-            _powerButton.Clicked -= OnPowerClick;
-            _wires.Clicked -= OnWiresClick;
-            _condenser.Clicked -= OnCondenserClick;
+            _powerButtonView.Clicked -= OnPowerClick;
+            _wiresView.Clicked -= OnWiresClick;
+            _condenserView.Clicked -= OnCondenserClick;
+        }
+
+        public bool IsLastStage()
+        {
+            return _activeStage == Stages.SetCondenser;
         }
 
         private void OnPowerClick()
         {
             async UniTaskVoid OnClick()
             {
-                if (_wiresRenderer.sprite != _wiresSprite)
+                if (_activeStage == Stages.PowerButton)
                 {
-                    await _textDisplayer.DisplayTooEasySarcasm();
+                    _motherBoardView.SetSprite();
+                    _rivetView.SetSprite();
+
+                    _powerButtonView.ResetToDefault();
+
+                    gameObject.SetActive(false);
+
+                    await _mechanoidView.PlayExplosion();
+
+                    // todo: await Loc replica
+
+                    gameObject.SetActive(true);
+
+                    _activeStage = Stages.PullOffCondenser;
+                }
+                else if (_activeStage == Stages.Wires)
+                {
+                    _textDisplayer.DisplayTooEasySarcasm().Forget();
+                }
+                else if (_activeStage == Stages.RunMechanoid)
+                {
+                    // note: visual delay
+                    await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
+                    gameObject.SetActive(false);
+
+                    // todo: enable mechanoid
                 }
                 else
                 {
-                    // todo: display Loc text
-                    _mechanoidView.PlayExplosion().Forget();
-                    _motherboardRenderer.sprite = _burntMotherboardSprite;
-                    _condenserRenderer.sprite = _burntCondenserSprite;
-                    _rivetRenderer.enabled = false;
-                    gameObject.SetActive(false);
+                    _textDisplayer.DisplayCantTurnOn().Forget();
                 }
             }
 
@@ -107,32 +122,54 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
 
         private void OnWiresClick()
         {
-            async UniTaskVoid OnClick()
+            if (_activeStage == Stages.Wires)
             {
                 if (_inventoryService.Contains(InventoryItem.Wires))
                 {
                     _inventoryService.Use(InventoryItem.Wires);
 
-                    _wiresRenderer.sprite = _wiresSprite;
-                    _powerButtonRenderer.sprite = _activePowerButtonSprite;
-                    await _textDisplayer.DisplaySelfPraise();
+                    _wiresView.SetSprite();
+                    _powerButtonView.SetSprite();
+
+                    _textDisplayer.DisplaySelfPraise().Forget();
+
+                    _activeStage = Stages.PowerButton;
                 }
                 else
                 {
-                    await _textDisplayer.DisplayForgotWires();
+                    _textDisplayer.DisplayForgotWires().Forget();
                 }
             }
-
-            OnClick().Forget();
+            else
+            {
+                _textDisplayer.DisplayWiresOnPlace().Forget();
+            }
         }
 
         private void OnCondenserClick()
         {
-            async UniTaskVoid OnClick()
+            if (_activeStage == Stages.PullOffCondenser)
             {
+                _rivetView.gameObject.SetActive(false);
+
+                _activeStage = Stages.SetCondenser;
             }
 
-            OnClick().Forget();
+            else if (_activeStage == Stages.SetCondenser)
+            {
+                if (_inventoryService.Contains(InventoryItem.Condenser))
+                {
+                    _inventoryService.Use(InventoryItem.Condenser);
+                    _condenserView.SetSprite();
+
+                    _activeStage = Stages.RunMechanoid;
+                    _textDisplayer.DisplayTimeToTurnOn().Forget();
+                }
+                else
+                {
+                    _textDisplayer.DisplayNoCondenser().Forget();
+                }
+            }
         }
     }
 }

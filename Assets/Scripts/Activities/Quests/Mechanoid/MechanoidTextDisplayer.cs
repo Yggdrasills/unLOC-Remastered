@@ -18,7 +18,19 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
         private string _forgotWiresText = "Блин, забыл провода взять";
 
         [SerializeField]
-        private string _selfPraiseText = "Гениально. Пора включать тебя, старикан";
+        private string _selfPraiseText = "Гениально. Пора включать тебя, старикан...";
+
+        [SerializeField]
+        private string _timeToTurnOnText = "Попробую включить сейчас";
+
+        [SerializeField]
+        private string _wiresOnPlaceText = "Да тут уже все на месте";
+
+        [SerializeField]
+        private string _noPowerText = "Кажись чего-то забыл...";
+
+        [SerializeField]
+        private string _noCondenserText = "Где же у меня завалялся старенький конденсатор?..";
 
         // todo: подумать на названием
         public UniTask DisplayTooEasySarcasm()
@@ -31,15 +43,40 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
             return Display(_forgotWiresText);
         }
 
+        public UniTask DisplayTimeToTurnOn()
+        {
+            return Display(_timeToTurnOnText);
+        }
+
         public UniTask DisplaySelfPraise()
         {
             return Display(_selfPraiseText);
         }
 
-        private async UniTask Display(string text)
+        public UniTask DisplayCantTurnOn()
+        {
+            return Display(_noPowerText);
+        }
+
+        public UniTask DisplayWiresOnPlace()
+        {
+            return Display(_wiresOnPlaceText);
+        }
+
+        public UniTask DisplayNoCondenser()
+        {
+            return Display(_noCondenserText);
+        }
+
+        public void ResetToDefault()
         {
             _dialogWindow.RevealImmediately();
             _dialogWindow.ResetToDefault();
+        }
+
+        private async UniTask Display(string text)
+        {
+            ResetToDefault();
             await _dialogWindow.ShowTextAsync(text);
         }
     }
