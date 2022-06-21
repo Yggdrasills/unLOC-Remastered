@@ -24,7 +24,7 @@ namespace SevenDays.unLOC.Activities.Quests.RobotPainter
                 _blinkTween.Kill();
         }
 
-        public async UniTask Blink(Color[] colors)
+        public UniTask Blink(Color[] colors)
         {
             int blinksCount = colors.Length;
             float stepDuration = _duration / blinksCount;
@@ -36,9 +36,9 @@ namespace SevenDays.unLOC.Activities.Quests.RobotPainter
             {
                 _blinkTween.Append(_text.DOColor(colors[i], stepDuration));
             }
-
-            //await _blinkTween;
 #pragma warning restore
+
+            return UniTask.CompletedTask;
         }
     }
 }
