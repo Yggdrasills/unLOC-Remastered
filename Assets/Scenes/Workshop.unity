@@ -8376,7 +8376,6 @@ GameObject:
   m_Component:
   - component: {fileID: 898063752}
   - component: {fileID: 898063751}
-  - component: {fileID: 898063753}
   m_Layer: 0
   m_Name: Composite Root
   m_TagString: Untagged
@@ -8400,16 +8399,29 @@ MonoBehaviour:
     TypeName: 
   autoRun: 1
   autoInjectGameObjects:
-  - {fileID: 1575724074}
-  - {fileID: 1940882831}
-  - {fileID: 2114047805}
-  - {fileID: 1751482898}
-  - {fileID: 583439336}
+  - {fileID: 38072254}
+  - {fileID: 44991338}
   - {fileID: 72289328}
-  - {fileID: 1915442493}
-  - {fileID: 1283787612077455828}
-  - {fileID: 2039964315}
+  - {fileID: 473819240}
+  - {fileID: 487787504}
+  - {fileID: 583439336}
+  - {fileID: 712299349}
+  - {fileID: 832509914}
+  - {fileID: 1308296392}
   - {fileID: 1433403509}
+  - {fileID: 1497171198}
+  - {fileID: 1554222209}
+  - {fileID: 1575724074}
+  - {fileID: 1658464756}
+  - {fileID: 1751482898}
+  - {fileID: 1888535561}
+  - {fileID: 1915442493}
+  - {fileID: 1917448157}
+  - {fileID: 1940882831}
+  - {fileID: 1999048892}
+  - {fileID: 2093623583}
+  - {fileID: 2114047805}
+  - {fileID: 1283787612077455828}
   _cellPrefab: {fileID: 3484372127179893562, guid: 59911d8127d15614298fab74d5c2500a, type: 3}
   _inventoryView: {fileID: 1846828555}
 --- !u!4 &898063752
@@ -8426,33 +8438,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &898063753
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 898063750}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 619c30235a6c4bc19ac663fbca47a642, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _injectableMonoBehaviours:
-  - {fileID: 38072259}
-  - {fileID: 44991343}
-  - {fileID: 473819244}
-  - {fileID: 487787509}
-  - {fileID: 712299353}
-  - {fileID: 832509918}
-  - {fileID: 1308296396}
-  - {fileID: 1497171202}
-  - {fileID: 1554222213}
-  - {fileID: 1658464757}
-  - {fileID: 1888535565}
-  - {fileID: 1917448161}
-  - {fileID: 1999048896}
-  - {fileID: 2093623587}
 --- !u!1 &899883469
 GameObject:
   m_ObjectHideFlags: 0
