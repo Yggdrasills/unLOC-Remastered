@@ -13,7 +13,7 @@ using VContainer.Unity;
 
 namespace SevenDays.unLOC.Core
 {
-    public class WorkshopCompositeRoot : LifetimeScope
+    public class WorkshopCompositeRoot : AutoInjectableLifeTimeScope
     {
         [SerializeField]
         private InventoryCellView _cellPrefab;
@@ -29,7 +29,7 @@ namespace SevenDays.unLOC.Core
 
         protected override void Configure(IContainerBuilder builder)
         {
-            builder.RegisterComponentInHierarchy<MonoBehaviourObjectResolver>()
+            builder.RegisterComponentInHierarchy<AutoInjectableLifeTimeScope>()
                 .AsImplementedInterfaces()
                 .AsSelf();
 
