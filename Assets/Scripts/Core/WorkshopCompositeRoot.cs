@@ -33,8 +33,6 @@ namespace SevenDays.unLOC.Core
                 .AsImplementedInterfaces()
                 .AsSelf();
 
-            builder.Register<InjectableMonoBehaviour>(Lifetime.Transient).AsSelf();
-
             RegisterInventory(builder);
             // RegisterPlayerMovement(builder);
             RegisterDialogues(builder);

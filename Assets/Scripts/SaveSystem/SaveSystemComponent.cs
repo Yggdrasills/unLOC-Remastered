@@ -19,7 +19,7 @@ using Object = UnityEngine.Object;
 
 namespace SaveSystem
 {
-    public class SaveSystemComponent : InjectableMonoBehaviour
+    public class SaveSystemComponent : MonoBehaviour
     {
         [SerializeField] private List<ISavableMono> _savableMonos;
         private IEnumerable<ISavable> _savables;
