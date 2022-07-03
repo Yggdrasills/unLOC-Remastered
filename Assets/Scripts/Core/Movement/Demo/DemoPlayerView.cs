@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading;
 
 using Cysharp.Threading.Tasks;
@@ -22,14 +21,18 @@ namespace SevenDays.unLOC.Core.Movement.Demo
         [SerializeField] private Vector2 _playerRootMovableRange;
 
         private Tween _activeTween;
-        private List<string> _walkingAnimations;
+        private string _idleAnimation;
+        private string _walkingAnimations;
+        private string[] _specialIdleAnimations;
 
         public bool IsActive { get; set; }
         public bool IsMoving { get; private set; }
 
         void IInitializable.Initialize()
         {
-            _walkingAnimations = new List<string>() {"PlayerWalkRight", "PlayerWalkLeft"};
+            _idleAnimation = "PlayerIdleLeft";
+            _specialIdleAnimations = new [] {"PlayerIdleLeft_spec", "PlayerIdleLeft_spec2"};
+            _walkingAnimations = "PlayerWalkRight";
         }
 
         UniTask IMovable.MoveToPointAsync(Vector3 point, CancellationToken token)
@@ -45,19 +48,35 @@ namespace SevenDays.unLOC.Core.Movement.Demo
         {
             if (!IsActive) return;
 
-            if (IsMoving) return;
+            if (IsMoving)
+            {
+                _playerAnimator.Play(_idleAnimation);
+                return;
+            }
 
             var translation = Input.GetAxis("Horizontal") * _movingSpeed;
 
-            if (translation.Equals(0)) return;
+            if (translation.Equals(0))
+            {
+                _playerAnimator.Play(_idleAnimation);
+                return;
+            }
+            
+            if (transform.position.x <= _playerRootMovableRange.x && translation < 0)
+            {
+                _playerAnimator.Play(_idleAnimation);
+                return;
+            }
+
+            if (transform.position.x >= _playerRootMovableRange.y && translation > 0)
+            {
+                _playerAnimator.Play(_idleAnimation);
+                return;
+            }
 
             RotatePlayer(translation, 0);
 
             translation *= Time.deltaTime;
-            
-            if (transform.position.x <= _playerRootMovableRange.x && translation < 0) return;
-            
-            if(transform.position.x >= _playerRootMovableRange.y && translation > 0) return;
 
             transform.Translate(translation, 0, 0);
         }
@@ -110,10 +129,9 @@ namespace SevenDays.unLOC.Core.Movement.Demo
         {
             var rotationValue = horizontalPoint < comparableValue ? LeftSideValue : RightSideValue;
             
-            //todo: Reconfigure player animation rotation root to full control rotation state of animations while translating or idle
-                //transform.localScale = new Vector3(rotationValue, transform.localScale.y, 1);
+            transform.localScale = new Vector3(rotationValue, transform.localScale.y, 1);
 
-            _playerAnimator.Play(rotationValue.Equals(LeftSideValue) ? _walkingAnimations[1] : _walkingAnimations[0]);
+            _playerAnimator.Play(_walkingAnimations);
         }
 
         private bool IsInRange(float horizontalPoint, out float inRangePoint)

@@ -1,6 +1,8 @@
 ﻿using SevenDays.DialogSystem.Components;
 using SevenDays.DialogSystem.Runtime;
 using SevenDays.Localization;
+using SevenDays.unLOC.Core.Movement;
+using SevenDays.unLOC.Core.Movement.Demo;
 /*using SevenDays.unLOC.Core.Movement;
 using SevenDays.unLOC.Core.Movement.Demo;*/
 using SevenDays.unLOC.Inventory.Services;
@@ -21,11 +23,8 @@ namespace SevenDays.unLOC.Core
         [SerializeField]
         private InventoryView _inventoryView;
 
-        /*[SerializeField]
-        private DemoPlayerView _demoPlayerView;
-
         [SerializeField]
-        private TapZoneView _tapZoneView;*/
+        private DemoPlayerView _demoPlayerView;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -36,8 +35,8 @@ namespace SevenDays.unLOC.Core
             builder.Register<InjectableMonoBehaviour>(Lifetime.Transient).AsSelf();
 
             RegisterInventory(builder);
-            // RegisterPlayerMovement(builder);
             RegisterDialogues(builder);
+            RegisterMovement(builder);
         }
 
         private void RegisterInventory(IContainerBuilder builder)
@@ -48,20 +47,17 @@ namespace SevenDays.unLOC.Core
                 .AsImplementedInterfaces();
         }
 
-        /*private void RegisterPlayerMovement(IContainerBuilder builder)
-        {
-            builder.RegisterInstance(_tapZoneView);
-            builder.RegisterInstance(_demoPlayerView).AsImplementedInterfaces();
-
-            builder.Register<IMovementService, MovementService>(Lifetime.Singleton);
-
-            builder.RegisterEntryPoint<DemoMovementController>();
-        }*/
-
         private void RegisterDialogues(IContainerBuilder builder)
         {
             builder.Register<LocalizationService>(Lifetime.Singleton).AsSelf();
             builder.Register<DialogService>(Lifetime.Singleton).AsSelf();
+        }
+
+        private void RegisterMovement(IContainerBuilder builder)
+        {
+            builder.RegisterInstance(_demoPlayerView).AsImplementedInterfaces();
+            builder.Register<IMovementService, MovementService>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<DemoMovementController>();
         }
     }
 }
