@@ -8,7 +8,7 @@ using VContainer;
 
 namespace SevenDays.DialogSystem.Components
 {
-    public class DialogProxyComponent : InjectableMonoBehaviour
+    public class DialogProxyComponent : MonoBehaviour
     {
         [SerializeField]
         private DialogWindow _dialogWindow;
