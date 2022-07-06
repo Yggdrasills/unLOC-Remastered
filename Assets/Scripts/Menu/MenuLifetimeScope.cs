@@ -8,6 +8,7 @@ namespace Menu
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterComponentInHierarchy<MenuView>().AsSelf();
+            builder.RegisterComponentInHierarchy<LoadingPanelView>().AsSelf();
             builder.RegisterEntryPoint<MenuController>();
         }
     }
