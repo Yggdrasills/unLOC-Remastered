@@ -5,11 +5,11 @@ namespace SevenDays.unLOC.Core.Movement.Demo
     public class DemoMovementController : IStartable
     {
         private readonly IMovementService _movementService;
-        private readonly DemoPlayerView _playerView;
+        private readonly PlayerView _playerView;
 
         public DemoMovementController(
             IMovementService movementService,
-            DemoPlayerView playerView)
+            PlayerView playerView)
         {
             _movementService = movementService;
             _playerView = playerView;

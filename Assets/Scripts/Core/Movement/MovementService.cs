@@ -8,11 +8,15 @@ namespace SevenDays.unLOC.Core.Movement
 {
     public class MovementService : IMovementService
     {
+        private CancellationTokenSource _movingToken;
         public void StartMove(IMovable movableObject, Vector3 position)
         {
             movableObject.IsActive = true;
             
-            movableObject.MoveToPointAsync(position, CancellationToken.None);
+            _movingToken?.Cancel();
+            _movingToken = new CancellationTokenSource();
+            
+            movableObject.MoveToPointAsync(position, _movingToken.Token);
         }
 
         public void Continue(params IMovable[] movableObjects)

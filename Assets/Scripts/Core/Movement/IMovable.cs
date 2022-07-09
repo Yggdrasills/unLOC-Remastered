@@ -19,5 +19,6 @@ namespace SevenDays.unLOC.Core.Movement
         void PauseMoving();
         
         void StopMoving();
+        void Move(float horizontalDirection);
     }
 }
