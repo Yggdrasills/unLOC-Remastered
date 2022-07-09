@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 
 using Cysharp.Threading.Tasks;
 
@@ -11,7 +12,6 @@ using UnityEditor;
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 using Utils;
 
@@ -24,15 +24,20 @@ namespace Menu
     public class MenuController : IInitializable
     {
         private readonly MenuView _menuView;
+        private readonly LoadingPanelView _loadingPanelView;
         private SaveSystemComponent _saveComponent;
 
         private Dictionary<int, SaveData> _savesList;
         private List<LoadProfileButton> _profileButtons;
         private bool _isShoved;
 
-        public MenuController(MenuView menuView)
+        public MenuController(
+            MenuView menuView, 
+            LoadingPanelView loadingPanelView
+            )
         {
             _menuView = menuView;
+            _loadingPanelView = loadingPanelView;
             _savesList = GetSavesList();
             _profileButtons = new List<LoadProfileButton>();
         }
@@ -49,6 +54,11 @@ namespace Menu
             _menuView.ExitGameButton.onClick.AddListener(HandleExitClicked);
 
             _menuView.MenuButtonPressed += HandleMenuButtonPressed;
+            
+            _menuView.SaveGameButton.gameObject.SetActive(false);
+            
+            if(_savesList.Count == 0)
+                _menuView.LoadGameButton.gameObject.SetActive(false);
         }
 
 
@@ -102,7 +112,7 @@ namespace Menu
 
         private async UniTask LoadSceneAsync(string sceneName)
         {
-            //todo: запустить загрузочный экран
+           await _loadingPanelView.ShowAsync(1, CancellationToken.None);
 
             var activeScene = SceneManager.GetActiveScene();
 
@@ -112,6 +122,7 @@ namespace Menu
             await SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
             SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
             _menuView.Hide();
+            _loadingPanelView.HideAsync(0.3f, CancellationToken.None).Forget();
         }
 
         private void HandleMenuButtonPressed()
@@ -119,6 +130,11 @@ namespace Menu
             if (SceneManager.GetActiveScene().name.Equals(Constants.MenuScene))
                 return;
 
+            _menuView.NewGameButton.gameObject.SetActive(false);
+            _menuView.SaveGameButton.gameObject.SetActive(true);
+            if(_savesList.Count > 0)
+                _menuView.LoadGameButton.gameObject.SetActive(true);
+            
             if (_isShoved)
             {
                 _menuView.Hide();
