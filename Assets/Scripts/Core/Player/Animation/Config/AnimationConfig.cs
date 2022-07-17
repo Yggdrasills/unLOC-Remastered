@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace SevenDays.unLOC.Core.Animations.Config
+namespace SevenDays.unLOC.Core.Player.Animations.Config
 {
     [CreateAssetMenu(menuName = "Configs/" + nameof(AnimationConfig), order = 0)]
     public class AnimationConfig : ScriptableObject

@@ -1,9 +1,7 @@
-﻿using SevenDays.DialogSystem.Components;
-using SevenDays.DialogSystem.Runtime;
+﻿using SevenDays.DialogSystem.Runtime;
 using SevenDays.Localization;
-using SevenDays.unLOC.Core.Animations;
-using SevenDays.unLOC.Core.Animations.Config;
 using SevenDays.unLOC.Core.Movement;
+using SevenDays.unLOC.Core.Player;
 using SevenDays.unLOC.Inventory.Services;
 using SevenDays.unLOC.Inventory.Views;
 
@@ -22,15 +20,12 @@ namespace SevenDays.unLOC.Core
         [SerializeField]
         private InventoryView _inventoryView;
 
-        [Space]
         [SerializeField]
-        private PlayerView _playerView;
+        private Camera _camera;
 
         [SerializeField]
-        private AnimationConfig _animationConfig;
+        private InitializeConfig _initializeConfig;
 
-        [SerializeField]
-        private TapZoneView _tapZoneView;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -59,13 +54,9 @@ namespace SevenDays.unLOC.Core
 
         private void RegisterMovement(IContainerBuilder builder)
         {
-            builder.RegisterComponent(_tapZoneView);
-            builder.RegisterInstance(_animationConfig);
-            builder.RegisterInstance(_playerView).AsImplementedInterfaces();
+            builder.RegisterInstance(_initializeConfig);
             builder.Register<IMovementService, MovementService>(Lifetime.Singleton);
-            builder.RegisterEntryPoint<InputService>().AsSelf();
-            builder.RegisterEntryPoint<MovementController>();
-            builder.RegisterEntryPoint<PlayerAnimationController>();
+            builder.RegisterEntryPoint<PlayerCreator>().WithParameter(_camera).AsSelf();
         }
     }
 }

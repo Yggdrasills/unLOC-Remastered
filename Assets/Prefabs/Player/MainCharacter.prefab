@@ -48,6 +48,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <AnimationCallBackView>k__BackingField: {fileID: 8894858881272318603}
+  <AnimationConfig>k__BackingField: {fileID: 11400000, guid: 1ca80b7db73bf4e4dae8743f269377c3, type: 2}
+  <CharacterScale>k__BackingField:
+    _body: {fileID: 4834755511112734647}
+    _collider: {fileID: 1400528961253330482}
   _movingSpeed: 8
   _playerAnimator: {fileID: 6311138847514304032}
 --- !u!114 &5182356270209609598

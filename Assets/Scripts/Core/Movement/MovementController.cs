@@ -1,24 +1,21 @@
 ﻿using System;
-using System.Linq;
 
 using Cysharp.Threading.Tasks.Linq;
 
-using SevenDays.unLOC.Core.Movement.Demo;
+using SevenDays.unLOC.Core.Player;
 
 using UnityEngine;
 
-using VContainer.Unity;
-
 namespace SevenDays.unLOC.Core.Movement
 {
-    public class MovementController : IStartable, IDisposable
+    public class MovementController : IDisposable
     {
         private readonly TapZoneView _tapZoneView;
         private readonly IMovementService _movementService;
         private readonly IMovable _playerView;
         private readonly InputService _inputService;
 
-        public MovementController(IMovable playerView, IMovementService movementService, TapZoneView tapZoneView,
+        public MovementController(PlayerView playerView, IMovementService movementService, TapZoneView tapZoneView,
             InputService inputService)
         {
             _playerView = playerView;
@@ -39,10 +36,14 @@ namespace SevenDays.unLOC.Core.Movement
         {
             if (direction == 0)
             {
-                if (!_playerView.IsMoving && _inputService.LastDirection != 0)
+                if (!_playerView.IsMoving && _inputService.PreviousInput != 0)
                     _playerView.StopMoving();
                 return;
             }
+
+            if (_playerView.IsMoving)
+                _playerView.StopMoving();
+
             _playerView.Move(direction);
         }
 

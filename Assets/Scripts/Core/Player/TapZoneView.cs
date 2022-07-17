@@ -11,16 +11,19 @@ namespace SevenDays.unLOC.Core.Movement
 
         public BoxCollider2D Collider2D { get; private set; }
 
-        private void OnValidate()
+        private Camera _camera;
+
+        public void SetUp(Camera cam, Vector2 colliderSize, Vector2 position)
         {
-            Collider2D = GetComponent<BoxCollider2D>();
+            _camera = cam;
+            Collider2D = gameObject.AddComponent<BoxCollider2D>();
+            Collider2D.size = colliderSize;
+            transform.position = position;
         }
 
         void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
         {
-            if (Camera.main == null) return;
-
-            var position = Camera.main.ScreenToWorldPoint(eventData.position);
+            var position = _camera.ScreenToWorldPoint(eventData.position);
 
             Clicked.Invoke(position);
         }

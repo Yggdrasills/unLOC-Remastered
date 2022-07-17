@@ -2,18 +2,17 @@
 
 using UnityEngine;
 
-using VContainer.Unity;
-
 namespace SevenDays.unLOC.Core.Movement
 {
-    public class InputService : ITickable
+    public class InputService : MonoBehaviour
     {
         public AsyncReactiveProperty<float> HorizontalInput { get; } = new AsyncReactiveProperty<float>(0);
-        public float LastDirection { get; private set; }
-        void ITickable.Tick()
+        public float PreviousInput { get; private set; }
+
+        private void Update()
         {
             HorizontalInput.Value = Input.GetAxis("Horizontal");
-            LastDirection = HorizontalInput.Value;
+            PreviousInput = HorizontalInput.Value;
         }
     }
 }

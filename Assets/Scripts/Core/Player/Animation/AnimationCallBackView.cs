@@ -2,7 +2,7 @@
 
 using UnityEngine;
 
-namespace SevenDays.unLOC.Core.Animations
+namespace SevenDays.unLOC.Core.Player.Animations
 {
     /// <summary>
     /// Class handle animation event

@@ -5,24 +5,37 @@ using Cysharp.Threading.Tasks;
 
 using DG.Tweening;
 
-using SevenDays.unLOC.Core.Animations;
+using SaveSystem;
+
+using SevenDays.unLOC.Core.Movement;
+using SevenDays.unLOC.Core.Player.Animations;
+using SevenDays.unLOC.Core.Player.Animations.Config;
+
+using ToolBox.Serialization;
 
 using UnityEngine;
 
-using VContainer;
+using Utils;
 
-namespace SevenDays.unLOC.Core.Movement
+namespace SevenDays.unLOC.Core.Player
 {
-    public class PlayerView : MonoBehaviour, IMovable
+    public class PlayerView : MonoBehaviour, IMovable, ISavableMono
     {
         [field: SerializeField]
         public AnimationCallBackView AnimationCallBackView { get; private set; }
+
+        [field: SerializeField]
+        public AnimationConfig AnimationConfig { get; private set; }
+
+        [field: SerializeField]
+        public CharacterScale CharacterScale { get; private set; }
 
         public event Action StartMove = delegate { };
 
         public event Action Stay = delegate { };
 
         public Animator PlayerAnimator => _playerAnimator;
+
 
         [SerializeField]
         private float _movingSpeed = 2;
@@ -42,8 +55,7 @@ namespace SevenDays.unLOC.Core.Movement
 
         public bool IsMoving { get; private set; }
 
-        [Inject]
-        public void Construct(TapZoneView tapZoneView)
+        public void SetRange(TapZoneView tapZoneView)
         {
             _playerRootMovableRange = new Vector2(-1, 1) * (tapZoneView.Collider2D.size.x / 2 - 1);
         }
@@ -62,9 +74,6 @@ namespace SevenDays.unLOC.Core.Movement
             if (!IsActive) return;
 
             var translation = horizontalDirection * _movingSpeed;
-
-            if (IsMoving)
-                StopMoving();
 
             if (transform.position.x >= _playerRootMovableRange.y && translation > 0 ||
                 transform.position.x <= _playerRootMovableRange.x && translation < 0)
@@ -101,7 +110,7 @@ namespace SevenDays.unLOC.Core.Movement
             }
         }
 
-        public void StopMoving()
+        void IMovable.StopMoving()
         {
             if (_activeTween is { active: true })
             {
@@ -147,6 +156,21 @@ namespace SevenDays.unLOC.Core.Movement
             StartMove.Invoke();
 
             IsMoving = true;
+        }
+
+        void ISavableMono.Save()
+        {
+            DataSerializer.Save(Constants.PlayerPosition, transform.position.x);
+        }
+
+        void ISavableMono.Load()
+        {
+            if (DataSerializer.TryLoad<float>(Constants.PlayerPosition, out var x))
+            {
+                var transformPosition = transform.position;
+                transformPosition.x = x;
+                transform.position = transformPosition;
+            }
         }
     }
 }

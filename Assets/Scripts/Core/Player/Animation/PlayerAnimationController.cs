@@ -3,18 +3,15 @@ using System.Threading;
 
 using Cysharp.Threading.Tasks;
 
-using SevenDays.unLOC.Core.Animations.Config;
-using SevenDays.unLOC.Core.Movement;
+using SevenDays.unLOC.Core.Player.Animations.Config;
 
 using UnityEngine;
 
-using VContainer.Unity;
-
 using Random = UnityEngine.Random;
 
-namespace SevenDays.unLOC.Core.Animations
+namespace SevenDays.unLOC.Core.Player.Animations
 {
-    public class PlayerAnimationController : IInitializable
+    public class PlayerAnimationController :  IDisposable
     {
         private readonly PlayerView _playerView;
         private readonly Animator _playerAnimator;
@@ -23,14 +20,14 @@ namespace SevenDays.unLOC.Core.Animations
         private CancellationTokenSource _specialIdleAwaitToken = new CancellationTokenSource();
         private bool _specIdleAwaiting = false;
 
-        public PlayerAnimationController(PlayerView playerView, AnimationConfig animationConfig)
+        public PlayerAnimationController(PlayerView playerView)
         {
             _playerView = playerView;
-            _animationConfig = animationConfig;
+            _animationConfig = playerView.AnimationConfig;
             _playerAnimator = playerView.PlayerAnimator;
         }
 
-        void IInitializable.Initialize()
+        public void Start()
         {
             _playerView.StartMove += OnPlayerStartMove;
             _playerView.Stay += OnPlayerStay;
@@ -72,6 +69,16 @@ namespace SevenDays.unLOC.Core.Animations
         {
             _playerAnimator.SetBool(_animationConfig.AnimatorWalkToggle, true);
             _specialIdleAwaitToken.Cancel();
+        }
+
+        void IDisposable.Dispose()
+        {
+            _specialIdleAwaitToken?.Cancel();
+            _specialIdleAwaitToken?.Dispose();
+
+            _playerView.StartMove -= OnPlayerStartMove;
+            _playerView.Stay -= OnPlayerStay;
+            _playerView.AnimationCallBackView.IdleStart -= OnIdleStart;
         }
     }
 }
