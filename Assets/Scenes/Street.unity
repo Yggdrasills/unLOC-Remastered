@@ -984,7 +984,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 65
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -6869,7 +6869,7 @@ GameObject:
   m_Component:
   - component: {fileID: 830514298}
   - component: {fileID: 830514297}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7279,7 +7279,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentReference:
-    TypeName: 
+    TypeName: SevenDays.unLOC.Core.CoreCompositeRoot
   autoRun: 1
   autoInjectGameObjects:
   - {fileID: 1218477878}
@@ -7290,8 +7290,6 @@ MonoBehaviour:
   - {fileID: 1934538101}
   - {fileID: 2114187322}
   - {fileID: 2116677985}
-  _cellPrefab: {fileID: 3484372127179893562, guid: 59911d8127d15614298fab74d5c2500a, type: 3}
-  _inventoryView: {fileID: 1846828555}
 --- !u!4 &898063752
 Transform:
   m_ObjectHideFlags: 0
