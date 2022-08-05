@@ -30,6 +30,7 @@ namespace SevenDays.unLOC.Core.Player
             player.CharacterScale.SetScale(_initializeConfig.PlayerSize, _initializeConfig.PlayerColliderSize);
 
             var cameraConfig = Object.Instantiate(_initializeConfig.CameraSettingsPrefab);
+            // review: GetComponentInChildren не есть хорошо
             var track = cameraConfig.GetComponentInChildren<CinemachineSmoothPath>();
 
             SetUpTrack(track);

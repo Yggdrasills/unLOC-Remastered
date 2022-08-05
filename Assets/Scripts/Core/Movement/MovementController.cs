@@ -10,6 +10,7 @@ namespace SevenDays.unLOC.Core.Movement
 {
     public class MovementController : IDisposable
     {
+        // review: нужно временно отключить тап зону
         private readonly TapZoneView _tapZoneView;
         private readonly IMovementService _movementService;
         private readonly IMovable _playerView;
@@ -24,6 +25,7 @@ namespace SevenDays.unLOC.Core.Movement
             _inputService = inputService;
         }
 
+        // review: класс не наследуется от IStartable. Если так и запланировано, то нужно вызывать его в конструкторе
         public void Start()
         {
             _tapZoneView.Clicked += OnClickedToTapZone;
@@ -32,17 +34,28 @@ namespace SevenDays.unLOC.Core.Movement
             _playerView.StopMoving();
         }
 
+        // review: диспоуз не вызывается
+        void IDisposable.Dispose()
+        {
+            _tapZoneView.Clicked -= OnClickedToTapZone;
+        }
+
         private void OnHorizontalInputChange(float direction)
         {
             if (direction == 0)
             {
                 if (!_playerView.IsMoving && _inputService.PreviousInput != 0)
+                {
                     _playerView.StopMoving();
+                }
+
                 return;
             }
 
             if (_playerView.IsMoving)
+            {
                 _playerView.StopMoving();
+            }
 
             _playerView.Move(direction);
         }
@@ -53,11 +66,6 @@ namespace SevenDays.unLOC.Core.Movement
             var xClickPosition = point.x;
 
             _movementService.StartMove(_playerView, Vector3.right * xClickPosition);
-        }
-
-        public void Dispose()
-        {
-            _tapZoneView.Clicked -= OnClickedToTapZone;
         }
     }
 }

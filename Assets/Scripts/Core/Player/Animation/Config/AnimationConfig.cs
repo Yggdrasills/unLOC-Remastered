@@ -2,7 +2,8 @@
 
 namespace SevenDays.unLOC.Core.Player.Animations.Config
 {
-    [CreateAssetMenu(menuName = "Configs/" + nameof(AnimationConfig), order = 0)]
+    // review: лучше вынести эти данные во вьшку
+    [CreateAssetMenu(menuName = "SevenDays/unLoc/Core/Player/" + nameof(AnimationConfig), order = 0)]
     public class AnimationConfig : ScriptableObject
     {
         [field: SerializeField]

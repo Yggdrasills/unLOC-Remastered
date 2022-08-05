@@ -69,6 +69,11 @@ namespace SevenDays.unLOC.Core.Player
             return UniTask.CompletedTask;
         }
 
+        // review: не понятно зачем нужен MovementController, если вьюшка сама может двигаться
+        // review: получается контроллер не контроллер, а презентер некий.
+        // review: Это к тому, что обработка логики должна быть вынесена в контроллер, а вьшка может только
+        // review: поворачиваться, двигаться, скейльться и т.п. При том можно оставить инверсию зависимости.
+        // review: Однако код управления должен находиться в одном классе
         void IMovable.Move(float horizontalDirection)
         {
             if (!IsActive) return;
@@ -158,6 +163,7 @@ namespace SevenDays.unLOC.Core.Player
             IsMoving = true;
         }
 
+        // review: эту часть можно вынести в модель/фабрику и т.п.
         void ISavableMono.Save()
         {
             DataSerializer.Save(Constants.PlayerPosition, transform.position.x);

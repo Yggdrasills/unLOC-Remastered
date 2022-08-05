@@ -4,6 +4,8 @@ using UnityEngine;
 
 namespace SevenDays.unLOC.Core.Player.Animations
 {
+    // review: вроде как не используется
+    
     /// <summary>
     /// Class handle animation event
     /// </summary>

@@ -18,7 +18,7 @@ namespace SevenDays.unLOC.Core.Player.Animations
         private readonly AnimationConfig _animationConfig;
 
         private CancellationTokenSource _specialIdleAwaitToken = new CancellationTokenSource();
-        private bool _specIdleAwaiting = false;
+        private bool _specIdleAwaiting;
 
         public PlayerAnimationController(PlayerView playerView)
         {
@@ -26,12 +26,23 @@ namespace SevenDays.unLOC.Core.Player.Animations
             _animationConfig = playerView.AnimationConfig;
             _playerAnimator = playerView.PlayerAnimator;
         }
-
+        
         public void Start()
         {
             _playerView.StartMove += OnPlayerStartMove;
             _playerView.Stay += OnPlayerStay;
             _playerView.AnimationCallBackView.IdleStart += OnIdleStart;
+        }
+
+        // review: диспоуз не вызывается
+        void IDisposable.Dispose()
+        {
+            _specialIdleAwaitToken?.Cancel();
+            _specialIdleAwaitToken?.Dispose();
+
+            _playerView.StartMove -= OnPlayerStartMove;
+            _playerView.Stay -= OnPlayerStay;
+            _playerView.AnimationCallBackView.IdleStart -= OnIdleStart;
         }
 
         private void OnPlayerStay()
@@ -41,10 +52,15 @@ namespace SevenDays.unLOC.Core.Player.Animations
 
         private void OnIdleStart()
         {
+            // review: вместо булевой можно кешировать UniTask AwaitEnableSpecialStayAsync (вместо UniTaskVoid)
+            // review: и проверить myTask.Status.IsCompleted();
             if (_specIdleAwaiting) return;
 
             _specialIdleAwaitToken.Cancel();
+            
+            // review: не диспоузится перед пересозданием
             _specialIdleAwaitToken = new CancellationTokenSource();
+            
             AwaitEnableSpecialStayAsync(_specialIdleAwaitToken.Token).Forget();
         }
 
@@ -68,17 +84,8 @@ namespace SevenDays.unLOC.Core.Player.Animations
         private void OnPlayerStartMove()
         {
             _playerAnimator.SetBool(_animationConfig.AnimatorWalkToggle, true);
+            // review: судя по коду может отмениться дважды. Если отменяется уже отмененный то выпадет ошибка
             _specialIdleAwaitToken.Cancel();
-        }
-
-        void IDisposable.Dispose()
-        {
-            _specialIdleAwaitToken?.Cancel();
-            _specialIdleAwaitToken?.Dispose();
-
-            _playerView.StartMove -= OnPlayerStartMove;
-            _playerView.Stay -= OnPlayerStay;
-            _playerView.AnimationCallBackView.IdleStart -= OnIdleStart;
         }
     }
 }
