@@ -6,9 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Core.unity
+    guid: 529950b21ae7f1b48973661c18e43b14
+  - enabled: 1
+    path: Assets/Scenes/Intro.unity
+    guid: e54674f06ab8720479e6896346529637
+  - enabled: 1
     path: Assets/Scenes/Workshop.unity
     guid: 88e1ef9bab275164883259fccf2fb163
   - enabled: 1
     path: Assets/Scenes/Street.unity
     guid: ca7688f772fbe8c4ea2fb50465a6c75a
+  - enabled: 1
+    path: Assets/Scenes/Street Stealth.unity
+    guid: c7750c7588d2444428f78e198048459a
   m_configObjects: {}
