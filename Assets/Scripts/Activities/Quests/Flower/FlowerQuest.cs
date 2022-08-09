@@ -19,6 +19,12 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
         public bool FirstStagePassed { get; private set; }
 
         [SerializeField]
+        private FlowerView _flowerView;
+
+        [SerializeField]
+        private GameObject _content;
+
+        [SerializeField]
         private FlowerQuestTextDisplayer _textDisplayer;
 
         [SerializeField]
@@ -41,40 +47,37 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
 
         private IInventoryService _inventory;
 
-        private List<GameObject> _brokenPlugList;
+        private List<ClickableItem> _brokenPlugList;
         private List<EmptyPlugView> _emptyPlugList;
 
         [Inject, UsedImplicitly]
-        private void Construct([NotNull] IInventoryService inventory)
+        private void Construct(IInventoryService inventory)
         {
             _inventory = inventory;
         }
 
         private void Awake()
         {
-            _brokenPlugList = new List<GameObject>(_brokenPlugs.Length);
-            _emptyPlugList = new List<EmptyPlugView>(_emptyPlugs.Length);
+            _brokenPlugList = new List<ClickableItem>(_brokenPlugs);
+            _emptyPlugList = new List<EmptyPlugView>(_emptyPlugs);
 
-            for (int i = 0; i < _brokenPlugs.Length; i++)
-            {
-                int closure = i;
+            _brokenPlugList.ForEach(cI => cI.Clicked += () => OnBrokenPlugClicked(cI));
+            _emptyPlugList.ForEach(cI => cI.Clicked += () => OnEmptyPlugClicked(cI));
 
-                _brokenPlugList.Add(_brokenPlugs[i].gameObject);
-
-                _brokenPlugs[i].Clicked += () => OnBrokenPlugClicked(_brokenPlugs[closure].gameObject);
-            }
-
-            for (int i = 0; i < _emptyPlugs.Length; i++)
-            {
-                int closure = i;
-
-                _emptyPlugList.Add(_emptyPlugs[i]);
-
-                _emptyPlugs[i].Clicked += () => OnEmptyPlugClicked(_emptyPlugs[closure]);
-            }
+            _flowerView.Clicked += ActivateSelf;
         }
 
-        private void OnBrokenPlugClicked(GameObject plug)
+        private void OnDestroy()
+        {
+            _flowerView.Clicked -= ActivateSelf;
+        }
+
+        private void ActivateSelf()
+        {
+            _content.SetActive(true);
+        }
+
+        private void OnBrokenPlugClicked(ClickableItem plug)
         {
             if (!_inventory.Contains(InventoryItem.Screwdriver))
             {
@@ -91,7 +94,8 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
             }
 
             _brokenPlugList.Remove(plug);
-            plug.SetActive(false);
+
+            plug.gameObject.SetActive(false);
 
             if (!_brokenPlugList.Any())
             {
@@ -120,14 +124,11 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
                     return;
 
                 CompleteQuest();
-                // todo: switch flower sprite
+                _flowerView.SetFlowerRepairedSprite();
                 gameObject.SetActive(false);
 
-                if (_inventory.Contains(InventoryItem.ScrewEdge3))
-                    _inventory.Remove(InventoryItem.ScrewEdge3);
-
-                if (_inventory.Contains(InventoryItem.ScrewRadiation))
-                    _inventory.Remove(InventoryItem.ScrewRadiation);
+                _inventory.Remove(InventoryItem.ScrewEdge3);
+                _inventory.Remove(InventoryItem.ScrewRadiation);
             }
 
             else if (_inventory.Contains(InventoryItem.ScrewEdge3) ||
