@@ -15,11 +15,11 @@ MonoBehaviour:
   _playerViewPrefab: {fileID: 7638084614247521343, guid: 1d6aab911ee2e7c4a9729beae545a10f, type: 3}
   _cameraSettingsPrefab: {fileID: 7986485423536250007, guid: 76ff0c61727295c4a855144e6adc86c3, type: 3}
   _cameraPath:
-  - {x: -131, y: -2.6, z: -9}
-  - {x: 131, y: -2.6, z: -9}
+  - {x: -67, y: -2.6, z: -9}
+  - {x: 67, y: -2.6, z: -9}
   _playerSize: {x: 0.315, y: 0.315}
   _playerColliderSize: {x: 5, y: 10}
-  _playerInitPosition: {x: 130, y: -3.76}
-  _tapZoneSize: {x: 288, y: 10}
+  _playerInitPosition: {x: 70, y: -3.76}
+  _tapZoneSize: {x: 130, y: 10}
   _tapZonePosition: {x: 0, y: -7, z: 10}
   _disableTapZone: 1
