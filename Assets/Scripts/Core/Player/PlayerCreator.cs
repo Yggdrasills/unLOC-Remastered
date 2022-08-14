@@ -33,14 +33,15 @@ namespace SevenDays.unLOC.Core.Player
         {
             var player = CreatePlayer();
 
-            CreateCamera(player);
-            
+            CreateCamera(player.transform);
+
             var tapZone = CreateTapZone();
             tapZone.enabled = !_initializeConfig.DisableTapZone;
             var playerMovement = PlayerMovement(tapZone, player);
-            
+
             var playerAnimationController = new PlayerAnimationController(playerMovement, player);
-            var movementController = new PlayerMovementController(tapZone, _inputModel, playerMovement, player.transform);
+            var movementController =
+                new PlayerMovementController(tapZone, _inputModel, playerMovement, player.transform);
 
             _initializes = new IInitialize[] { playerAnimationController, movementController };
             _disposables = new IDisposable[] { playerAnimationController, movementController };
@@ -65,15 +66,11 @@ namespace SevenDays.unLOC.Core.Player
             return tapZone;
         }
 
-        private void CreateCamera(PlayerView player)
+        private void CreateCamera(Transform player)
         {
             var cameraConfig = Object.Instantiate(_initializeConfig.CameraSettingsPrefab);
-            var track = cameraConfig.GetComponentInChildren<CinemachineSmoothPath>();
-
-            SetUpTrack(track);
-
-            var vCam = cameraConfig.GetComponentInChildren<CinemachineVirtualCamera>();
-            vCam.Follow = player.transform;
+            SetUpTrack(cameraConfig.Track);
+            cameraConfig.VCam.Follow = player;
         }
 
         private PlayerView CreatePlayer()

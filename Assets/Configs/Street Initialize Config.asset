@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Street Initialize Config
   m_EditorClassIdentifier: 
   _playerViewPrefab: {fileID: 7638084614247521343, guid: 1d6aab911ee2e7c4a9729beae545a10f, type: 3}
-  _cameraSettingsPrefab: {fileID: 7986485423536250007, guid: 76ff0c61727295c4a855144e6adc86c3, type: 3}
+  _cameraSettingsPrefab: {fileID: 5394468533924789102, guid: 76ff0c61727295c4a855144e6adc86c3, type: 3}
   _cameraPath:
   - {x: -67, y: -2.6, z: -9}
   - {x: 67, y: -2.6, z: -9}

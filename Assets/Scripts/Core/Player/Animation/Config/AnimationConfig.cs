@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+
+using UnityEngine;
 
 namespace SevenDays.unLOC.Core.Player.Animations.Config
 {
-    [CreateAssetMenu(menuName = "Configs/" + nameof(AnimationConfig), order = 0)]
-    public class AnimationConfig : ScriptableObject
+    [Serializable]
+    public class AnimationConfig
     {
         [field: SerializeField]
         public string AnimatorWalkToggle { get; private set; } = "isWalk";

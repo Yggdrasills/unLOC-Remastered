@@ -230,6 +230,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3800924439604390590}
+  - component: {fileID: 5394468533924789102}
   m_Layer: 0
   m_Name: CameraSettings
   m_TagString: Untagged
@@ -253,3 +254,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5394468533924789102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7986485423536250007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ae265f520cc4ac5bd036289942e66d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <VCam>k__BackingField: {fileID: 367377247734429618}
+  <Track>k__BackingField: {fileID: 367377249608665862}

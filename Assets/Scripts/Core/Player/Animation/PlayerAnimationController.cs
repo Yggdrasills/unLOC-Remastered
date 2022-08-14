@@ -17,7 +17,7 @@ namespace SevenDays.unLOC.Core.Player.Animations
         private readonly PlayerView _playerView;
         private readonly Animator _playerAnimator;
         private readonly AnimationConfig _animationConfig;
-        private MovementModel _movementModel;
+        private readonly MovementModel _movementModel;
 
         private CancellationTokenSource _specialIdleAwaitToken = new CancellationTokenSource();
         private bool _specIdleAwaiting;

@@ -2,15 +2,14 @@
 
 namespace SevenDays.unLOC.Core.Player
 {
-    
-    [CreateAssetMenu(menuName = "Configs/InitializeConfig", order = 0)]
+    [CreateAssetMenu(menuName = "SevenDays/unLoc/Core/Player/" + nameof(InitializeConfig), order = 0)]
     public class InitializeConfig : ScriptableObject
     {
         [SerializeField]
         private PlayerView _playerViewPrefab;
-    
+
         [SerializeField]
-        private GameObject _cameraSettingsPrefab;
+        private CameraSettings _cameraSettingsPrefab;
 
         [SerializeField]
         private Vector3[] _cameraPath;
@@ -26,6 +25,7 @@ namespace SevenDays.unLOC.Core.Player
 
         [SerializeField]
         private Vector2 _tapZoneSize;
+
         [SerializeField]
         private Vector3 _tapZonePosition;
 
@@ -34,7 +34,7 @@ namespace SevenDays.unLOC.Core.Player
 
         public PlayerView PlayerViewPrefab => _playerViewPrefab;
 
-        public GameObject CameraSettingsPrefab => _cameraSettingsPrefab;
+        public CameraSettings CameraSettingsPrefab => _cameraSettingsPrefab;
 
         public Vector3[] CameraPath => _cameraPath;
 
