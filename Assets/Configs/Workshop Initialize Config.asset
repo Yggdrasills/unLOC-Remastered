@@ -22,3 +22,4 @@ MonoBehaviour:
   _playerInitPosition: {x: -20, y: -1.41}
   _tapZoneSize: {x: 130, y: 15}
   _tapZonePosition: {x: 0, y: 0, z: 10}
+  _disableTapZone: 1

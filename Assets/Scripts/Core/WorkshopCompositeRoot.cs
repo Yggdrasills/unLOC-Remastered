@@ -55,8 +55,12 @@ namespace SevenDays.unLOC.Core
         private void RegisterMovement(IContainerBuilder builder)
         {
             builder.RegisterInstance(_initializeConfig);
-            builder.Register<IMovementService, MovementService>(Lifetime.Singleton);
-            builder.RegisterEntryPoint<PlayerCreator>().WithParameter(_camera).AsSelf();
+            IEnumerable<IInputModel> horizontalInput = new[]{new HorizontalInputModel()};
+            builder.RegisterEntryPoint<InputController>().AsSelf().WithParameter(horizontalInput);
+            builder.RegisterEntryPoint<PlayerCreator>()
+                .WithParameter(_camera)
+                .WithParameter(horizontalInput.First())
+                .AsSelf();
         }
     }
 }
