@@ -1,4 +1,7 @@
-﻿using SevenDays.DialogSystem.Runtime;
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using SevenDays.DialogSystem.Runtime;
 using SevenDays.Localization;
 using SevenDays.unLOC.Core.Movement;
 using SevenDays.unLOC.Core.Player;
