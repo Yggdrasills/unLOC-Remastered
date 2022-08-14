@@ -7,21 +7,14 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
     public class FlowerView : InteractableItem
     {
         [SerializeField]
-        private FlowerQuest _flowerQuest;
+        private Sprite _repairedFlowerSprite;
 
-        protected override void Enabled()
-        {
-            Clicked += ActivateQuest;
-        }
+        [SerializeField]
+        private SpriteRenderer _renderer;
 
-        protected override void Disabled()
+        public void SetFlowerRepairedSprite()
         {
-            Clicked -= ActivateQuest;
-        }
-
-        private void ActivateQuest()
-        {
-            _flowerQuest.gameObject.SetActive(true);
+            _renderer.sprite = _repairedFlowerSprite;
         }
     }
 }

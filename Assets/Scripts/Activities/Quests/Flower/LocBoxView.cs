@@ -7,6 +7,7 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
     [AddComponentMenu(nameof(LocBoxView) + " [Flower Quest]")]
     public class LocBoxView : InteractableItem
     {
+        // todo: inverse dependency
         [SerializeField]
         private FlowerQuest _flowerQuest;
 
