@@ -3,6 +3,7 @@ using System.Threading;
 
 using Cysharp.Threading.Tasks;
 
+using SevenDays.unLOC.Core.Movement;
 using SevenDays.unLOC.Core.Player.Animations.Config;
 
 using UnityEngine;
@@ -11,26 +12,28 @@ using Random = UnityEngine.Random;
 
 namespace SevenDays.unLOC.Core.Player.Animations
 {
-    public class PlayerAnimationController :  IDisposable
+    public class PlayerAnimationController : IInitialize, IDisposable
     {
         private readonly PlayerView _playerView;
         private readonly Animator _playerAnimator;
         private readonly AnimationConfig _animationConfig;
+        private MovementModel _movementModel;
 
         private CancellationTokenSource _specialIdleAwaitToken = new CancellationTokenSource();
-        private bool _specIdleAwaiting = false;
+        private bool _specIdleAwaiting;
 
-        public PlayerAnimationController(PlayerView playerView)
+        public PlayerAnimationController(MovementModel playerMovement, PlayerView playerView)
         {
             _playerView = playerView;
             _animationConfig = playerView.AnimationConfig;
             _playerAnimator = playerView.PlayerAnimator;
+            _movementModel = playerMovement;
         }
 
-        public void Start()
+        public void Initialize()
         {
-            _playerView.StartMove += OnPlayerStartMove;
-            _playerView.Stay += OnPlayerStay;
+            _movementModel.StartMove += OnPlayerStartMove;
+            _movementModel.StopMove += OnPlayerStay;
             _playerView.AnimationCallBackView.IdleStart += OnIdleStart;
         }
 
@@ -76,8 +79,8 @@ namespace SevenDays.unLOC.Core.Player.Animations
             _specialIdleAwaitToken?.Cancel();
             _specialIdleAwaitToken?.Dispose();
 
-            _playerView.StartMove -= OnPlayerStartMove;
-            _playerView.Stay -= OnPlayerStay;
+            _movementModel.StartMove -= OnPlayerStartMove;
+            _movementModel.StopMove -= OnPlayerStay;
             _playerView.AnimationCallBackView.IdleStart -= OnIdleStart;
         }
     }

@@ -29,6 +29,9 @@ namespace SevenDays.unLOC.Core.Player
         [SerializeField]
         private Vector3 _tapZonePosition;
 
+        [SerializeField]
+        private bool _disableTapZone;
+
         public PlayerView PlayerViewPrefab => _playerViewPrefab;
 
         public GameObject CameraSettingsPrefab => _cameraSettingsPrefab;
@@ -44,5 +47,6 @@ namespace SevenDays.unLOC.Core.Player
         public Vector3 TapZonePosition => _tapZonePosition;
 
         public Vector2 PlayerInitPosition => _playerInitPosition;
+        public bool DisableTapZone => _disableTapZone;
     }
 }
