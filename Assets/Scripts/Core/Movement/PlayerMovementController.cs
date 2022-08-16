@@ -38,6 +38,12 @@ namespace SevenDays.unLOC.Core.Movement
             _movementModel.OnStop();
         }
 
+        private void KillToken()
+        {
+            _movingToken?.Cancel();
+            _movingToken?.Dispose();
+        }
+
         private void Move(float horizontalNormal)
         {
             var translation = horizontalNormal * _movementModel.MovingSpeed;
@@ -60,14 +66,38 @@ namespace SevenDays.unLOC.Core.Movement
             _movementModel.OnMove();
         }
 
-
-        private void RotatePlayer(float horizontalPoint, float comparableValue)
+        private async UniTask MoveHorizontalAsync(float horizontalPoint, CancellationToken token)
         {
-            var rotationValue = horizontalPoint < comparableValue
-                ? MovementModel.LeftSideValue
-                : MovementModel.RightSideValue;
-            if (Math.Abs(_playerTransform.localScale.x - rotationValue) > .0f)
-                _playerTransform.localScale = new Vector3(rotationValue, _playerTransform.localScale.y, 1);
+            var viewXPosition = _playerTransform.transform.position.x;
+
+            RotatePlayer(horizontalPoint, viewXPosition);
+
+            var distance = Mathf.Abs(horizontalPoint - viewXPosition);
+
+            _movementModel.IsMovingToPoint = true;
+            _movementModel.OnMove();
+
+            await _playerTransform.transform.DOMoveX(horizontalPoint, distance / _movementModel.MovingSpeed)
+                .SetEase(Ease.Linear).ToUniTask(cancellationToken: token);
+
+            _movementModel.IsMovingToPoint = false;
+            _movementModel.OnStop();
+        }
+
+        private void MoveToPoint(Vector3 point)
+        {
+            if (_movementModel.IsMovingToPoint)
+            {
+                UpdateToken();
+            }
+
+            MoveHorizontalAsync(point.x, _movingToken.Token).Forget();
+        }
+
+
+        private void OnClickedToTapZone(Vector3 point)
+        {
+            MoveToPoint(Vector3.right * point.x);
         }
 
         private void OnHorizontalInputChange(float normal)
@@ -100,51 +130,26 @@ namespace SevenDays.unLOC.Core.Movement
         }
 
 
-        private void OnClickedToTapZone(Vector3 point)
+        private void RotatePlayer(float horizontalPoint, float comparableValue)
         {
-            MoveToPoint(Vector3.right * point.x);
-        }
-
-        private void MoveToPoint(Vector3 point)
-        {
-            if (_movementModel.IsMovingToPoint)
-            {
-                StopMoveToPoint();
-            }
-            
-            MoveHorizontalAsync(point.x, _movingToken.Token).Forget();
+            var rotationValue = horizontalPoint < comparableValue
+                ? MovementModel.LeftSideValue
+                : MovementModel.RightSideValue;
+            if (Math.Abs(_playerTransform.localScale.x - rotationValue) > .0f)
+                _playerTransform.localScale = new Vector3(rotationValue, _playerTransform.localScale.y, 1);
         }
 
         private void StopMoveToPoint()
         {
+            UpdateToken();
+            _movementModel.IsMovingToPoint = false;
+            _movementModel.OnStop();
+        }
+
+        private void UpdateToken()
+        {
             KillToken();
             _movingToken = new CancellationTokenSource();
-            _movementModel.IsMovingToPoint = false;
-            _movementModel.OnStop();
-        }
-
-        private async UniTask MoveHorizontalAsync(float horizontalPoint, CancellationToken token)
-        {
-            var viewXPosition = _playerTransform.transform.position.x;
-
-            RotatePlayer(horizontalPoint, viewXPosition);
-
-            var distance = Mathf.Abs(horizontalPoint - viewXPosition);
-
-            _movementModel.IsMovingToPoint = true;
-            _movementModel.OnMove();
-
-            await _playerTransform.transform.DOMoveX(horizontalPoint, distance / _movementModel.MovingSpeed)
-                .SetEase(Ease.Linear).ToUniTask(cancellationToken: token);
-
-            _movementModel.IsMovingToPoint = false;
-            _movementModel.OnStop();
-        }
-
-        private void KillToken()
-        {
-            _movingToken?.Cancel();
-            _movingToken?.Dispose();
         }
 
         public void Dispose()
