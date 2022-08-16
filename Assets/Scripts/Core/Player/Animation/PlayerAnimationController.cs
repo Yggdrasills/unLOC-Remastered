@@ -17,12 +17,12 @@ namespace SevenDays.unLOC.Core.Player.Animations
         private readonly PlayerView _playerView;
         private readonly Animator _playerAnimator;
         private readonly AnimationConfig _animationConfig;
-        private readonly MovementModel _movementModel;
+        private readonly IMovementModel _movementModel;
 
         private CancellationTokenSource _specialIdleAwaitToken = new CancellationTokenSource();
         private bool _specIdleAwaiting;
 
-        public PlayerAnimationController(MovementModel playerMovement, PlayerView playerView)
+        public PlayerAnimationController(IMovementModel playerMovement, PlayerView playerView)
         {
             _playerView = playerView;
             _animationConfig = playerView.AnimationConfig;
@@ -47,6 +47,7 @@ namespace SevenDays.unLOC.Core.Player.Animations
             if (_specIdleAwaiting) return;
 
             _specialIdleAwaitToken.Cancel();
+            _specialIdleAwaitToken.Dispose();
             _specialIdleAwaitToken = new CancellationTokenSource();
             AwaitEnableSpecialStayAsync(_specialIdleAwaitToken.Token).Forget();
         }
@@ -54,17 +55,23 @@ namespace SevenDays.unLOC.Core.Player.Animations
         private async UniTaskVoid AwaitEnableSpecialStayAsync(CancellationToken cancellationToken)
         {
             _specIdleAwaiting = true;
-            cancellationToken.Register(() => _specIdleAwaiting = false);
 
             var range = _animationConfig.RangeRandomEnabledSpecIdle;
 
-            await UniTask.Delay(TimeSpan.FromSeconds(Random.Range(range.x, range.y + 1)),
-                cancellationToken: cancellationToken);
+            try
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(Random.Range(range.x, range.y + 1)),
+                    cancellationToken: cancellationToken);
+                _specIdleAwaiting = false;
 
-            _specIdleAwaiting = false;
+                _playerAnimator.SetTrigger(_animationConfig.AnimatorSpecIdleTriggers[
+                    Random.Range(0, _animationConfig.AnimatorSpecIdleTriggers.Length)]);
+            }
+            catch (Exception)
+            {
+                _specIdleAwaiting = false;
+            }
 
-            _playerAnimator.SetTrigger(_animationConfig.AnimatorSpecIdleTriggers[
-                Random.Range(0, _animationConfig.AnimatorSpecIdleTriggers.Length)]);
         }
 
 

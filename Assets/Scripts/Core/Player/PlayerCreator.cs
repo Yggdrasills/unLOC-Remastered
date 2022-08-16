@@ -41,7 +41,7 @@ namespace SevenDays.unLOC.Core.Player
 
             var playerAnimationController = new PlayerAnimationController(playerMovement, player);
             var movementController =
-                new PlayerMovementController(tapZone, _inputModel, playerMovement, player.transform);
+                new PlayerMovementController(tapZone, _inputModel, playerMovement, player);
 
             _initializes = new IInitialize[] { playerAnimationController, movementController };
             _disposables = new IDisposable[] { playerAnimationController, movementController };

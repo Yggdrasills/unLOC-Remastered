@@ -6,6 +6,8 @@ using Cysharp.Threading.Tasks.Linq;
 
 using DG.Tweening;
 
+using SevenDays.unLOC.Core.Player;
+
 using UnityEngine;
 
 namespace SevenDays.unLOC.Core.Movement
@@ -17,12 +19,15 @@ namespace SevenDays.unLOC.Core.Movement
         private readonly Transform _playerTransform;
         private readonly MovementModel _movementModel;
 
-        public PlayerMovementController(TapZoneView tapZoneView, IInputModel inputModel, MovementModel movementModel, Transform playerTransform)
+        private CancellationTokenSource _movingToken = new CancellationTokenSource();
+
+        public PlayerMovementController(TapZoneView tapZoneView, IInputModel inputModel, MovementModel movementModel,
+            PlayerView player)
         {
             _tapZoneView = tapZoneView;
             _inputModel = inputModel;
             _movementModel = movementModel;
-            _playerTransform = playerTransform;
+            _playerTransform = player.transform;
         }
 
         public void Initialize()
@@ -58,7 +63,9 @@ namespace SevenDays.unLOC.Core.Movement
 
         private void RotatePlayer(float horizontalPoint, float comparableValue)
         {
-            var rotationValue = horizontalPoint < comparableValue ? MovementModel.LeftSideValue :MovementModel.RightSideValue;
+            var rotationValue = horizontalPoint < comparableValue
+                ? MovementModel.LeftSideValue
+                : MovementModel.RightSideValue;
             if (Math.Abs(_playerTransform.localScale.x - rotationValue) > .0f)
                 _playerTransform.localScale = new Vector3(rotationValue, _playerTransform.localScale.y, 1);
         }
@@ -76,43 +83,42 @@ namespace SevenDays.unLOC.Core.Movement
                 StopMoveToPoint();
                 return;
             }
-            
+
             if (_movementModel.IsMovingToPoint)
             {
                 if (_inputModel.PreviousInput == 0)
                 {
                     StopMoveToPoint();
                 }
-                else if(_movementModel.IsMoving)
+                else if (_movementModel.IsMoving)
                 {
                     return;
                 }
             }
+
             Move(normal);
         }
 
 
         private void OnClickedToTapZone(Vector3 point)
         {
-            StopMoveToPoint();
-            _movementModel.OnStop();
-            _movementModel.IsMovingToPoint = false;
-            MoveToPointAsync(Vector3.right * point.x).Forget();
+            MoveToPoint(Vector3.right * point.x);
         }
 
-
-        private async UniTask MoveToPointAsync(Vector3 point)
+        private void MoveToPoint(Vector3 point)
         {
-            _movementModel.UpdateToken();
-            await MoveHorizontalAsync(point.x, _movementModel.MovingToken.Token);
+            if (_movementModel.IsMovingToPoint)
+            {
+                StopMoveToPoint();
+            }
+            
+            MoveHorizontalAsync(point.x, _movingToken.Token).Forget();
         }
 
         private void StopMoveToPoint()
         {
-            if (_movementModel.ActiveTween is { active: true })
-            {
-                _movementModel.ActiveTween.Kill();
-            }
+            KillToken();
+            _movingToken = new CancellationTokenSource();
             _movementModel.IsMovingToPoint = false;
             _movementModel.OnStop();
         }
@@ -127,17 +133,23 @@ namespace SevenDays.unLOC.Core.Movement
 
             _movementModel.IsMovingToPoint = true;
             _movementModel.OnMove();
-            
-            _movementModel.ActiveTween = _playerTransform.transform.DOMoveX(horizontalPoint, distance / _movementModel.MovingSpeed).SetEase(Ease.Linear);
 
-            await _movementModel.ActiveTween.AwaitForComplete(cancellationToken: token);
-            
+            await _playerTransform.transform.DOMoveX(horizontalPoint, distance / _movementModel.MovingSpeed)
+                .SetEase(Ease.Linear).ToUniTask(cancellationToken: token);
+
             _movementModel.IsMovingToPoint = false;
             _movementModel.OnStop();
         }
 
+        private void KillToken()
+        {
+            _movingToken?.Cancel();
+            _movingToken?.Dispose();
+        }
+
         public void Dispose()
         {
+            KillToken();
             _tapZoneView.Clicked -= OnClickedToTapZone;
         }
     }

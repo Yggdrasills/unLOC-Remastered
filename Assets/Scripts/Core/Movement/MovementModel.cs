@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Threading;
-
-using DG.Tweening;
 
 using UnityEngine;
 
 namespace SevenDays.unLOC.Core.Movement
 {
-    public class MovementModel
+    public class MovementModel : IMovementModel
     {
         public const int RightSideValue = 1;
         public const int LeftSideValue = -1;
@@ -16,10 +13,7 @@ namespace SevenDays.unLOC.Core.Movement
         public event Action StopMove = delegate { };
         public bool IsMoving { get; set; }
         public bool IsMovingToPoint { get; set; }
-
-        public Tween ActiveTween { get; set; }
-
-        public CancellationTokenSource MovingToken { get; private set; }
+        
 
         public Vector2 Range { get; }
 
@@ -31,14 +25,6 @@ namespace SevenDays.unLOC.Core.Movement
             MovingSpeed = movingSpeed;
         }
 
-
-        public void UpdateToken()
-        {
-            MovingToken?.Cancel();
-            MovingToken?.Dispose();
-            MovingToken = new CancellationTokenSource();
-        }
-
         public void OnStop()
         {
             StopMove?.Invoke();
@@ -48,5 +34,6 @@ namespace SevenDays.unLOC.Core.Movement
         {
             StartMove?.Invoke();
         }
+        
     }
 }
