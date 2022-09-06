@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 82081909039b33a46b992ab18980f1f0
+guid: f14e8ae7be465454c935c15c0c5fa4cc
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3679640553918328916
-    second: Tablet_Player_Play_0
+      213: 5282014303829146484
+    second: Tablet_Player_Background_0
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -40,7 +40,7 @@ TextureImporter:
     mipBias: 0
     wrapU: 1
     wrapV: 1
-    wrapW: 1
+    wrapW: 0
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -51,7 +51,7 @@ TextureImporter:
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spriteGenerateFallbackPhysicsShape: 0
+  spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -130,13 +130,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Tablet_Player_Play_0
+      name: Tablet_Player_Background_0
       rect:
         serializedVersion: 2
-        x: 10
-        y: 24
-        width: 132
-        height: 132
+        x: 79
+        y: 93
+        width: 1088
+        height: 501
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -144,8 +144,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: caf839a696a4fecc0800000000000000
-      internalID: -3679640553918328916
+      spriteID: 47bb446260c7d4940800000000000000
+      internalID: 5282014303829146484
       vertices: []
       indices: 
       edges: []
