@@ -3,7 +3,8 @@ using System.Threading;
 
 using Cysharp.Threading.Tasks;
 
-using SaveSystem;
+using SevenDays.SaveSystem;
+using SevenDays.Utils.Constants;
 
 using ToolBox.Serialization;
 using ToolBox.Serialization.OdinSerializer.Utilities;
@@ -13,13 +14,9 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-using Utils;
-
 using VContainer.Unity;
 
-using Object = UnityEngine.Object;
-
-namespace Menu
+namespace SevenDays.Menu
 {
     public class MenuController : IInitializable
     {
@@ -70,10 +67,10 @@ namespace Menu
 
         private void HandleNewGameClicked()
         {
-            var autoSaveData = new SaveData {ProfileIndex = 0, SceneName = Constants.IntroScene};
+            var autoSaveData = new SaveData {ProfileIndex = 0, SceneName = GameConstants.IntroScene};
             AddToSaveList(autoSaveData);
             RedrawProfilePanel();
-            LoadSceneAsync(Constants.IntroScene).Forget();
+            LoadSceneAsync(GameConstants.IntroScene).Forget();
         }
 
         private void HandleSaveClicked()
@@ -116,7 +113,7 @@ namespace Menu
 
             var activeScene = SceneManager.GetActiveScene();
 
-            if (activeScene.name != Constants.MenuScene)
+            if (activeScene.name != GameConstants.MenuScene)
                 await SceneManager.UnloadSceneAsync(activeScene);
 
             await SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
@@ -127,7 +124,7 @@ namespace Menu
 
         private void HandleMenuButtonPressed()
         {
-            if (SceneManager.GetActiveScene().name.Equals(Constants.MenuScene))
+            if (SceneManager.GetActiveScene().name.Equals(GameConstants.MenuScene))
                 return;
 
             _menuView.NewGameButton.gameObject.SetActive(false);
@@ -173,12 +170,12 @@ namespace Menu
                 _savesList.Remove(saveData.ProfileIndex);
             
             _savesList.Add(saveData.ProfileIndex, saveData);
-            DataSerializer.Save(Constants.SavesList, _savesList);
+            DataSerializer.Save(GameConstants.SavesList, _savesList);
         }
 
         private Dictionary<int, SaveData> GetSavesList()
         {
-            return DataSerializer.TryLoad(Constants.SavesList, out Dictionary<int, SaveData> saves)
+            return DataSerializer.TryLoad(GameConstants.SavesList, out Dictionary<int, SaveData> saves)
                 ? saves
                 : new Dictionary<int, SaveData>();
         }

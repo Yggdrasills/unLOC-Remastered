@@ -10,7 +10,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Menu
+namespace SevenDays.Menu
 {
     public class LoadingPanelView : MonoBehaviour
     {

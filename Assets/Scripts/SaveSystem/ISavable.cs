@@ -1,4 +1,4 @@
-﻿namespace SaveSystem
+﻿namespace SevenDays.SaveSystem
 {
     public interface ISavable
     {
