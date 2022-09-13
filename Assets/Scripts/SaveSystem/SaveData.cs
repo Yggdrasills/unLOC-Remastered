@@ -1,4 +1,4 @@
-﻿namespace SevenDays.SaveSystem
+﻿namespace SevenDays.unLOC.SaveSystem
 {
     public struct SaveData
     {

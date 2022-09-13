@@ -1,5 +1,6 @@
 using SevenDays.unLOC.Inventory.Services;
 using SevenDays.unLOC.Inventory.Views;
+using SevenDays.unLOC.Utils.Helpers;
 
 using UnityEngine;
 
@@ -7,7 +8,7 @@ using VContainer;
 
 namespace SevenDays.unLOC.Core
 {
-    public class CoreCompositeRoot : AutoInjectableLifeTimeScope
+    public class CoreLifetimeScope : AutoInjectableLifetimeScope
     {
         [SerializeField]
         private InventoryCellView _cellPrefab;

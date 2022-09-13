@@ -6,9 +6,9 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace SevenDays.unLOC.Core
+namespace SevenDays.unLOC.Utils.Helpers
 {
-    public class AutoInjectableLifeTimeScope : LifetimeScope
+    public class AutoInjectableLifetimeScope : LifetimeScope
     {
         private void OnValidate()
         {

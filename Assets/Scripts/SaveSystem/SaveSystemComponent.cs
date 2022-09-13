@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 
 using VContainer;
 
-namespace SevenDays.SaveSystem
+namespace SevenDays.unLOC.SaveSystem
 {
     public class SaveSystemComponent : MonoBehaviour
     {

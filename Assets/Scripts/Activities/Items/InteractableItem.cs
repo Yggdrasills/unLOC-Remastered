@@ -2,7 +2,7 @@
 
 using DG.Tweening;
 
-using SevenDays.unLOC.Core;
+using SevenDays.unLOC.Core.Player;
 
 using UnityEngine;
 using UnityEngine.Events;

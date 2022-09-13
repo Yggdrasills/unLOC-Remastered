@@ -5,8 +5,7 @@ using SevenDays.DialogSystem.Runtime;
 using SevenDays.Localization;
 using SevenDays.unLOC.Core.Movement;
 using SevenDays.unLOC.Core.Player;
-using SevenDays.unLOC.Inventory.Services;
-using SevenDays.unLOC.Inventory.Views;
+using SevenDays.unLOC.Utils.Helpers;
 
 using UnityEngine;
 
@@ -15,7 +14,7 @@ using VContainer.Unity;
 
 namespace SevenDays.unLOC.Core
 {
-    public class WorkshopCompositeRoot : AutoInjectableLifeTimeScope
+    public class WorkshopLifetimeScope : AutoInjectableLifetimeScope
     {
         [SerializeField]
         private Camera _camera;

@@ -3,7 +3,7 @@ using System.Threading;
 
 using Cysharp.Threading.Tasks;
 
-using SevenDays.SaveSystem;
+using SevenDays.unLOC.SaveSystem;
 using SevenDays.Utils.Constants;
 
 using ToolBox.Serialization;
@@ -16,7 +16,7 @@ using UnityEngine.SceneManagement;
 
 using VContainer.Unity;
 
-namespace SevenDays.Menu
+namespace SevenDays.unLOC.Menu
 {
     public class MenuController : IInitializable
     {

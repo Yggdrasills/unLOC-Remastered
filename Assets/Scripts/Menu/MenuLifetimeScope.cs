@@ -1,7 +1,7 @@
 ﻿using VContainer;
 using VContainer.Unity;
 
-namespace SevenDays.Menu
+namespace SevenDays.unLOC.Menu
 {
     public class MenuLifetimeScope : LifetimeScope
     {
