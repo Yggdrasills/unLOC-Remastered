@@ -1,6 +1,6 @@
-﻿namespace Utils
+﻿namespace SevenDays.Utils.Constants
 {
-    public static class Constants
+    public static class GameConstants
     {
         public const string SavesList = "SavesList";
         public const string IntroScene = "Intro";

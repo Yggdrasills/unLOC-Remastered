@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using JetBrains.Annotations;
-
-using SevenDays.DialogSystem.Components;
 
 using ToolBox.Serialization;
 using ToolBox.Serialization.OdinSerializer.Utilities;
@@ -13,11 +10,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 using VContainer;
-using VContainer.Unity;
 
-using Object = UnityEngine.Object;
-
-namespace SaveSystem
+namespace SevenDays.SaveSystem
 {
     public class SaveSystemComponent : MonoBehaviour
     {

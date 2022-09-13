@@ -1,13 +1,11 @@
-using SaveSystem;
-
+using SevenDays.SaveSystem;
 using SevenDays.unLOC.Core.Player.Animations;
 using SevenDays.unLOC.Core.Player.Animations.Config;
+using SevenDays.Utils.Constants;
 
 using ToolBox.Serialization;
 
 using UnityEngine;
-
-using Utils;
 
 namespace SevenDays.unLOC.Core.Player
 {
@@ -34,12 +32,12 @@ namespace SevenDays.unLOC.Core.Player
 
         void ISavableMono.Save()
         {
-            DataSerializer.Save(Constants.PlayerPosition, transform.position.x);
+            DataSerializer.Save(GameConstants.PlayerPosition, transform.position.x);
         }
 
         void ISavableMono.Load()
         {
-            if (DataSerializer.TryLoad<float>(Constants.PlayerPosition, out var x))
+            if (DataSerializer.TryLoad<float>(GameConstants.PlayerPosition, out var x))
             {
                 var transformPosition = transform.position;
                 transformPosition.x = x;

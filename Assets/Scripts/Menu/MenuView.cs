@@ -1,11 +1,11 @@
 ﻿using System;
 
-using SaveSystem;
+using SevenDays.SaveSystem;
 
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Menu
+namespace SevenDays.Menu
 {
     public class MenuView : MonoBehaviour
     {

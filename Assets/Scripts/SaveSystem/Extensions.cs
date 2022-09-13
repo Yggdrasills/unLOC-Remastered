@@ -1,7 +1,7 @@
 ﻿using VContainer;
 using VContainer.Unity;
 
-namespace SaveSystem
+namespace SevenDays.SaveSystem
 {
     public static class Extensions
     {
