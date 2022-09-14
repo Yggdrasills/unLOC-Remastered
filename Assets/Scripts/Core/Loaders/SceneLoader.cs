@@ -2,6 +2,8 @@
 
 using UnityEngine.SceneManagement;
 
+using VContainer.Unity;
+
 namespace SevenDays.unLOC.Core.Loaders
 {
     public class SceneLoader
@@ -53,6 +55,16 @@ namespace SevenDays.unLOC.Core.Loaders
             SceneManager.SetActiveScene(loadedScene);
 
             _activeSceneIndex = buildIndex;
+
+            var rootGameObjects = loadedScene.GetRootGameObjects();
+
+            foreach (var rootObject in rootGameObjects)
+            {
+                if (rootObject.TryGetComponent(out LifetimeScope scope))
+                {
+                    scope.Build();
+                }
+            }
         }
     }
 }
