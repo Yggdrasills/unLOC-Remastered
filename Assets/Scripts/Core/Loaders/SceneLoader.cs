@@ -1,4 +1,9 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System.Threading;
+
+using Cysharp.Threading.Tasks;
+
+using SevenDays.Screens.Models;
+using SevenDays.Screens.Services;
 
 using UnityEngine.SceneManagement;
 
@@ -8,7 +13,16 @@ namespace SevenDays.unLOC.Core.Loaders
 {
     public class SceneLoader
     {
+        private readonly ScreenIdentifier _loadingScreen;
+        private readonly IScreenService _screenService;
+
         private int _activeSceneIndex;
+
+        public SceneLoader(ScreenIdentifier loadingScreen, IScreenService screenService)
+        {
+            _loadingScreen = loadingScreen;
+            _screenService = screenService;
+        }
 
         public async UniTask LoadMenuAsync()
         {
@@ -42,9 +56,15 @@ namespace SevenDays.unLOC.Core.Loaders
 
         private async UniTask LoadSceneAsync(int buildIndex)
         {
+            await _screenService.ShowAsync(_loadingScreen, CancellationToken.None);
+
             var activeScene = SceneManager.GetActiveScene();
 
-            await SceneManager.UnloadSceneAsync(activeScene);
+            // todo: костыль. Не нравится
+            if (activeScene.buildIndex != 0)
+            {
+                await SceneManager.UnloadSceneAsync(activeScene);
+            }
 
             var sceneLoadOperation = SceneManager.LoadSceneAsync(buildIndex, LoadSceneMode.Additive);
 
@@ -65,6 +85,8 @@ namespace SevenDays.unLOC.Core.Loaders
                     scope.Build();
                 }
             }
+
+            await _screenService.HideAsync(_loadingScreen, CancellationToken.None);
         }
     }
 }

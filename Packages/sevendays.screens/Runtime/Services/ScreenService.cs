@@ -13,11 +13,14 @@ namespace SevenDays.Screens.Services
     public class ScreenService : IScreenService
     {
         private readonly ScreenCollection _screenCollection;
+        private readonly Transform _root;
         private readonly Dictionary<string, ScreenViewBase> _activeScreens;
 
-        public ScreenService(ScreenCollection screenCollection)
+        public ScreenService(ScreenCollection screenCollection, Transform parentCanvas)
         {
             _screenCollection = screenCollection;
+
+            _root = parentCanvas;
 
             _activeScreens = new Dictionary<string, ScreenViewBase>(16);
         }
@@ -41,7 +44,7 @@ namespace SevenDays.Screens.Services
                 }
 
                 // todo: нужно подумать о пуле
-                var screen = Object.Instantiate(screenPrefab);
+                var screen = Object.Instantiate(screenPrefab, _root);
 
                 _activeScreens[screenId] = screen;
 
@@ -67,7 +70,7 @@ namespace SevenDays.Screens.Services
             try
             {
                 await screen.HideAsync(cancellationToken);
-                
+
                 Object.Destroy(screen.gameObject);
             }
             catch
