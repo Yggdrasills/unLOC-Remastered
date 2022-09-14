@@ -12,7 +12,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace SevenDays.unLOC.Core
+namespace SevenDays.unLOC.Core.Scopes
 {
     public class WorkshopLifetimeScope : AutoInjectableLifetimeScope
     {
