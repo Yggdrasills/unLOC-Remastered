@@ -41,32 +41,42 @@ namespace SevenDays.Screens.Editor.Drawers
                 ? 0
                 : collection.IndexOf(currentScreen);
 
-            var index = EditorGUI.Popup(position, currentIndex, names.ToArray());
+            EditorGUI.BeginChangeCheck();
 
-            var newPosition = new Rect(position);
+            var classRect = new Rect(position.x, position.y, position.width, position.height);
 
-            newPosition.y += 20;
+            var index = EditorGUI.Popup(classRect, currentIndex, names.ToArray());
 
-            EditorGUI.LabelField(newPosition, $"Guid: {identifierProperty.stringValue}");
-
-            if (index == currentIndex && !string.IsNullOrEmpty(identifierProperty.stringValue))
+            if (EditorGUI.EndChangeCheck())
             {
-                EditorGUI.EndProperty();
-                return;
+                var ids = collection
+                    .Select(screenData => screenData.ScreenIdentifier)
+                    .Select(prefab => prefab.Value);
+
+                identifierProperty.stringValue = ids.ElementAt(index);
             }
 
-            var ids = collection
-                .Select(screenData => screenData.ScreenIdentifier)
-                .Select(prefab => prefab.Value);
+            var newPosition = position;
+            newPosition.y += 10f;
 
-            identifierProperty.stringValue = ids.ElementAt(index);
+            var style = new GUIStyle(GUI.skin.label)
+            {
+                normal =
+                {
+                    textColor = Color.cyan
+                },
+                fontSize = 11,
+                fontStyle = FontStyle.Bold
+            };
+
+            EditorGUI.LabelField(newPosition, $"Guid: {identifierProperty.stringValue}", style);
 
             EditorGUI.EndProperty();
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return base.GetPropertyHeight(property, label) + 20;
+            return EditorGUI.GetPropertyHeight(property, label, true);
         }
     }
 }
