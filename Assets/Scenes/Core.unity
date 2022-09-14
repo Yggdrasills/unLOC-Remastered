@@ -559,7 +559,7 @@ Canvas:
   m_GameObject: {fileID: 1912245040}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_Camera: {fileID: 480332809}
   m_PlaneDistance: 10
   m_PixelPerfect: 0
@@ -604,9 +604,12 @@ MonoBehaviour:
     TypeName: 
   autoRun: 1
   autoInjectGameObjects: []
+  _loadingScreen:
+    _value: 4ba61ea7-b5f8-4ea0-9781-d754cce550c9
   _screenCollection: {fileID: 11400000, guid: 2cc474653f3b0a14ba9fb61d3e301432, type: 2}
   _cellPrefab: {fileID: 3484372127179893562, guid: 59911d8127d15614298fab74d5c2500a, type: 3}
   _inventoryView: {fileID: 39580934}
+  _screenCanvasTransform: {fileID: 1912245041}
 --- !u!4 &1997195041
 Transform:
   m_ObjectHideFlags: 0

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4648739180334015546}
   - component: {fileID: 4648739180334015544}
   - component: {fileID: 4648739180334015545}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Loading Screen 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50,8 +50,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6b9ce5a7ac668048ad5909a5f48a589, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _showDuration: 0.75
-  _hideDuration: 0.25
+  _showDuration: 1.5
+  _hideDuration: 2
   _canvasGroup: {fileID: 4648739180334015545}
   _content: {fileID: 4648739181679624405}
 --- !u!225 &4648739180334015545
@@ -62,7 +62,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4648739180334015547}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -75,7 +75,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4648739181679624404}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -113,7 +113,7 @@ GameObject:
   - component: {fileID: 4648739182160845827}
   - component: {fileID: 4648739182160845825}
   - component: {fileID: 4648739182160845826}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Layout
   m_TagString: Untagged
   m_Icon: {fileID: 0}
