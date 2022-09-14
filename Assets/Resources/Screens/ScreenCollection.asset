@@ -12,4 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fa8e2029a488d742b99b6632620bb23, type: 3}
   m_Name: ScreenCollection
   m_EditorClassIdentifier: 
-  _collection: []
+  _collection:
+  - _screenPrefab: {fileID: 4648739180334015544, guid: 7973d90dc4b7cc147820d8e080d4dbe0, type: 3}
+    _screenIdentifier:
+      _value: 4ba61ea7-b5f8-4ea0-9781-d754cce550c9
+  - _screenPrefab: {fileID: 4648739180334015544, guid: d92e26e735c468a48850fdaa8c6e2e99, type: 3}
+    _screenIdentifier:
+      _value: 3994413c-c456-409b-a149-644aedae5786
