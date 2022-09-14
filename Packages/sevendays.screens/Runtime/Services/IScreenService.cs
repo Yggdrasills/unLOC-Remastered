@@ -8,8 +8,8 @@ namespace SevenDays.Screens.Services
 {
     public interface IScreenService
     {
-        UniTask ShowAsync(ScreenIdentifier screen, CancellationToken cancellationToken);
+        UniTask ShowAsync(ScreenIdentifier screenIdentifier, CancellationToken cancellationToken);
 
-        UniTask HideAsync(ScreenIdentifier screen, CancellationToken cancellationToken);
+        UniTask HideAsync(ScreenIdentifier screenIdentifier, CancellationToken cancellationToken);
     }
 }

@@ -19,6 +19,22 @@ namespace SevenDays.Screens.Views
         [SerializeField]
         private CanvasGroup _canvasGroup;
 
+        [SerializeField]
+        private GameObject _content;
+
+        private void OnValidate()
+        {
+            if (_canvasGroup is null)
+            {
+                _canvasGroup = gameObject.AddComponent<CanvasGroup>();
+            }
+
+            if (_content is null && transform.childCount > 0)
+            {
+                _content = transform.GetChild(0).gameObject;
+            }
+        }
+
         protected override async UniTask VisualizeShowAsync(CancellationToken cancellationToken)
         {
             await _canvasGroup.DOFade(1, _showDuration)
@@ -29,6 +45,16 @@ namespace SevenDays.Screens.Views
         {
             await _canvasGroup.DOFade(0, _hideDuration)
                 .ToUniTask(TweenCancelBehaviour.KillAndCancelAwait, cancellationToken);
+        }
+
+        protected override void Enable()
+        {
+            _content.SetActive(true);
+        }
+
+        protected override void Disable()
+        {
+            _content.SetActive(false);
         }
     }
 }

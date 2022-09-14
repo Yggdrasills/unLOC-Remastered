@@ -13,35 +13,38 @@ namespace SevenDays.Screens.Services
     public class ScreenService : IScreenService
     {
         private readonly ScreenCollection _screenCollection;
-        private readonly Dictionary<ScreenIdentifier, ScreenViewBase> _activeScreens;
+        private readonly Dictionary<string, ScreenViewBase> _activeScreens;
 
         public ScreenService(ScreenCollection screenCollection)
         {
             _screenCollection = screenCollection;
 
-            _activeScreens = new Dictionary<ScreenIdentifier, ScreenViewBase>(16);
+            _activeScreens = new Dictionary<string, ScreenViewBase>(16);
         }
 
-        public async UniTask ShowAsync(ScreenIdentifier identifier, CancellationToken cancellationToken)
+        public async UniTask ShowAsync(ScreenIdentifier screenIdentifier, CancellationToken cancellationToken)
         {
             try
             {
-                var screenPrefab = _screenCollection.Get(identifier);
+                var screenId = screenIdentifier.Value;
+
+                var screenPrefab = _screenCollection.Get(screenId);
 
                 if (screenPrefab is null)
                 {
                     return;
                 }
 
-                if (_activeScreens.ContainsKey(identifier))
+                if (_activeScreens.ContainsKey(screenId))
                 {
                     return;
                 }
 
+                // todo: нужно подумать о пуле
                 var screen = Object.Instantiate(screenPrefab);
 
-                _activeScreens[identifier] = screen;
-                
+                _activeScreens[screenId] = screen;
+
                 screen.transform.SetAsLastSibling();
 
                 await screen.ShowAsync(cancellationToken);
@@ -52,9 +55,11 @@ namespace SevenDays.Screens.Services
             }
         }
 
-        public async UniTask HideAsync(ScreenIdentifier identifier, CancellationToken cancellationToken)
+        public async UniTask HideAsync(ScreenIdentifier screenIdentifier, CancellationToken cancellationToken)
         {
-            if (!_activeScreens.TryGetValue(identifier, out ScreenViewBase screen))
+            var screenId = screenIdentifier.Value;
+
+            if (!_activeScreens.TryGetValue(screenId, out var screen))
             {
                 return;
             }
@@ -62,6 +67,8 @@ namespace SevenDays.Screens.Services
             try
             {
                 await screen.HideAsync(cancellationToken);
+                
+                Object.Destroy(screen.gameObject);
             }
             catch
             {
@@ -69,7 +76,7 @@ namespace SevenDays.Screens.Services
             }
             finally
             {
-                _activeScreens.Remove(identifier);
+                _activeScreens.Remove(screenId);
             }
         }
     }

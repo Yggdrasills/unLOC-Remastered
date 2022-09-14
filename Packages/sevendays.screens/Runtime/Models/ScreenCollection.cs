@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -15,6 +16,8 @@ namespace SevenDays.Screens.Models
         menuName = "SevenDays/unLOC/" + nameof(ScreenCollection))]
     public class ScreenCollection : ScriptableObject
     {
+        internal ScreenData[] Collection => _collection;
+
         [SerializeField]
         private ScreenData[] _collection;
 
@@ -22,11 +25,10 @@ namespace SevenDays.Screens.Models
         {
             foreach (var target in _collection.Reverse())
             {
-                var existingGuids = _collection
-                    .Select(t => t.Identifier)
-                    .Select(t => t.Value);
+                var existingGuids = GetIdentifiers();
 
-                if (string.IsNullOrEmpty(target.Identifier.Value) || existingGuids.Count(t => target.Identifier.Value == t) > 1)
+                if (string.IsNullOrEmpty(target.ScreenIdentifier.Value) ||
+                    existingGuids.Count(t => target.ScreenIdentifier.Value == t) > 1)
                 {
                     var screenIdentifierFieldValue = target.GetType().GetField("_screenIdentifier",
                         BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(target);
@@ -40,9 +42,16 @@ namespace SevenDays.Screens.Models
         }
 
         [CanBeNull]
-        internal ScreenViewBase Get(ScreenIdentifier screenIdentifier)
+        internal ScreenViewBase Get(string identifier)
         {
-            return _collection.FirstOrDefault(t => t.Identifier == screenIdentifier)?.Prefab;
+            return _collection.FirstOrDefault(t => t.ScreenIdentifier.Value == identifier)?.Prefab;
+        }
+
+        private IEnumerable<string> GetIdentifiers()
+        {
+            return _collection
+                .Select(t => t.ScreenIdentifier)
+                .Select(t => t.Value);
         }
     }
 }

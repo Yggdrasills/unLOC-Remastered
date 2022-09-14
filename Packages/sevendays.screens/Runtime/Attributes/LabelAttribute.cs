@@ -6,6 +6,11 @@ namespace SevenDays.Screens.Attributes
     {
         internal string Prefix { get; }
 
+        internal LabelAttribute()
+        {
+            Prefix = string.Empty;
+        }
+
         internal LabelAttribute(string prefix)
         {
             Prefix = prefix;

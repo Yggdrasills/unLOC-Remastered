@@ -8,7 +8,7 @@ using UnityEngine;
 namespace SevenDays.Screens.Editor.Drawers
 {
     [CustomPropertyDrawer(typeof(LabelAttribute), true)]
-    internal sealed class LabelAttributeDrawer : PropertyDrawer
+    internal sealed class LabelPropertyDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {

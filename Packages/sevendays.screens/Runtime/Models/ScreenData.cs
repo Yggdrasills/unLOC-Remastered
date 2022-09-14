@@ -11,7 +11,7 @@ namespace SevenDays.Screens.Models
     {
         internal ScreenViewBase Prefab => _screenPrefab;
 
-        internal ScreenIdentifier Identifier => _screenIdentifier;
+        internal ScreenIdentifier ScreenIdentifier => _screenIdentifier;
 
         [SerializeField]
         private ScreenViewBase _screenPrefab;
