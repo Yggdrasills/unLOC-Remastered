@@ -1,9 +1,12 @@
-﻿using VContainer;
+﻿using SevenDays.unLOC.Menu;
+using SevenDays.unLOC.Utils.Helpers;
+
+using VContainer;
 using VContainer.Unity;
 
-namespace SevenDays.Menu
+namespace SevenDays.unLOC.Core.Scopes
 {
-    public class MenuLifetimeScope : LifetimeScope
+    public class MenuLifetimeScope : AutoInjectableLifetimeScope
     {
         protected override void Configure(IContainerBuilder builder)
         {

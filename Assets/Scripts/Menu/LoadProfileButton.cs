@@ -1,13 +1,13 @@
 ﻿using System;
 
-using SevenDays.SaveSystem;
+using SevenDays.unLOC.SaveSystem;
 
 using TMPro;
 
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace SevenDays.Menu
+namespace SevenDays.unLOC.Menu
 {
     public class LoadProfileButton : MonoBehaviour
     {

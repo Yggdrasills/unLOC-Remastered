@@ -2,6 +2,7 @@
 
 using Cinemachine;
 
+using SevenDays.unLOC.Core.Loaders;
 using SevenDays.unLOC.Core.Movement;
 using SevenDays.unLOC.Core.Player.Animations;
 
@@ -19,7 +20,7 @@ namespace SevenDays.unLOC.Core.Player
         private readonly Camera _camera;
         private readonly IInputModel _inputModel;
 
-        private IInitialize[] _initializes;
+        private IInstallable[] _initializes;
         private IDisposable[] _disposables;
 
         public PlayerCreator(InitializeConfig initializeConfig, Camera camera, IInputModel inputModel)
@@ -43,12 +44,12 @@ namespace SevenDays.unLOC.Core.Player
             var movementController =
                 new PlayerMovementController(tapZone, _inputModel, playerMovement, player);
 
-            _initializes = new IInitialize[] { playerAnimationController, movementController };
+            _initializes = new IInstallable[] { playerAnimationController, movementController };
             _disposables = new IDisposable[] { playerAnimationController, movementController };
 
             foreach (var initialize in _initializes)
             {
-                initialize.Initialize();
+                initialize.Install();
             }
         }
 

@@ -1,13 +1,14 @@
 using SevenDays.DialogSystem.Runtime;
 using SevenDays.Localization;
-using SevenDays.SaveSystem;
+using SevenDays.unLOC.Activities.Intro;
+using SevenDays.unLOC.SaveSystem;
 
 using UnityEngine;
 
 using VContainer;
 using VContainer.Unity;
 
-namespace SevenDays.unLOC.Activities.Intro
+namespace SevenDays.unLOC.Core.Scopes
 {
     public class IntroLifetimeScope : LifetimeScope
     {

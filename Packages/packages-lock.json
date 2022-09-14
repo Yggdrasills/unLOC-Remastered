@@ -26,6 +26,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.sevendays.screens": {
+      "version": "file:sevendays.screens",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.2d.animation": {
       "version": "5.0.10",
       "depth": 0,

@@ -4,22 +4,24 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
+using SevenDays.unLOC.Utils.Helpers;
+
 using UnityEditor;
 using UnityEditor.SceneManagement;
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace SevenDays.unLOC.Core.CustomEditors
+namespace SevenDays.unLOC.Utils.Editor
 {
-    [CustomEditor(typeof(AutoInjectableLifeTimeScope), true)]
-    public class AutoInjectableLifeTimeScopeEditor : Editor
+    [CustomEditor(typeof(AutoInjectableLifetimeScope), true)]
+    public class AutoInjectableLifeTimeScopeEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
 
-            var script = (AutoInjectableLifeTimeScope) target;
+            var script = (AutoInjectableLifetimeScope) target;
             
             var style = new GUIStyle(GUI.skin.button);
             style.normal.textColor = Color.green;
