@@ -1,0 +1,16 @@
+{
+  "name": "com.sevendays.screens",
+  "version": "1.0.0",
+  "displayName": "SevenDays.Screens",
+  "description": "Popups and windows display service",
+  "keywords": [
+    "screen",
+    "popup",
+    "window"
+  ],
+  "author": {
+    "name": "Yggdrasills",
+    "email": "khamrokamalov@gmail.com",
+    "url": "https://github.com/Yggdrasills"
+  }
+}
