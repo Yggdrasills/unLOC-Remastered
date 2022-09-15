@@ -1,9 +1,11 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 
 using Cysharp.Threading.Tasks;
 
 using SevenDays.Screens.Models;
 using SevenDays.Screens.Services;
+using SevenDays.Utils.Constants;
 
 using UnityEngine.SceneManagement;
 
@@ -13,10 +15,10 @@ namespace SevenDays.unLOC.Core.Loaders
 {
     public class SceneLoader
     {
+        public event Action<int> Loaded;
+
         private readonly ScreenIdentifier _loadingScreen;
         private readonly IScreenService _screenService;
-
-        private int _activeSceneIndex;
 
         public SceneLoader(ScreenIdentifier loadingScreen, IScreenService screenService)
         {
@@ -26,32 +28,37 @@ namespace SevenDays.unLOC.Core.Loaders
 
         public async UniTask LoadMenuAsync()
         {
-            await LoadSceneAsync(1);
+            await LoadSceneAsync(GameConstants.MenuSceneIndex);
         }
 
         public async UniTask LoadIntroAsync()
         {
-            await LoadSceneAsync(2);
+            await LoadSceneAsync(GameConstants.IntroSceneIndex);
         }
 
         public async UniTask LoadWorkshopAsync()
         {
-            await LoadSceneAsync(3);
+            await LoadSceneAsync(GameConstants.WorkshopSceneIndex);
         }
 
         public async UniTask LoadStreetAsync()
         {
-            await LoadSceneAsync(4);
+            await LoadSceneAsync(GameConstants.StreetSceneIndex);
         }
 
         public async UniTask LoadStreetStealthAsync()
         {
-            await LoadSceneAsync(5);
+            await LoadSceneAsync(GameConstants.StreetStealthSceneIndex);
         }
 
         public async UniTask LoadMelissaRoomAsync()
         {
-            await LoadSceneAsync(6);
+            await LoadSceneAsync(GameConstants.MelissaRoomSceneIndex);
+        }
+
+        public async UniTask LoadSceneByBuildIndexAsync(int buildIndex)
+        {
+            await LoadSceneAsync(buildIndex);
         }
 
         private async UniTask LoadSceneAsync(int buildIndex)
@@ -74,8 +81,6 @@ namespace SevenDays.unLOC.Core.Loaders
 
             SceneManager.SetActiveScene(loadedScene);
 
-            _activeSceneIndex = buildIndex;
-
             var rootGameObjects = loadedScene.GetRootGameObjects();
 
             foreach (var rootObject in rootGameObjects)
@@ -85,6 +90,8 @@ namespace SevenDays.unLOC.Core.Loaders
                     scope.Build();
                 }
             }
+            
+            Loaded?.Invoke(loadedScene.buildIndex);
 
             await _screenService.HideAsync(_loadingScreen, CancellationToken.None);
         }
