@@ -1,26 +1,38 @@
 ﻿using System.Linq;
 
+using Cysharp.Threading.Tasks;
+
 using SevenDays.unLOC.Activities.Items;
 using SevenDays.unLOC.Activities.Quests;
+using SevenDays.unLOC.Core.Loaders;
 
 using UnityEngine;
-using UnityEngine.SceneManagement;
+
+using VContainer;
 
 namespace SevenDays.unLOC.Activities.Workshop
 {
-    [RequireComponent(typeof(ClickableItem))]
+    [RequireComponent(typeof(InteractableItem))]
     public class ExitDoorView : MonoBehaviour
     {
         [SerializeField]
-        private ClickableItem _clickableItem;
+        private InteractableItem _clickableItem;
 
         [SerializeField]
         private QuestBase[] _quests;
 
+        private SceneLoader _sceneLoader;
+
+        [Inject]
+        private void Construct(SceneLoader sceneLoader)
+        {
+            _sceneLoader = sceneLoader;
+        }
+
         private void OnValidate()
         {
             if (_clickableItem == null)
-                _clickableItem = GetComponent<ClickableItem>();
+                _clickableItem = GetComponent<InteractableItem>();
         }
 
         private void OnEnable()
@@ -41,7 +53,7 @@ namespace SevenDays.unLOC.Activities.Workshop
                 return;
             }
 
-            SceneManager.LoadScene(1);
+            _sceneLoader.LoadStreetAsync().Forget();
         }
     }
 }

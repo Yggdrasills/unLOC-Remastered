@@ -16,6 +16,6 @@ MonoBehaviour:
   - _screenPrefab: {fileID: 4648739180334015544, guid: 7973d90dc4b7cc147820d8e080d4dbe0, type: 3}
     _screenIdentifier:
       _value: 4ba61ea7-b5f8-4ea0-9781-d754cce550c9
-  - _screenPrefab: {fileID: 4648739180334015544, guid: b4759f837065b00428378dff1ede4c6e, type: 3}
+  - _screenPrefab: {fileID: 6862825422004071581, guid: a89fefa06e5d4c846ae4a5222dc0a3d1, type: 3}
     _screenIdentifier:
       _value: c197fbe7-9a83-433b-829a-3b70f1bb7bc1

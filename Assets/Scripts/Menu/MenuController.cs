@@ -1,183 +1,120 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Threading;
 
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 
-using SevenDays.unLOC.SaveSystem;
-using SevenDays.Utils.Constants;
+using JetBrains.Annotations;
 
-using ToolBox.Serialization;
-using ToolBox.Serialization.OdinSerializer.Utilities;
+using SevenDays.Screens.Models;
+using SevenDays.Screens.Services;
+using SevenDays.unLOC.Core.Loaders;
+using SevenDays.unLOC.Profiles.Models;
+using SevenDays.unLOC.Profiles.Services;
 
 using UnityEditor;
 
-using UnityEngine;
-using UnityEngine.SceneManagement;
-
 using VContainer.Unity;
+
+using Object = UnityEngine.Object;
 
 namespace SevenDays.unLOC.Menu
 {
-    public class MenuController : IInitializable
+    [UsedImplicitly]
+    public class MenuController : IAsyncStartable, IDisposable
     {
-        private readonly MenuView _menuView;
-        private readonly LoadingPanelView _loadingPanelView;
-        private SaveSystemComponent _saveComponent;
+        private readonly SceneLoader _sceneLoader;
 
-        private Dictionary<int, SaveData> _savesList;
-        private List<LoadProfileButton> _profileButtons;
-        private bool _isShoved;
+        private readonly ScreenIdentifier _menuScreen;
+
+        private readonly ProfileLoadButton _profileLoadButtonPrefab;
+
+        private readonly IProfileService _profileService;
+        private readonly IScreenService _screenService;
+
+        private MenuScreenView _menuScreenView;
 
         public MenuController(
-            MenuView menuView, 
-            LoadingPanelView loadingPanelView
-            )
+            SceneLoader sceneLoader,
+            IScreenService screenService,
+            ScreenIdentifier menuScreen,
+            ProfileLoadButton profileLoadButtonPrefab,
+            IProfileService profileService)
         {
-            _menuView = menuView;
-            _loadingPanelView = loadingPanelView;
-            _savesList = GetSavesList();
-            _profileButtons = new List<LoadProfileButton>();
+            _sceneLoader = sceneLoader;
+            _screenService = screenService;
+            _menuScreen = menuScreen;
+            _profileLoadButtonPrefab = profileLoadButtonPrefab;
+            _profileService = profileService;
         }
 
-        void IInitializable.Initialize()
+        async UniTask IAsyncStartable.StartAsync(CancellationToken cancellation)
         {
-            RedrawProfilePanel();
+            _menuScreenView = await _screenService.ShowAsync<MenuScreenView>(_menuScreen, cancellation);
 
-            _isShoved = true;
+            _menuScreenView.NewGameButton.OnClickAsAsyncEnumerable().SubscribeAwait(OnNewGameButtonClickedAsync);
 
-            _menuView.ContinueGameButton.onClick.AddListener(HandleContinueGameClicked);
-            _menuView.SaveGameButton.onClick.AddListener(HandleSaveClicked);
-            _menuView.NewGameButton.onClick.AddListener(HandleNewGameClicked);
-            _menuView.ExitGameButton.onClick.AddListener(HandleExitClicked);
+            _menuScreenView.ExitGameButton.OnClickAsAsyncEnumerable().Subscribe(_ => OnExitButtonClickedAsync());
+            _menuScreenView.LoadGameButton.OnClickAsAsyncEnumerable().Subscribe(_ => LoadProfileButton());
 
-            _menuView.MenuButtonPressed += HandleMenuButtonPressed;
-            
-            _menuView.SaveGameButton.gameObject.SetActive(false);
-            
-            if(_savesList.Count == 0)
-                _menuView.LoadGameButton.gameObject.SetActive(false);
+            LoadProfileButton();
         }
 
-
-        private void HandleContinueGameClicked()
+        void IDisposable.Dispose()
         {
-            var autoSaveData = _savesList[0];
-            LoadSceneAsync(autoSaveData.SceneName).Forget();
+            _screenService.HideAsync(_menuScreen, CancellationToken.None).Forget();
         }
 
-        private void HandleNewGameClicked()
+        private async UniTask OnNewGameButtonClickedAsync(AsyncUnit _, CancellationToken __)
         {
-            var autoSaveData = new SaveData {ProfileIndex = 0, SceneName = GameConstants.IntroScene};
-            AddToSaveList(autoSaveData);
-            RedrawProfilePanel();
-            LoadSceneAsync(GameConstants.IntroScene).Forget();
+            _profileService.CreateProfile();
+
+            await _sceneLoader.LoadIntroAsync();
         }
 
-        private void HandleSaveClicked()
+        private void OnExitButtonClickedAsync()
         {
-            _saveComponent = GetSaveComponent();
-
-            var newProfileIndex = _savesList.Count + 1;
-
-            var saveData = new SaveData
-                {ProfileIndex = newProfileIndex, SceneName = SceneManager.GetActiveScene().name};
-
-            AddToSaveList(saveData);
-            RedrawProfilePanel();
-
-            _saveComponent.SaveData(saveData);
-        }
-
-        private async UniTaskVoid HandleLoadClickedAsync(SaveData saveData)
-        {
-            await LoadSceneAsync(saveData.SceneName);
-
-            _saveComponent = GetSaveComponent();
-            _saveComponent.LoadData(saveData);
-        }
-
-        private void HandleExitClicked()
-        {
-            _saveComponent = GetSaveComponent();
-            _saveComponent.AutoSaveData();
-
 #if UNITY_EDITOR
             EditorApplication.isPlaying = false;
-#endif
+#else
             Application.Quit();
+#endif
         }
 
-        private async UniTask LoadSceneAsync(string sceneName)
+        private void LoadProfileButton()
         {
-           await _loadingPanelView.ShowAsync(1, CancellationToken.None);
-
-            var activeScene = SceneManager.GetActiveScene();
-
-            if (activeScene.name != GameConstants.MenuScene)
-                await SceneManager.UnloadSceneAsync(activeScene);
-
-            await SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-            SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
-            _menuView.Hide();
-            _loadingPanelView.HideAsync(0.3f, CancellationToken.None).Forget();
-        }
-
-        private void HandleMenuButtonPressed()
-        {
-            if (SceneManager.GetActiveScene().name.Equals(GameConstants.MenuScene))
-                return;
-
-            _menuView.NewGameButton.gameObject.SetActive(false);
-            _menuView.SaveGameButton.gameObject.SetActive(true);
-            if(_savesList.Count > 0)
-                _menuView.LoadGameButton.gameObject.SetActive(true);
-            
-            if (_isShoved)
+            for (var i = 0; i < _menuScreenView.ProfileContainer.childCount; i++)
             {
-                _menuView.Hide();
-                _isShoved = false;
+                var child = _menuScreenView.ProfileContainer.GetChild(i);
+
+                Object.Destroy(child.gameObject);
             }
-            else
+
+            var profiles = _profileService.Profiles;
+
+            for (var i = 0; i < profiles.Length; i++)
             {
-                _menuView.Show();
-                _isShoved = true;
+                var profile = profiles[i];
+
+                var profileLoadButton = Object.Instantiate(
+                    _profileLoadButtonPrefab,
+                    _menuScreenView.ProfileContainer);
+
+                profileLoadButton.SetButtonText(
+                    profile.Index.ToString(),
+                    profile.DateCreation,
+                    profile.DateActivity);
+
+                profileLoadButton.Button.OnClickAsAsyncEnumerable().SubscribeAwait((_, __) =>
+                    OnProfileLoadButtonOnClicked(profile));
             }
         }
 
-        private SaveSystemComponent GetSaveComponent()
+        private async UniTask OnProfileLoadButtonOnClicked(Profile profile)
         {
-            if (_saveComponent is null)
-                return _saveComponent = Object.FindObjectOfType<SaveSystemComponent>();
+            _profileService.SetActiveProfile(profile.Index);
 
-            return _saveComponent;
-        }
-
-        private void RedrawProfilePanel()
-        {
-            _profileButtons.ForEach(Object.Destroy);
-
-            _savesList.ForEach(x =>
-            {
-                var profileButton = _menuView.CreateProfileButton(x.Value);
-                profileButton.Subscribe(() => HandleLoadClickedAsync(x.Value).Forget());
-                _profileButtons.Add(profileButton);
-            });
-        }
-
-        private void AddToSaveList(SaveData saveData)
-        {
-            if (_savesList.ContainsKey(saveData.ProfileIndex))
-                _savesList.Remove(saveData.ProfileIndex);
-            
-            _savesList.Add(saveData.ProfileIndex, saveData);
-            DataSerializer.Save(GameConstants.SavesList, _savesList);
-        }
-
-        private Dictionary<int, SaveData> GetSavesList()
-        {
-            return DataSerializer.TryLoad(GameConstants.SavesList, out Dictionary<int, SaveData> saves)
-                ? saves
-                : new Dictionary<int, SaveData>();
+            await _sceneLoader.LoadSceneByBuildIndexAsync(profile.SceneIndex);
         }
     }
 }

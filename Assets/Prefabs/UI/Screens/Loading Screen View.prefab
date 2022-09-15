@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4648739180334015544}
   - component: {fileID: 4648739180334015545}
   m_Layer: 5
-  m_Name: Loading Screen
+  m_Name: Loading Screen View
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -50,10 +50,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6b9ce5a7ac668048ad5909a5f48a589, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _showDuration: 1.5
-  _hideDuration: 2
-  _canvasGroup: {fileID: 4648739180334015545}
   _content: {fileID: 4648739181679624405}
+  _showDuration: 0.5
+  _hideDuration: 1.25
+  _canvasGroup: {fileID: 4648739180334015545}
 --- !u!225 &4648739180334015545
 CanvasGroup:
   m_ObjectHideFlags: 0

@@ -8492,7 +8492,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentReference:
-    TypeName: 
+    TypeName: SevenDays.unLOC.Core.Scopes.CoreLifetimeScope
   autoRun: 1
   autoInjectGameObjects:
   - {fileID: 38072254}
@@ -8504,6 +8504,7 @@ MonoBehaviour:
   - {fileID: 712299349}
   - {fileID: 832509914}
   - {fileID: 1308296392}
+  - {fileID: 1405654858}
   - {fileID: 1433403509}
   - {fileID: 1497171198}
   - {fileID: 1554222209}
@@ -11674,7 +11675,6 @@ GameObject:
   - component: {fileID: 1405654861}
   - component: {fileID: 1405654862}
   - component: {fileID: 1405654863}
-  - component: {fileID: 1405654864}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -11804,22 +11804,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e59810fc5cb4856bfd3c618b37a6752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _clickableItem: {fileID: 1405654864}
+  _clickableItem: {fileID: 1405654862}
   _quests:
-  - {fileID: 0}
   - {fileID: 1575724080}
---- !u!114 &1405654864
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1405654858}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21c5ce4954734121841737f0bbaaaecb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1416037513
 GameObject:
   m_ObjectHideFlags: 0
@@ -13407,7 +13394,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1531579717}
   - component: {fileID: 1531579716}
-  - component: {fileID: 1531579715}
   - component: {fileID: 1531579718}
   - component: {fileID: 1531579719}
   - component: {fileID: 1531579720}
@@ -13418,14 +13404,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &1531579715
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1531579714}
-  m_Enabled: 1
 --- !u!20 &1531579716
 Camera:
   m_ObjectHideFlags: 0
