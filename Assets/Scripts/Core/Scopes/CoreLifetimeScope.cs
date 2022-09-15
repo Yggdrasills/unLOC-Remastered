@@ -3,6 +3,7 @@ using SevenDays.Screens.Services;
 using SevenDays.unLOC.Core.Loaders;
 using SevenDays.unLOC.Inventory.Services;
 using SevenDays.unLOC.Inventory.Views;
+using SevenDays.unLOC.Profiles.Services;
 using SevenDays.unLOC.Utils.Helpers;
 
 using UnityEngine;
@@ -16,7 +17,7 @@ namespace SevenDays.unLOC.Core.Scopes
     {
         [SerializeField]
         private ScreenIdentifier _loadingScreen;
-        
+
         [SerializeField]
         private ScreenCollection _screenCollection;
 
@@ -31,7 +32,9 @@ namespace SevenDays.unLOC.Core.Scopes
 
         protected override void Configure(IContainerBuilder builder)
         {
-            RegisterInventory(builder);
+            builder.Register<IInventoryService, InventoryService>(Lifetime.Singleton)
+                .WithParameter(_cellPrefab)
+                .WithParameter(_inventoryView);
 
             builder.Register<SceneLoader>(Lifetime.Singleton)
                 .WithParameter(_loadingScreen);
@@ -40,15 +43,9 @@ namespace SevenDays.unLOC.Core.Scopes
                 .WithParameter(_screenCollection)
                 .WithParameter(_screenCanvasTransform);
 
-            builder.RegisterEntryPoint<CoreStartup>();
-        }
+            builder.RegisterEntryPoint<ProfileService>();
 
-        private void RegisterInventory(IContainerBuilder builder)
-        {
-            builder.Register<InventoryService>(Lifetime.Singleton)
-                .WithParameter(_cellPrefab)
-                .WithParameter(_inventoryView)
-                .AsImplementedInterfaces();
+            builder.RegisterEntryPoint<CoreStartup>();
         }
     }
 }
