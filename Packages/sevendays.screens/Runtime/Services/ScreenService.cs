@@ -27,6 +27,13 @@ namespace SevenDays.Screens.Services
 
         public async UniTask ShowAsync(ScreenIdentifier screenIdentifier, CancellationToken cancellationToken)
         {
+            await ShowAsync<ScreenViewBase>(screenIdentifier, cancellationToken);
+        }
+
+        public async UniTask<T> ShowAsync<T>(ScreenIdentifier screenIdentifier,
+            CancellationToken cancellationToken)
+            where T : ScreenViewBase
+        {
             try
             {
                 var screenId = screenIdentifier.Value;
@@ -35,12 +42,12 @@ namespace SevenDays.Screens.Services
 
                 if (screenPrefab is null)
                 {
-                    return;
+                    return null;
                 }
 
                 if (_activeScreens.ContainsKey(screenId))
                 {
-                    return;
+                    return null;
                 }
 
                 // todo: нужно подумать о пуле
@@ -51,11 +58,15 @@ namespace SevenDays.Screens.Services
                 screen.transform.SetAsLastSibling();
 
                 await screen.ShowAsync(cancellationToken);
+
+                return (T) screen;
             }
             catch
             {
                 // ignored
             }
+
+            return null;
         }
 
         public async UniTask HideAsync(ScreenIdentifier screenIdentifier, CancellationToken cancellationToken)
