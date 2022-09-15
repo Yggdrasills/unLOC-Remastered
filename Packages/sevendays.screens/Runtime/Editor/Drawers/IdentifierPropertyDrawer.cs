@@ -42,10 +42,10 @@ namespace SevenDays.Screens.Editor.Drawers
                 : collection.IndexOf(currentScreen);
 
             EditorGUI.BeginChangeCheck();
+            
+            position = EditorGUI.PrefixLabel(position, new GUIContent("Screen: "));
 
-            var classRect = new Rect(position.x, position.y, position.width, position.height);
-
-            var index = EditorGUI.Popup(classRect, currentIndex, names.ToArray());
+            var index = EditorGUI.Popup(position, currentIndex, names.ToArray());
 
             if (EditorGUI.EndChangeCheck())
             {
@@ -76,7 +76,7 @@ namespace SevenDays.Screens.Editor.Drawers
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return EditorGUI.GetPropertyHeight(property, label, true);
+            return EditorGUI.GetPropertyHeight(property, label, true) + 15f;
         }
     }
 }
