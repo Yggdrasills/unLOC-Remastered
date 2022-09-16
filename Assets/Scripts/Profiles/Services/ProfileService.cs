@@ -29,7 +29,7 @@ namespace SevenDays.unLOC.Profiles.Services
 
         void IInitializable.Initialize()
         {
-            if (!_storage.TryLoad(nameof(ProfileCollection), out _profileCollection))
+            if (!_storage.TryLoad(typeof(ProfileCollection).FullName, out _profileCollection))
             {
                 _profileCollection = new ProfileCollection();
             }
@@ -91,7 +91,7 @@ namespace SevenDays.unLOC.Profiles.Services
 
             profile.DateActivity = DateTime.UtcNow;
 
-            _storage.Save(nameof(ProfileCollection), _profileCollection);
+            _storage.Save(typeof(ProfileCollection).FullName, _profileCollection);
         }
     }
 }

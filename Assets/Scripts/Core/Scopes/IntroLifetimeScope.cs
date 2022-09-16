@@ -1,5 +1,3 @@
-using SevenDays.DialogSystem.Runtime;
-using SevenDays.Localization;
 using SevenDays.unLOC.Activities.Intro;
 using SevenDays.unLOC.SaveSystem;
 
@@ -21,9 +19,6 @@ namespace SevenDays.unLOC.Core.Scopes
 
             builder.RegisterEntryPoint<IntroController>();
             builder.RegisterComponentInHierarchy<IntroView>();
-
-            builder.Register<LocalizationService>(Lifetime.Singleton).AsSelf();
-            builder.Register<DialogService>(Lifetime.Singleton).AsSelf();
             
             builder.UseSaveSystem();
         }

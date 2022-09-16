@@ -1,5 +1,9 @@
+using SevenDays.DialogSystem.Runtime;
+using SevenDays.Localization;
 using SevenDays.Screens.Models;
 using SevenDays.Screens.Services;
+using SevenDays.unLOC.Activities.Items.Pad;
+using SevenDays.unLOC.Activities.Quests.Flower.Screwdriver;
 using SevenDays.unLOC.Core.Loaders;
 using SevenDays.unLOC.Inventory.Services;
 using SevenDays.unLOC.Inventory.Views;
@@ -28,13 +32,28 @@ namespace SevenDays.unLOC.Core.Scopes
         private InventoryView _inventoryView;
 
         [SerializeField]
+        private PadView _padView;
+
+        [SerializeField]
+        private ScrewdriverView _screwdriverView;
+
+        [SerializeField]
         private Transform _screenCanvasTransform;
 
         protected override void Configure(IContainerBuilder builder)
         {
-            builder.Register<IInventoryService, InventoryService>(Lifetime.Singleton)
+            builder.RegisterComponent(_padView);
+            builder.RegisterComponent(_screwdriverView);
+
+            builder.Register<LocalizationService>(Lifetime.Singleton).AsSelf();
+            builder.Register<DialogService>(Lifetime.Singleton).AsSelf();
+
+            builder.RegisterEntryPoint<ProfileService>();
+
+            builder.Register<InventoryService>(Lifetime.Singleton)
                 .WithParameter(_cellPrefab)
-                .WithParameter(_inventoryView);
+                .WithParameter(_inventoryView)
+                .AsImplementedInterfaces();
 
             builder.Register<SceneLoader>(Lifetime.Singleton)
                 .WithParameter(_loadingScreen);
@@ -43,9 +62,11 @@ namespace SevenDays.unLOC.Core.Scopes
                 .WithParameter(_screenCollection)
                 .WithParameter(_screenCanvasTransform);
 
-            builder.RegisterEntryPoint<ProfileService>();
-
             builder.RegisterEntryPoint<CoreStartup>();
+        }
+
+        private void RegisterDialogues(IContainerBuilder builder)
+        {
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 
 using UnityEngine;
 
@@ -20,11 +18,6 @@ namespace SevenDays.unLOC.Inventory.Views
             gameObject.SetActive(false);
 
             return UniTask.CompletedTask;
-        }
-
-        public virtual Action GetInventoryClickStrategy()
-        {
-            return delegate { };
         }
     }
 }
