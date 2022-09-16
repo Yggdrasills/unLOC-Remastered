@@ -46,7 +46,7 @@ namespace SevenDays.unLOC.Activities.Quests.Flower.Screwdriver
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            _screwdriverView.ShowAsync(_nozzle).Forget();
+            _screwdriverView.ShowAsync(_nozzle);
         }
 
         private void Colorize(Color color)

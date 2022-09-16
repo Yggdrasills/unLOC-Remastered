@@ -28,9 +28,6 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
         private FlowerQuestTextDisplayer _textDisplayer;
 
         [SerializeField]
-        private ScrewdriverView _screwdriver;
-
-        [SerializeField]
         private ClickableItem[] _brokenPlugs;
 
         [SerializeField]
@@ -47,13 +44,16 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
 
         private IInventoryService _inventory;
 
+        private ScrewdriverView _screwdriver;
+
         private List<ClickableItem> _brokenPlugList;
         private List<EmptyPlugView> _emptyPlugList;
 
         [Inject, UsedImplicitly]
-        private void Construct(IInventoryService inventory)
+        private void Construct(IInventoryService inventory, ScrewdriverView screwdriverView)
         {
             _inventory = inventory;
+            _screwdriver = screwdriverView;
         }
 
         private void Awake()
