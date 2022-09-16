@@ -25,14 +25,7 @@ namespace SevenDays.unLOC.Core.Scopes
         
         protected override void Configure(IContainerBuilder builder)
         {
-            RegisterDialogues(builder);
             RegisterMovement(builder);
-        }
-
-        private void RegisterDialogues(IContainerBuilder builder)
-        {
-            builder.Register<LocalizationService>(Lifetime.Singleton).AsSelf();
-            builder.Register<DialogService>(Lifetime.Singleton).AsSelf();
         }
 
         private void RegisterMovement(IContainerBuilder builder)
