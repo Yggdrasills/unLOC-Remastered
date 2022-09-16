@@ -60,7 +60,7 @@ namespace SevenDays.unLOC.Core.Scopes
                     return;
                 }
 
-                if (!new DataStorage().IsExists(nameof(ProfileCollection)))
+                if (!new DataStorage().IsExists(typeof(ProfileCollection).FullName))
                 {
                     _profileService.CreateProfile();
                 }
