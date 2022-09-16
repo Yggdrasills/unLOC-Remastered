@@ -6,9 +6,14 @@ namespace SevenDays.unLOC.Storage
 {
     public class DataStorage
     {
+        private static readonly JsonSerializerSettings SerializationSettings = new JsonSerializerSettings()
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        };
+        
         public void Save<T>(string key, T data)
         {
-            var json = JsonConvert.SerializeObject(data);
+            var json = JsonConvert.SerializeObject(data, SerializationSettings);
 
             PlayerPrefs.SetString(key, json);
             PlayerPrefs.Save();
@@ -24,7 +29,7 @@ namespace SevenDays.unLOC.Storage
         {
             var json = PlayerPrefs.GetString(key, string.Empty);
 
-            return JsonConvert.DeserializeObject<T>(json);
+            return JsonConvert.DeserializeObject<T>(json, SerializationSettings);
         }
 
         public bool TryLoad<T>(string key, out T data)
@@ -34,7 +39,7 @@ namespace SevenDays.unLOC.Storage
 
             if (IsExists(key))
             {
-                data = JsonConvert.DeserializeObject<T>(json);
+                data = JsonConvert.DeserializeObject<T>(json, SerializationSettings);
 
                 return true;
             }
