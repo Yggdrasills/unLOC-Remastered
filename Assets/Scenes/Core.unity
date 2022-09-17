@@ -6501,6 +6501,7 @@ MonoBehaviour:
   autoRun: 1
   autoInjectGameObjects:
   - {fileID: 72289328}
+  - {fileID: 1442999585}
   - {fileID: 2079238155}
   _loadingScreen:
     _value: 4ba61ea7-b5f8-4ea0-9781-d754cce550c9
