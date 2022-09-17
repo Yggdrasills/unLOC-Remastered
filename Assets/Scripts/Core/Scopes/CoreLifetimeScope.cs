@@ -8,6 +8,7 @@ using SevenDays.unLOC.Core.Loaders;
 using SevenDays.unLOC.Inventory.Services;
 using SevenDays.unLOC.Inventory.Views;
 using SevenDays.unLOC.Profiles.Services;
+using SevenDays.unLOC.Storage;
 using SevenDays.unLOC.Utils.Helpers;
 
 using UnityEngine;
@@ -42,13 +43,17 @@ namespace SevenDays.unLOC.Core.Scopes
 
         protected override void Configure(IContainerBuilder builder)
         {
-            builder.RegisterComponent(_padView);
-            builder.RegisterComponent(_screwdriverView);
+            builder.Register<IScreenService, ScreenService>(Lifetime.Singleton)
+                .WithParameter(_screenCollection)
+                .WithParameter(_screenCanvasTransform);
+
+            builder.Register<DataStorage>(Lifetime.Singleton);
 
             builder.Register<LocalizationService>(Lifetime.Singleton).AsSelf();
             builder.Register<DialogService>(Lifetime.Singleton).AsSelf();
 
-            builder.RegisterEntryPoint<ProfileService>();
+            builder.Register<ProfileService>(Lifetime.Singleton)
+                .AsImplementedInterfaces();
 
             builder.Register<InventoryService>(Lifetime.Singleton)
                 .WithParameter(_cellPrefab)
@@ -58,15 +63,10 @@ namespace SevenDays.unLOC.Core.Scopes
             builder.Register<SceneLoader>(Lifetime.Singleton)
                 .WithParameter(_loadingScreen);
 
-            builder.Register<IScreenService, ScreenService>(Lifetime.Singleton)
-                .WithParameter(_screenCollection)
-                .WithParameter(_screenCanvasTransform);
-
             builder.RegisterEntryPoint<CoreStartup>();
-        }
 
-        private void RegisterDialogues(IContainerBuilder builder)
-        {
+            builder.RegisterComponent(_padView);
+            builder.RegisterComponent(_screwdriverView);
         }
     }
 }

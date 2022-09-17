@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5914,7 +5914,6 @@ MonoBehaviour:
   - {fileID: 1917448157}
   - {fileID: 1940882831}
   - {fileID: 1999048892}
-  - {fileID: 0}
   - {fileID: 2093623583}
   - {fileID: 2114047805}
   - {fileID: 1283787612077455828}
@@ -9397,7 +9396,6 @@ MonoBehaviour:
   _flowerView: {fileID: 710310338}
   _content: {fileID: 496427807}
   _textDisplayer: {fileID: 1575724079}
-  _screwdriver: {fileID: 0}
   _brokenPlugs:
   - {fileID: 811481357}
   - {fileID: 2158452}

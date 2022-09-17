@@ -1,4 +1,6 @@
-﻿using SevenDays.unLOC.Storage;
+﻿using JetBrains.Annotations;
+
+using SevenDays.unLOC.Storage;
 
 using UnityEngine;
 
@@ -14,19 +16,18 @@ namespace SevenDays.unLOC.Activities.Items.Pad
 
         private PadView _padView;
 
-        private DataStorage _dataStorage;
+        private DataStorage _storage;
 
-        [Inject]
-        private void Constructor(PadView padView)
+        [Inject, UsedImplicitly]
+        private void Constructor(PadView padView, DataStorage storage)
         {
             _padView = padView;
+            _storage = storage;
         }
 
         private void Awake()
         {
-            _dataStorage = new DataStorage();
-
-            if (_dataStorage.IsExists(typeof(PadItem).FullName))
+            if (_storage.IsExists(typeof(PadItem).FullName))
             {
                 gameObject.SetActive(false);
             }
@@ -55,7 +56,7 @@ namespace SevenDays.unLOC.Activities.Items.Pad
             gameObject.SetActive(false);
             _padView.PickUp();
 
-            _dataStorage.Save(typeof(PadItem).FullName, true);
+            _storage.Save(typeof(PadItem).FullName, true);
         }
     }
 }

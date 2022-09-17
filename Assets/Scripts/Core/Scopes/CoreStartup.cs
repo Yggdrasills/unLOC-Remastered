@@ -3,16 +3,13 @@
 using Cysharp.Threading.Tasks;
 
 using SevenDays.unLOC.Core.Loaders;
-#if UNITY_EDITOR
 using SevenDays.unLOC.Profiles.Models;
 using SevenDays.unLOC.Profiles.Services;
-#endif
 using SevenDays.unLOC.Storage;
 
-using VContainer.Unity;
-#if UNITY_EDITOR
 using UnityEngine.SceneManagement;
-#endif
+
+using VContainer.Unity;
 
 namespace SevenDays.unLOC.Core.Scopes
 {
@@ -21,12 +18,16 @@ namespace SevenDays.unLOC.Core.Scopes
         private readonly SceneLoader _sceneLoader;
 #if UNITY_EDITOR
         private readonly IProfileService _profileService;
+        private readonly DataStorage _storage;
 #endif
-        public CoreStartup(SceneLoader sceneLoader, IProfileService profileService)
+        public CoreStartup(SceneLoader sceneLoader,
+            IProfileService profileService,
+            DataStorage storage)
         {
             _sceneLoader = sceneLoader;
 #if UNITY_EDITOR
             _profileService = profileService;
+            _storage = storage;
 #endif
         }
 
@@ -60,7 +61,7 @@ namespace SevenDays.unLOC.Core.Scopes
                     return;
                 }
 
-                if (!new DataStorage().IsExists(typeof(ProfileCollection).FullName))
+                if (!_storage.IsExists(typeof(ProfileCollection).FullName))
                 {
                     _profileService.CreateProfile();
                 }
