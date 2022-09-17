@@ -86,7 +86,7 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
             {
                 for (int i = 0, k = _emptyPlugIndexes.Count; i < k; i++)
                 {
-                    ReplaceEmptyPlug(_brokenPlugIndexes[i]);
+                    ReplaceEmptyPlug(_emptyPlugIndexes[i]);
                 }
             }
 
