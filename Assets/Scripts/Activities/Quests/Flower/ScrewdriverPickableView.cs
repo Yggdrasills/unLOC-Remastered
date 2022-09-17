@@ -26,14 +26,15 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
 
         private IInventoryService _inventory;
 
-        private DataStorage _dataStorage;
+        private DataStorage _storage;
 
         private Action _inventoryAddAction;
 
         [Inject, UsedImplicitly]
-        private void Construct(IInventoryService inventory)
+        private void Construct(IInventoryService inventory, DataStorage storage)
         {
             _inventory = inventory;
+            _storage = storage;
         }
 
         private void OnValidate()
@@ -44,9 +45,7 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
 
         private void Awake()
         {
-            _dataStorage = new DataStorage();
-
-            if (_dataStorage.IsExists(typeof(ScrewdriverPickableView).FullName))
+            if (_storage.IsExists(typeof(ScrewdriverPickableView).FullName))
             {
                 gameObject.SetActive(false);
             }
@@ -59,7 +58,7 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
                 _inventory.AddAsync(this).Forget();
 
                 gameObject.SetActive(false);
-                _dataStorage.Save(typeof(ScrewdriverPickableView).FullName, true);
+                _storage.Save(typeof(ScrewdriverPickableView).FullName, true);
             };
 
             _clickableItem.Clicked += _inventoryAddAction;

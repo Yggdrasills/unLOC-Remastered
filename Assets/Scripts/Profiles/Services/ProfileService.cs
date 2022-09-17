@@ -20,11 +20,11 @@ namespace SevenDays.unLOC.Profiles.Services
         private readonly SceneLoader _sceneLoader;
         private readonly DataStorage _storage;
 
-        public ProfileService(SceneLoader sceneLoader)
+        public ProfileService(SceneLoader sceneLoader, DataStorage storage)
         {
             _sceneLoader = sceneLoader;
 
-            _storage = new DataStorage();
+            _storage = storage;
         }
 
         void IInitializable.Initialize()
@@ -32,6 +32,10 @@ namespace SevenDays.unLOC.Profiles.Services
             if (!_storage.TryLoad(typeof(ProfileCollection).FullName, out _profileCollection))
             {
                 _profileCollection = new ProfileCollection();
+            }
+            else
+            {
+                _storage.SetProfileIndex(_profileCollection.ActiveProfile.Index);
             }
         }
 
@@ -43,13 +47,14 @@ namespace SevenDays.unLOC.Profiles.Services
         void IDisposable.Dispose()
         {
             _sceneLoader.Loaded -= OnSceneLoaded;
+
+            _storage.Save(typeof(ProfileCollection).FullName, _profileCollection);
         }
 
         private void OnSceneLoaded(int sceneBuildIndex)
         {
             _profileCollection.ActiveProfile.SceneIndex = sceneBuildIndex;
-
-            Save();
+            _profileCollection.ActiveProfile.DateActivity = DateTime.UtcNow;
         }
 
         void IProfileService.CreateProfile()
@@ -66,9 +71,7 @@ namespace SevenDays.unLOC.Profiles.Services
 
             _profileCollection.Profiles.Add(profile);
 
-            _profileCollection.ActiveProfile = profile;
-
-            Save();
+            SetActiveProfile(profile);
         }
 
         void IProfileService.SetActiveProfile(int profileIndex)
@@ -80,18 +83,13 @@ namespace SevenDays.unLOC.Profiles.Services
                 return;
             }
 
-            _profileCollection.ActiveProfile = profile;
-
-            Save();
+            SetActiveProfile(profile);
         }
 
-        private void Save()
+        private void SetActiveProfile(Profile profile)
         {
-            var profile = _profileCollection.ActiveProfile;
-
-            profile.DateActivity = DateTime.UtcNow;
-
-            _storage.Save(typeof(ProfileCollection).FullName, _profileCollection);
+            _profileCollection.ActiveProfile = profile;
+            _storage.SetProfileIndex(_profileCollection.ActiveProfile.Index);
         }
     }
 }

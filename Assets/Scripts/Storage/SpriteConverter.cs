@@ -18,7 +18,8 @@ namespace SevenDays.unLOC.Storage
 
         public static Sprite GetSprite(SerializableTexture serializableTexture)
         {
-            var texture = new Texture2D(serializableTexture.Width, serializableTexture.Height);
+            var texture = new Texture2D(serializableTexture.Width, serializableTexture.Height,
+                TextureFormat.ARGB32, false);
 
             texture.LoadImage(serializableTexture.Bytes);
 

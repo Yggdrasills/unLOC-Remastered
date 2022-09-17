@@ -23,7 +23,7 @@ namespace SevenDays.unLOC.Inventory.Services
 
         public Action ClickStrategy { get; set; }
     }
-    
+
     public class InventoryService : IInventoryService, IInitializable, IDisposable
     {
         private readonly List<ItemClickStrategy> _clickStrategies;
@@ -34,11 +34,12 @@ namespace SevenDays.unLOC.Inventory.Services
 
         private readonly InventoryView _inventoryView;
 
-        private readonly DataStorage _dataStorage;
+        private readonly DataStorage _storage;
 
         public InventoryService(
             InventoryCellView cellPrefab,
-            InventoryView inventoryView)
+            InventoryView inventoryView,
+            DataStorage storage)
         {
             _clickStrategies = new List<ItemClickStrategy>()
             {
@@ -54,7 +55,7 @@ namespace SevenDays.unLOC.Inventory.Services
             };
 
             _inventory = new Dictionary<Item, InventoryCellView>();
-            _dataStorage = new DataStorage();
+            _storage = storage;
 
             _cellPrefab = cellPrefab;
             _inventoryView = inventoryView;
@@ -62,7 +63,7 @@ namespace SevenDays.unLOC.Inventory.Services
 
         void IInitializable.Initialize()
         {
-            if (!_dataStorage.TryLoad(typeof(InventoryService).FullName, out Item[] items))
+            if (!_storage.TryLoad(typeof(InventoryService).FullName, out Item[] items))
             {
                 return;
             }
@@ -79,7 +80,7 @@ namespace SevenDays.unLOC.Inventory.Services
         {
             var keys = _inventory.Keys.ToArray();
 
-            _dataStorage.Save(typeof(InventoryService).FullName, keys);
+            _storage.Save(typeof(InventoryService).FullName, keys);
         }
 
         bool IInventoryService.Contains(InventoryItem type)
@@ -91,7 +92,7 @@ namespace SevenDays.unLOC.Inventory.Services
         {
             if (TryGetCellItem(type, out var cellItem))
             {
-                var amount = cellItem.item.Amount--;
+                var amount = --cellItem.item.Amount;
 
                 if (amount <= 0)
                 {
