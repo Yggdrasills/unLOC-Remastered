@@ -39,7 +39,7 @@ namespace SevenDays.unLOC.Activities.Quests.Printer
             _clickableItem ??= GetComponent<InteractableItem>();
         }
 
-        private void Awake()
+        private void Start()
         {
             _key = typeof(BottleView).FullName + gameObject.name;
 

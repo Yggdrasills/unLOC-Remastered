@@ -43,7 +43,7 @@ namespace SevenDays.unLOC.Activities.Quests.Printer
             _storage = storage;
         }
 
-        private void Awake()
+        private void Start()
         {
             if (_storage.TryLoad(typeof(PrinterQuest).FullName, out _droppedBottlesAmount))
             {

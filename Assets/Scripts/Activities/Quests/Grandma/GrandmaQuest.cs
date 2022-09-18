@@ -47,7 +47,7 @@ namespace SevenDays.unLOC.Activities.Quests.Grandma
             _storage = storage;
         }
 
-        private void Awake()
+        private void Start()
         {
             if (_storage.IsExists(typeof(GrandmaQuest).FullName))
             {

@@ -86,7 +86,7 @@ namespace SevenDays.unLOC.Activities.Quests.RobotPainter
             }
         }
 
-        private void Awake()
+        private void Start()
         {
             if (_storage.IsExists(typeof(RobotPainterQuest).FullName))
             {
