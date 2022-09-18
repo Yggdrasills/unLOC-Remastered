@@ -1,8 +1,14 @@
 ﻿using Cysharp.Threading.Tasks;
 
+using JetBrains.Annotations;
+
+using SevenDays.unLOC.Storage;
+
 using TMPro;
 
 using UnityEngine;
+
+using VContainer;
 
 namespace SevenDays.unLOC.Activities.Quests.RobotPainter
 {
@@ -39,7 +45,15 @@ namespace SevenDays.unLOC.Activities.Quests.RobotPainter
         [SerializeField]
         private string _questDoneDialogueBubbleText = "Так-то лучше. Теперь тебя не взломают.";
 
+        private DataStorage _storage;
+
         private bool _canEnterPassword = true;
+
+        [Inject, UsedImplicitly]
+        private void Construct(DataStorage storage)
+        {
+            _storage = storage;
+        }
 
         private void OnValidate()
         {
@@ -69,6 +83,14 @@ namespace SevenDays.unLOC.Activities.Quests.RobotPainter
             if (_robotView == null)
             {
                 _robotView = GetComponentInChildren<RobotPainterView>();
+            }
+        }
+
+        private void Awake()
+        {
+            if (_storage.IsExists(typeof(RobotPainterQuest).FullName))
+            {
+                Complete();
             }
         }
 
@@ -111,11 +133,9 @@ namespace SevenDays.unLOC.Activities.Quests.RobotPainter
             {
                 await _textBlinker.Blink(_correctColors);
 
-                CompleteQuest();
+                Complete();
 
-                _robotView.Play();
-
-                gameObject.SetActive(false);
+                _storage.Save(typeof(RobotPainterQuest).FullName, true);
             }
 
             _canEnterPassword = false;
@@ -123,6 +143,15 @@ namespace SevenDays.unLOC.Activities.Quests.RobotPainter
             await _textBlinker.Blink(_wrongColors);
 
             ResetToDefault();
+        }
+
+        private void Complete()
+        {
+            CompleteQuest();
+
+            _robotView.Play();
+
+            gameObject.SetActive(false);
         }
 
         private void ResetToDefault()
