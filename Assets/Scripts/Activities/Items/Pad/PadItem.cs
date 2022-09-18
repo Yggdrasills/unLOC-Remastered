@@ -19,7 +19,7 @@ namespace SevenDays.unLOC.Activities.Items.Pad
         private DataStorage _storage;
 
         [Inject, UsedImplicitly]
-        private void Constructor(PadView padView, DataStorage storage)
+        private void Construct(PadView padView, DataStorage storage)
         {
             _padView = padView;
             _storage = storage;

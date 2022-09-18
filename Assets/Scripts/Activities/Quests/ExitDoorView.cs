@@ -3,21 +3,17 @@
 using Cysharp.Threading.Tasks;
 
 using SevenDays.unLOC.Activities.Items;
-using SevenDays.unLOC.Activities.Quests;
 using SevenDays.unLOC.Core.Loaders;
 
 using UnityEngine;
 
 using VContainer;
 
-namespace SevenDays.unLOC.Activities.Workshop
+namespace SevenDays.unLOC.Activities.Quests
 {
     [RequireComponent(typeof(InteractableItem))]
     public class ExitDoorView : MonoBehaviour
     {
-        [SerializeField]
-        private InteractableItem _clickableItem;
-
         [SerializeField]
         private QuestBase[] _quests;
 
@@ -29,31 +25,31 @@ namespace SevenDays.unLOC.Activities.Workshop
             _sceneLoader = sceneLoader;
         }
 
-        private void OnValidate()
+        public void LoadStreet()
         {
-            if (_clickableItem == null)
-                _clickableItem = GetComponent<InteractableItem>();
-        }
-
-        private void OnEnable()
-        {
-            _clickableItem.Clicked += GoToStreet;
-        }
-
-        private void OnDisable()
-        {
-            _clickableItem.Clicked -= GoToStreet;
-        }
-
-        private void GoToStreet()
-        {
-            if (_quests.Any(t => !t.IsCompleted))
+            if (!CanPassNext())
             {
                 // todo: dialogue about not all quests completed
                 return;
             }
 
             _sceneLoader.LoadStreetAsync().Forget();
+        }
+
+        public void LoadWorkshop()
+        {
+            if (!CanPassNext())
+            {
+                // todo: dialogue about not all quests completed
+                return;
+            }
+
+            _sceneLoader.LoadWorkshopAsync().Forget();
+        }
+
+        private bool CanPassNext()
+        {
+            return _quests != null && _quests.All(t => t.IsCompleted);
         }
     }
 }
