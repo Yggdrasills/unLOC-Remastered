@@ -4,9 +4,12 @@ using Cysharp.Threading.Tasks;
 
 using DG.Tweening;
 
+using SevenDays.Screens.Views;
+using SevenDays.unLOC.Utils.Extensions;
+
 using UnityEngine;
 
-namespace SevenDays.Screens.Views
+namespace SevenDays.unLOC.Screens.Views
 {
     internal sealed class FadeScreenView : DefaultScreenView
     {
@@ -19,9 +22,16 @@ namespace SevenDays.Screens.Views
         [SerializeField]
         private CanvasGroup _canvasGroup;
 
+        private CancellationToken _cancellationToken;
+
+        private void Awake()
+        {
+            _cancellationToken = gameObject.GetCancellationTokenOnDestroy();
+        }
+
         protected override void Validated()
         {
-            if (_canvasGroup is null)
+            if (_canvasGroup == null)
             {
                 _canvasGroup = gameObject.AddComponent<CanvasGroup>();
             }
@@ -29,14 +39,20 @@ namespace SevenDays.Screens.Views
 
         protected override async UniTask VisualizeShowAsync(CancellationToken cancellationToken)
         {
+            using var cts = CancellationTokenSource
+                .CreateLinkedTokenSource(_cancellationToken, cancellationToken);
+
             await _canvasGroup.DOFade(1, _showDuration)
-                .ToUniTask(TweenCancelBehaviour.KillAndCancelAwait, cancellationToken);
+                .AwaitWithCancellation(cts.Token);
         }
 
         protected override async UniTask VisualizeHideAsync(CancellationToken cancellationToken)
         {
+            using var cts = CancellationTokenSource
+                .CreateLinkedTokenSource(_cancellationToken, cancellationToken);
+
             await _canvasGroup.DOFade(0, _hideDuration)
-                .ToUniTask(TweenCancelBehaviour.KillAndCancelAwait, cancellationToken);
+                .AwaitWithCancellation(cts.Token);
         }
     }
 }
