@@ -1,10 +1,8 @@
-﻿using System;
-
-using DG.Tweening;
+﻿using DG.Tweening;
 
 using UnityEngine;
 
-namespace SevenDays.unLOC.Activities.Workshop
+namespace SevenDays.unLOC.Activities.Workshop.Views
 {
     public class RoboCleanerView : MonoBehaviour
     {
