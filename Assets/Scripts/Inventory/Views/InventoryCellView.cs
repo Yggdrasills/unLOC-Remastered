@@ -3,6 +3,7 @@
 using TMPro;
 
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.UI;
 
 namespace SevenDays.unLOC.Inventory.Views
@@ -30,7 +31,10 @@ namespace SevenDays.unLOC.Inventory.Views
 
         public void SetCounterText(int amount)
         {
-            _counterText.text = amount.ToString();
+            Assert.IsTrue(amount > 0,
+                $"[{nameof(InventoryCellView)}] Items amount should be more than zero");
+
+            _counterText.text = amount == 1 ? string.Empty : amount.ToString();
         }
     }
 }
