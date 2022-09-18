@@ -53,6 +53,11 @@ namespace SevenDays.unLOC.Profiles.Services
 
         private void OnSceneLoaded(int sceneBuildIndex)
         {
+            if (_profileCollection.ActiveProfile == null)
+            {
+                return;
+            }
+
             _profileCollection.ActiveProfile.SceneIndex = sceneBuildIndex;
             _profileCollection.ActiveProfile.DateActivity = DateTime.UtcNow;
         }
