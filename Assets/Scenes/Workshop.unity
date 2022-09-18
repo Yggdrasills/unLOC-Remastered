@@ -5890,8 +5890,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentReference:
-    TypeName: SevenDays.unLOC.Core.Scopes.CoreLifetimeScope
-  autoRun: 1
+    TypeName: 
+  autoRun: 0
   autoInjectGameObjects:
   - {fileID: 38072254}
   - {fileID: 44991338}
