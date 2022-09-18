@@ -24,6 +24,11 @@ namespace SevenDays.unLOC.Storage
 
         public void Save<T>(string key, T data)
         {
+            if (data == null)
+            {
+                return;
+            }
+
             var json = JsonConvert.SerializeObject(data, SerializationSettings);
 
             PlayerPrefs.SetString(GetFullKey(key), json);

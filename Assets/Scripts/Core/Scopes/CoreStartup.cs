@@ -19,15 +19,17 @@ namespace SevenDays.unLOC.Core.Scopes
 #if UNITY_EDITOR
         private readonly IProfileService _profileService;
         private readonly DataStorage _storage;
+        private readonly LifetimeScope _parentScope;
 #endif
         public CoreStartup(SceneLoader sceneLoader,
             IProfileService profileService,
-            DataStorage storage)
+            DataStorage storage, LifetimeScope parentScope)
         {
             _sceneLoader = sceneLoader;
 #if UNITY_EDITOR
             _profileService = profileService;
             _storage = storage;
+            _parentScope = parentScope;
 #endif
         }
 
@@ -54,6 +56,22 @@ namespace SevenDays.unLOC.Core.Scopes
                 var scene = SceneManager.GetSceneAt(SceneManager.sceneCount - 1);
 
                 SceneManager.SetActiveScene(scene);
+
+                for (int i = 1; i < SceneManager.sceneCount; i++)
+                {
+                    var sceneRootObjects = scene.GetRootGameObjects();
+
+                    for (int k = 0; k < sceneRootObjects.Length; k++)
+                    {
+                        if (sceneRootObjects[k].TryGetComponent(out LifetimeScope scope))
+                        {
+                            using (LifetimeScope.EnqueueParent(_parentScope))
+                            {
+                                scope.Build();
+                            }
+                        }
+                    }
+                }
 
                 // note: add profile for editor if not exist
                 if (scene.name == "Menu")

@@ -358,8 +358,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentReference:
-    TypeName: SevenDays.unLOC.Core.Scopes.CoreLifetimeScope
-  autoRun: 1
+    TypeName: 
+  autoRun: 0
   autoInjectGameObjects: []
   _menuScreen:
     _value: c197fbe7-9a83-433b-829a-3b70f1bb7bc1

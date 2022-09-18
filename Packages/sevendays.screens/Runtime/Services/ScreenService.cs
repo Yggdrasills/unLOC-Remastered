@@ -81,8 +81,6 @@ namespace SevenDays.Screens.Services
             try
             {
                 await screen.HideAsync(cancellationToken);
-
-                Object.Destroy(screen.gameObject);
             }
             catch
             {
@@ -90,6 +88,7 @@ namespace SevenDays.Screens.Services
             }
             finally
             {
+                Object.Destroy(screen.gameObject);
                 _activeScreens.Remove(screenId);
             }
         }

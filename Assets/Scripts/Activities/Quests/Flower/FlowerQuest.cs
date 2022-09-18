@@ -64,7 +64,7 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
             _storage = storage;
         }
 
-        private void Awake()
+        private void Start()
         {
             if (!_storage.TryLoad(BrokenPlugKey, out _brokenPlugIndexes))
             {

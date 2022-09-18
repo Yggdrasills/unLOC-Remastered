@@ -25,16 +25,13 @@ namespace SevenDays.unLOC.Activities.Items.Pad
             _storage = storage;
         }
 
-        private void Awake()
+        private void Start()
         {
             if (_storage.IsExists(typeof(PadItem).FullName))
             {
                 gameObject.SetActive(false);
             }
-        }
 
-        private void Start()
-        {
             _interactableItem.Clicked += OnClicked;
         }
 

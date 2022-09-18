@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -6913,12 +6913,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 898063750}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8e44e847d2f40cb80bf39068820fb8a, type: 3}
+  m_Script: {fileID: 11500000, guid: fd69caf386e241dba65ba3f9376f23c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   parentReference:
-    TypeName: SevenDays.unLOC.Core.Scopes.CoreLifetimeScope
-  autoRun: 1
+    TypeName: 
+  autoRun: 0
   autoInjectGameObjects:
   - {fileID: 767040454}
   - {fileID: 1218477878}
