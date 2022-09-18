@@ -11,12 +11,20 @@ namespace SevenDays.unLOC.Activities.Quests.RobotPainter
     public class TextColorBlinker : MonoBehaviour
     {
         [SerializeField]
-        private TextMeshPro _text;
+        private TextMeshProUGUI _text;
 
         [SerializeField]
         private float _duration = 1f;
 
         private Sequence _blinkTween;
+
+        private void OnValidate()
+        {
+            if (_text == null)
+            {
+                _text = GetComponentInChildren<TextMeshProUGUI>();
+            }
+        }
 
         private void OnDisable()
         {
