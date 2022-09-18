@@ -19,11 +19,15 @@ namespace SevenDays.unLOC.Core.Loaders
 
         private readonly ScreenIdentifier _loadingScreen;
         private readonly IScreenService _screenService;
+        private readonly LifetimeScope _parentScope;
 
-        public SceneLoader(ScreenIdentifier loadingScreen, IScreenService screenService)
+        public SceneLoader(ScreenIdentifier loadingScreen,
+            IScreenService screenService,
+            LifetimeScope parentScope)
         {
             _loadingScreen = loadingScreen;
             _screenService = screenService;
+            _parentScope = parentScope;
         }
 
         public async UniTask LoadMenuAsync()
@@ -73,25 +77,26 @@ namespace SevenDays.unLOC.Core.Loaders
                 await SceneManager.UnloadSceneAsync(activeScene);
             }
 
-            var sceneLoadOperation = SceneManager.LoadSceneAsync(buildIndex, LoadSceneMode.Additive);
-
-            await UniTask.WaitUntil(() => sceneLoadOperation.isDone);
-
-            var loadedScene = SceneManager.GetSceneByBuildIndex(buildIndex);
-
-            SceneManager.SetActiveScene(loadedScene);
-
-            var rootGameObjects = loadedScene.GetRootGameObjects();
-
-            foreach (var rootObject in rootGameObjects)
+            using (LifetimeScope.EnqueueParent(_parentScope))
             {
-                if (rootObject.TryGetComponent(out LifetimeScope scope))
+                await SceneManager.LoadSceneAsync(buildIndex, LoadSceneMode.Additive);
+
+                var loadedScene = SceneManager.GetSceneByBuildIndex(buildIndex);
+
+                SceneManager.SetActiveScene(loadedScene);
+
+                var rootGameObjects = loadedScene.GetRootGameObjects();
+
+                foreach (var rootObject in rootGameObjects)
                 {
-                    scope.Build();
+                    if (rootObject.TryGetComponent(out LifetimeScope scope))
+                    {
+                        scope.Build();
+                    }
                 }
+
+                Loaded?.Invoke(loadedScene.buildIndex);
             }
-            
-            Loaded?.Invoke(loadedScene.buildIndex);
 
             await _screenService.HideAsync(_loadingScreen, CancellationToken.None);
         }

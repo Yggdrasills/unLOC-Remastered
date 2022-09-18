@@ -12,7 +12,7 @@ using VContainer.Unity;
 
 namespace SevenDays.unLOC.Core.Scopes
 {
-    public class WorkshopLifetimeScope : AutoInjectableLifetimeScope
+    public class StreetLifetimeScope : AutoInjectableLifetimeScope
     {
         [SerializeField]
         private Camera _camera;

@@ -43,16 +43,15 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
                 _clickableItem = GetComponent<ClickableItem>();
         }
 
-        private void Awake()
+        private void Start()
         {
             if (_storage.IsExists(typeof(ScrewdriverPickableView).FullName))
             {
                 gameObject.SetActive(false);
-            }
-        }
 
-        private void Start()
-        {
+                return;
+            }
+
             _inventoryAddAction = () =>
             {
                 _inventory.AddAsync(this).Forget();
