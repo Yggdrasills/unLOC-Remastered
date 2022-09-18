@@ -1,4 +1,6 @@
-﻿using DG.Tweening;
+﻿using System;
+
+using DG.Tweening;
 
 using UnityEngine;
 
@@ -15,16 +17,26 @@ namespace SevenDays.unLOC.Activities.Workshop
         [SerializeField]
         private float _awaitingDuration = 5f;
 
+        private Sequence _sequence;
+
         private void Start()
         {
             Run();
+        }
+
+        private void OnDestroy()
+        {
+            if (_sequence.IsActive())
+            {
+                _sequence.Kill();
+            }
         }
 
         private void Run()
         {
             Flip();
 
-            DOTween.Sequence()
+            _sequence = DOTween.Sequence()
                 .AppendCallback(Flip)
                 .Append(transform.DOMoveX(_targetPositionX, _moveDuration)
                     .SetEase(Ease.Linear))
