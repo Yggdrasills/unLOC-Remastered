@@ -9109,6 +9109,7 @@ GameObject:
   - component: {fileID: 1554222211}
   - component: {fileID: 1554222212}
   - component: {fileID: 1554222213}
+  - component: {fileID: 1554222214}
   m_Layer: 0
   m_Name: Note
   m_TagString: Untagged
@@ -9203,6 +9204,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _dialogWindow: {fileID: 1318779885}
   _dialogJson: {fileID: 4900000, guid: 07ad0ffc6236839429bdb211c3f6a4e6, type: 3}
+--- !u!114 &1554222214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1554222209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c73683ff2e1441db8985ab12c7269d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interactableItem: {fileID: 1554222212}
 --- !u!1 &1574941599
 GameObject:
   m_ObjectHideFlags: 0
