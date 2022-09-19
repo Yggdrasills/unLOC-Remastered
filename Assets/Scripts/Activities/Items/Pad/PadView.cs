@@ -13,10 +13,10 @@ namespace SevenDays.unLOC.Activities.Items.Pad
         [SerializeField]
         private GameObject _content;
 
-        private DataStorage _storage;
+        private IStorageRepository _storage;
 
         [Inject, UsedImplicitly]
-        private void Construct(DataStorage storage)
+        private void Construct(IStorageRepository storage)
         {
             _storage = storage;
         }

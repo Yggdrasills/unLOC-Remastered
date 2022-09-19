@@ -35,12 +35,12 @@ namespace SevenDays.unLOC.Activities.Quests.Grandma
 
         private IInventoryService _inventory;
         private DialogService _dialogService;
-        private DataStorage _storage;
+        private IStorageRepository _storage;
 
         [Inject, UsedImplicitly]
         private void Construct(IInventoryService inventory,
             DialogService dialogService,
-            DataStorage storage)
+            IStorageRepository storage)
         {
             _inventory = inventory;
             _dialogService = dialogService;

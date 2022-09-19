@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace SevenDays.unLOC.Storage
 {
-    public class DataStorage
+    public class LocalStorage : IStorageRepository
     {
         private static readonly JsonSerializerSettings SerializationSettings = new JsonSerializerSettings()
         {
@@ -15,20 +15,16 @@ namespace SevenDays.unLOC.Storage
 
         private readonly StringBuilder _stringBuilder;
 
-        private int _profileIndex;
+        private readonly int _profileIndex;
 
-        public DataStorage()
+        public LocalStorage(int profileIndex)
         {
             _stringBuilder = new StringBuilder();
+            _profileIndex = profileIndex;
         }
 
         public void Save<T>(string key, T data)
         {
-            if (data == null)
-            {
-                return;
-            }
-
             var json = JsonConvert.SerializeObject(data, SerializationSettings);
 
             PlayerPrefs.SetString(GetFullKey(key), json);
@@ -69,11 +65,6 @@ namespace SevenDays.unLOC.Storage
         public bool IsExists(string key)
         {
             return !string.IsNullOrEmpty(PlayerPrefs.GetString(GetFullKey(key)));
-        }
-
-        public void SetProfileIndex(int index)
-        {
-            _profileIndex = index;
         }
 
         private string GetFullKey(string key)

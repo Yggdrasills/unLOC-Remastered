@@ -16,26 +16,29 @@ namespace SevenDays.unLOC.Profiles.Services
     {
         public Profile[] Profiles => _profileCollection.Profiles.ToArray();
 
+        private Profile Current => _profileCollection.ActiveProfile;
+
         private ProfileCollection _profileCollection;
         private readonly SceneLoader _sceneLoader;
-        private readonly DataStorage _storage;
+        private readonly IStorageDecorator _storage;
 
-        public ProfileService(SceneLoader sceneLoader, DataStorage storage)
+        public ProfileService(SceneLoader sceneLoader, IStorageDecorator storage)
         {
             _sceneLoader = sceneLoader;
-
             _storage = storage;
         }
 
         void IInitializable.Initialize()
         {
+            _storage.SetStorage(new GlobalStorage());
+
             if (!_storage.TryLoad(typeof(ProfileCollection).FullName, out _profileCollection))
             {
                 _profileCollection = new ProfileCollection();
             }
             else
             {
-                _storage.SetProfileIndex(_profileCollection.ActiveProfile.Index);
+                _storage.SetStorage(new LocalStorage(Current.Index));
             }
         }
 
@@ -48,7 +51,11 @@ namespace SevenDays.unLOC.Profiles.Services
         {
             _sceneLoader.Loaded -= OnSceneLoaded;
 
+            _storage.SetStorage(new GlobalStorage());
+
             _storage.Save(typeof(ProfileCollection).FullName, _profileCollection);
+
+            _storage.SetStorage(new LocalStorage(Current.Index));
         }
 
         private void OnSceneLoaded(int sceneBuildIndex)
@@ -94,7 +101,12 @@ namespace SevenDays.unLOC.Profiles.Services
         private void SetActiveProfile(Profile profile)
         {
             _profileCollection.ActiveProfile = profile;
-            _storage.SetProfileIndex(_profileCollection.ActiveProfile.Index);
+
+            _storage.SetStorage(new GlobalStorage());
+
+            _storage.SetProfileIndex(profile.Index);
+
+            _storage.SetStorage(new LocalStorage(profile.Index));
         }
     }
 }

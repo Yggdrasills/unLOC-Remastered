@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 
 using SevenDays.unLOC.Inventory.Views;
 using SevenDays.unLOC.Storage;
+using SevenDays.unLOC.Utils.Helpers;
 
 using UnityEngine;
 
@@ -24,7 +25,7 @@ namespace SevenDays.unLOC.Inventory.Services
         public Action ClickStrategy { get; set; }
     }
 
-    public class InventoryService : IInventoryService, IInitializable, IDisposable
+    public class InventoryService : IInventoryService, IStartable, IDisposable
     {
         private readonly List<ItemClickStrategy> _clickStrategies;
 
@@ -34,12 +35,12 @@ namespace SevenDays.unLOC.Inventory.Services
 
         private readonly InventoryView _inventoryView;
 
-        private readonly DataStorage _storage;
+        private readonly IStorageRepository _storage;
 
         public InventoryService(
             InventoryCellView cellPrefab,
             InventoryView inventoryView,
-            DataStorage storage)
+            IStorageRepository storage)
         {
             _clickStrategies = new List<ItemClickStrategy>()
             {
@@ -61,7 +62,7 @@ namespace SevenDays.unLOC.Inventory.Services
             _inventoryView = inventoryView;
         }
 
-        void IInitializable.Initialize()
+        void IStartable.Start()
         {
             if (!_storage.TryLoad(typeof(InventoryService).FullName, out Item[] items))
             {

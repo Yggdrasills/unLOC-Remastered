@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace SevenDays.unLOC.Storage
+namespace SevenDays.unLOC.Utils.Helpers
 {
     public static class SpriteConverter
     {
@@ -25,5 +25,14 @@ namespace SevenDays.unLOC.Storage
 
             return Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), Vector2.one);
         }
+    }
+    
+    public class SerializableTexture
+    {
+        public int Width { get; set; }
+
+        public int Height { get; set; }
+
+        public byte[] Bytes { get; set; }
     }
 }
