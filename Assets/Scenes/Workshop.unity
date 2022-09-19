@@ -5911,7 +5911,7 @@ GameObject:
   - component: {fileID: 898063752}
   - component: {fileID: 898063751}
   m_Layer: 0
-  m_Name: Scope
+  m_Name: Workshop Scope
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

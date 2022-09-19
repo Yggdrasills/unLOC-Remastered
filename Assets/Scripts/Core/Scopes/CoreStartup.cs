@@ -20,16 +20,20 @@ namespace SevenDays.unLOC.Core.Scopes
         private readonly IProfileService _profileService;
         private readonly IStorageRepository _storage;
         private readonly LifetimeScope _parentScope;
+        private readonly GameServiceData _serviceData;
 #endif
         public CoreStartup(SceneLoader sceneLoader,
             IProfileService profileService,
-            IStorageRepository storage, LifetimeScope parentScope)
+            IStorageRepository storage,
+            LifetimeScope parentScope,
+            GameServiceData serviceData)
         {
             _sceneLoader = sceneLoader;
 #if UNITY_EDITOR
             _profileService = profileService;
             _storage = storage;
             _parentScope = parentScope;
+            _serviceData = serviceData;
 #endif
         }
 
@@ -53,35 +57,42 @@ namespace SevenDays.unLOC.Core.Scopes
             {
                 canGoNext = false;
 
+                // note: поддерживается только вторая сцена. Третью не добавляйте. Только Core + что-то
                 var scene = SceneManager.GetSceneAt(SceneManager.sceneCount - 1);
 
                 SceneManager.SetActiveScene(scene);
 
-                for (int i = 1; i < SceneManager.sceneCount; i++)
-                {
-                    var sceneRootObjects = scene.GetRootGameObjects();
+                var sceneRootObjects = scene.GetRootGameObjects();
 
-                    for (int k = 0; k < sceneRootObjects.Length; k++)
+                for (int k = 0; k < sceneRootObjects.Length; k++)
+                {
+                    if (sceneRootObjects[k].TryGetComponent(out LifetimeScope scope))
                     {
-                        if (sceneRootObjects[k].TryGetComponent(out LifetimeScope scope))
+                        LifetimeScope outerScope = _parentScope;
+
+                        if (scene.buildIndex == 3 || scene.buildIndex == 4)
                         {
-                            using (LifetimeScope.EnqueueParent(_parentScope))
-                            {
-                                scope.Build();
-                            }
+                            outerScope = GameServiceInstaller.UseServices(_parentScope, _serviceData);
+                            
+                            SceneManager.MoveGameObjectToScene(outerScope.gameObject, SceneManager.GetSceneAt(0));
+
+                            _sceneLoader.SetOuterScope(outerScope);
+                        }
+
+                        using (LifetimeScope.EnqueueParent(outerScope))
+                        {
+                            scope.Build();
                         }
                     }
                 }
 
                 // note: add profile for editor if not exist
-                if (scene.name == "Menu")
+                if (scene.buildIndex > 1)
                 {
-                    return;
-                }
-
-                if (!_storage.IsExists(typeof(ProfileCollection).FullName))
-                {
-                    _profileService.CreateProfile();
+                    if (!_storage.IsExists(typeof(ProfileCollection).FullName))
+                    {
+                        _profileService.CreateProfile();
+                    }
                 }
             }
 #endif

@@ -14,9 +14,9 @@ namespace SevenDays.unLOC.Profiles.Services
     [UsedImplicitly]
     public class ProfileService : IProfileService, IInitializable, IStartable, IDisposable
     {
-        public Profile[] Profiles => _profileCollection.Profiles.ToArray();
+        public ProfileInfo[] ProfileInfos => _profileCollection.Profiles.Select(p => p.Info).ToArray();
 
-        private Profile Current => _profileCollection.ActiveProfile;
+        private Profile _current;
 
         private ProfileCollection _profileCollection;
         private readonly SceneLoader _sceneLoader;
@@ -36,10 +36,6 @@ namespace SevenDays.unLOC.Profiles.Services
             {
                 _profileCollection = new ProfileCollection();
             }
-            else
-            {
-                _storage.SetStorage(new LocalStorage(Current.Index));
-            }
         }
 
         void IStartable.Start()
@@ -55,58 +51,66 @@ namespace SevenDays.unLOC.Profiles.Services
 
             _storage.Save(typeof(ProfileCollection).FullName, _profileCollection);
 
-            _storage.SetStorage(new LocalStorage(Current.Index));
+            if (_current != null)
+            {
+                _storage.SetStorage(new LocalStorage(_current.Info.Index));
+            }
         }
 
         private void OnSceneLoaded(int sceneBuildIndex)
         {
-            if (_profileCollection.ActiveProfile == null)
+            if (_current == null)
             {
                 return;
             }
 
-            _profileCollection.ActiveProfile.SceneIndex = sceneBuildIndex;
-            _profileCollection.ActiveProfile.DateActivity = DateTime.UtcNow;
+            _current.SceneIndex = sceneBuildIndex;
+            _current.Info.DateActivity = DateTime.UtcNow;
         }
 
         void IProfileService.CreateProfile()
         {
-            var profileIndex = _profileCollection.Profiles.LastOrDefault()?.Index + 1 ?? 0;
+            var profileIndex = _profileCollection.Profiles.LastOrDefault()?.Info.Index + 1 ?? 0;
 
             var profile = new Profile()
             {
-                Index = profileIndex,
                 SceneIndex = 1,
-                DateCreation = DateTime.UtcNow,
-                DateActivity = DateTime.UtcNow
+                Info = new ProfileInfo()
+                {
+                    Index = profileIndex,
+                    DateCreation = DateTime.UtcNow,
+                    DateActivity = DateTime.UtcNow
+                }
             };
 
             _profileCollection.Profiles.Add(profile);
 
-            SetActiveProfile(profile);
+            SetCurrent(profile);
         }
 
         void IProfileService.SetActiveProfile(int profileIndex)
         {
-            var profile = _profileCollection.Profiles.SingleOrDefault(p => p.Index == profileIndex);
+            var profile = _profileCollection.Profiles.SingleOrDefault(p => p.Info.Index == profileIndex);
 
             if (profile == null)
             {
                 return;
             }
 
-            SetActiveProfile(profile);
+            SetCurrent(profile);
         }
 
-        private void SetActiveProfile(Profile profile)
+        int IProfileService.GetSceneIndex(int profileIndex)
         {
-            _profileCollection.ActiveProfile = profile;
+            var profile = _profileCollection.Profiles.SingleOrDefault(p => p.Info.Index == profileIndex);
 
-            _storage.SetStorage(new GlobalStorage());
+            return profile?.SceneIndex ?? -1;
+        }
 
-            _storage.SetProfileIndex(profile.Index);
-
-            _storage.SetStorage(new LocalStorage(profile.Index));
+        private void SetCurrent(Profile profile)
+        {
+            _current = profile;
+            _storage.SetStorage(new LocalStorage(profile.Info.Index));
         }
     }
 }
