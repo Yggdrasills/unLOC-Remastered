@@ -2,11 +2,7 @@ using SevenDays.DialogSystem.Runtime;
 using SevenDays.Localization;
 using SevenDays.Screens.Models;
 using SevenDays.Screens.Services;
-using SevenDays.unLOC.Activities.Items.Pad;
-using SevenDays.unLOC.Activities.Quests.Flower.Screwdriver;
 using SevenDays.unLOC.Core.Loaders;
-using SevenDays.unLOC.Inventory.Services;
-using SevenDays.unLOC.Inventory.Views;
 using SevenDays.unLOC.Profiles.Services;
 using SevenDays.unLOC.Storage;
 using SevenDays.unLOC.Utils.Helpers;
@@ -27,16 +23,10 @@ namespace SevenDays.unLOC.Core.Scopes
         private ScreenCollection _screenCollection;
 
         [SerializeField]
-        private InventoryCellView _cellPrefab;
+        private GameServiceData _serviceData;
 
         [SerializeField]
-        private InventoryView _inventoryView;
-
-        [SerializeField]
-        private PadView _padView;
-
-        [SerializeField]
-        private ScrewdriverView _screwdriverView;
+        private Camera _mainCamera;
 
         [SerializeField]
         private Transform _screenCanvasTransform;
@@ -58,18 +48,13 @@ namespace SevenDays.unLOC.Core.Scopes
                 .WithParameter(storage)
                 .AsImplementedInterfaces();
 
-            builder.Register<InventoryService>(Lifetime.Singleton)
-                .WithParameter(_cellPrefab)
-                .WithParameter(_inventoryView)
-                .AsImplementedInterfaces();
-
             builder.Register<SceneLoader>(Lifetime.Singleton)
                 .WithParameter(_loadingScreen);
 
             builder.RegisterEntryPoint<CoreStartup>();
 
-            builder.RegisterComponent(_padView);
-            builder.RegisterComponent(_screwdriverView);
+            builder.RegisterInstance(_serviceData);
+            builder.RegisterComponent(_mainCamera);
         }
     }
 }

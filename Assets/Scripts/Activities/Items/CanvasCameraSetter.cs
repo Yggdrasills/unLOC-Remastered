@@ -6,23 +6,18 @@ using UnityEngine;
 
 using VContainer;
 
-namespace SevenDays.unLOC.Activities.Items.Pad
+namespace SevenDays.unLOC.Activities.Items
 {
-    public class PadView : MonoBehaviour
+    public class CanvasCameraSetter : MonoBehaviour
     {
         [SerializeField]
         private Canvas _canvas;
 
-        [SerializeField]
-        private GameObject _content;
-
-        private IStorageRepository _storage;
         private Camera _mainCamera;
 
         [Inject, UsedImplicitly]
         private void Construct(IStorageRepository storage, Camera mainCamera)
         {
-            _storage = storage;
             _mainCamera = mainCamera;
         }
 
@@ -36,18 +31,7 @@ namespace SevenDays.unLOC.Activities.Items.Pad
 
         private void Start()
         {
-            if (_storage.IsExists(typeof(PadItem).FullName))
-            {
-                _content.SetActive(true);
-            }
-
             _canvas.worldCamera = _mainCamera;
-        }
-
-        public void PickUp()
-        {
-            _content.SetActive(true);
-            _storage.Save(typeof(PadView).FullName, true);
         }
     }
 }

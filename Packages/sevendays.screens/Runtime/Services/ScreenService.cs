@@ -88,7 +88,11 @@ namespace SevenDays.Screens.Services
             }
             finally
             {
-                Object.Destroy(screen.gameObject);
+                if (screen != null)
+                {
+                    Object.Destroy(screen.gameObject);
+                }
+
                 _activeScreens.Remove(screenId);
             }
         }
