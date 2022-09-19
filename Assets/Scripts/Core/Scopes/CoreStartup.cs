@@ -18,12 +18,12 @@ namespace SevenDays.unLOC.Core.Scopes
         private readonly SceneLoader _sceneLoader;
 #if UNITY_EDITOR
         private readonly IProfileService _profileService;
-        private readonly DataStorage _storage;
+        private readonly IStorageRepository _storage;
         private readonly LifetimeScope _parentScope;
 #endif
         public CoreStartup(SceneLoader sceneLoader,
             IProfileService profileService,
-            DataStorage storage, LifetimeScope parentScope)
+            IStorageRepository storage, LifetimeScope parentScope)
         {
             _sceneLoader = sceneLoader;
 #if UNITY_EDITOR

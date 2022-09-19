@@ -16,10 +16,10 @@ namespace SevenDays.unLOC.Activities.Workshop.Views
         [SerializeField]
         private InteractableItem _interactableItem;
 
-        private DataStorage _storage;
+        private IStorageRepository _storage;
 
         [Inject, UsedImplicitly]
-        private void Construct(DataStorage storage)
+        private void Construct(IStorageRepository storage)
         {
             _storage = storage;
         }

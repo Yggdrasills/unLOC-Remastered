@@ -24,7 +24,7 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
         [SerializeField, Tooltip("Item pick max amount")]
         private int _maxPickAmount = 4;
 
-        private DataStorage _storage;
+        private IStorageRepository _storage;
         private IInventoryService _inventory;
 
         private int _currentClickAmount;
@@ -32,7 +32,7 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
         private string _storageKey;
 
         [Inject, UsedImplicitly]
-        private void Construct(IInventoryService inventory, DataStorage storage)
+        private void Construct(IInventoryService inventory, IStorageRepository storage)
         {
             _inventory = inventory;
             _storage = storage;

@@ -45,12 +45,12 @@ namespace SevenDays.unLOC.Activities.Quests.RobotPainter
         [SerializeField]
         private string _questDoneDialogueBubbleText = "Так-то лучше. Теперь тебя не взломают.";
 
-        private DataStorage _storage;
+        private IStorageRepository _storage;
 
         private bool _canEnterPassword = true;
 
         [Inject, UsedImplicitly]
-        private void Construct(DataStorage storage)
+        private void Construct(IStorageRepository storage)
         {
             _storage = storage;
         }

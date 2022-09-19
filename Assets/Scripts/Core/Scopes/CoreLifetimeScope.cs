@@ -43,16 +43,19 @@ namespace SevenDays.unLOC.Core.Scopes
 
         protected override void Configure(IContainerBuilder builder)
         {
+            IStorageDecorator storage = new StorageDecorator();
+
             builder.Register<IScreenService, ScreenService>(Lifetime.Singleton)
                 .WithParameter(_screenCollection)
                 .WithParameter(_screenCanvasTransform);
 
-            builder.Register<DataStorage>(Lifetime.Singleton);
+            builder.RegisterInstance<IStorageRepository>(storage);
 
             builder.Register<LocalizationService>(Lifetime.Singleton).AsSelf();
             builder.Register<DialogService>(Lifetime.Singleton).AsSelf();
 
             builder.Register<ProfileService>(Lifetime.Singleton)
+                .WithParameter(storage)
                 .AsImplementedInterfaces();
 
             builder.Register<InventoryService>(Lifetime.Singleton)

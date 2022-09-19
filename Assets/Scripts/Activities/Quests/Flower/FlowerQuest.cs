@@ -47,7 +47,7 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
 
         private IInventoryService _inventory;
 
-        private DataStorage _storage;
+        private IStorageRepository _storage;
 
         private ScrewdriverView _screwdriver;
 
@@ -56,7 +56,7 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
 
         [Inject, UsedImplicitly]
         private void Construct(IInventoryService inventory,
-            DataStorage storage,
+            IStorageRepository storage,
             ScrewdriverView screwdriverView)
         {
             _inventory = inventory;
