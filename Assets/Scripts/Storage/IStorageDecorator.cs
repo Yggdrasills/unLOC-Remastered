@@ -2,8 +2,11 @@
 {
     public interface IStorageDecorator : IStorageRepository
     {
-        void SetStorage<T>(T storage) where T : IStorageRepository;
+        void SetStorage<T, V>(V creationParams)
+            where T : IStorageRepository
+            where V : StorageCreationParameters, new();
 
-        void SetProfileIndex(int index);
+        void SetStorage<T>()
+            where T : IStorageRepository, new();
     }
 }

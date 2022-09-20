@@ -30,7 +30,7 @@ namespace SevenDays.unLOC.Profiles.Services
 
         void IInitializable.Initialize()
         {
-            _storage.SetStorage(new GlobalStorage());
+            _storage.SetStorage<GlobalStorage>();
 
             if (!_storage.TryLoad(typeof(ProfileCollection).FullName, out _profileCollection))
             {
@@ -47,13 +47,14 @@ namespace SevenDays.unLOC.Profiles.Services
         {
             _sceneLoader.Loaded -= OnSceneLoaded;
 
-            _storage.SetStorage(new GlobalStorage());
+            _storage.SetStorage<GlobalStorage>();
 
             _storage.Save(typeof(ProfileCollection).FullName, _profileCollection);
 
             if (_current != null)
             {
-                _storage.SetStorage(new LocalStorage(_current.Info.Index));
+                _storage.SetStorage<LocalStorage, LocalStorageCreationParameters>(
+                    new LocalStorageCreationParameters(_current.Info.Index));
             }
         }
 
@@ -110,7 +111,8 @@ namespace SevenDays.unLOC.Profiles.Services
         private void SetCurrent(Profile profile)
         {
             _current = profile;
-            _storage.SetStorage(new LocalStorage(profile.Info.Index));
+            _storage.SetStorage<LocalStorage, LocalStorageCreationParameters>(
+                new LocalStorageCreationParameters(_current.Info.Index));
         }
     }
 }

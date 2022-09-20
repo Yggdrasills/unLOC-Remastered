@@ -17,10 +17,10 @@ namespace SevenDays.unLOC.Storage
 
         private readonly int _profileIndex;
 
-        public LocalStorage(int profileIndex)
+        public LocalStorage(LocalStorageCreationParameters creationParameters)
         {
             _stringBuilder = new StringBuilder();
-            _profileIndex = profileIndex;
+            _profileIndex = creationParameters.Index;
         }
 
         public void Save<T>(string key, T data)

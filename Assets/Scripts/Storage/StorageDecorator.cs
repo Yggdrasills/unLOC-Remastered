@@ -1,4 +1,6 @@
-﻿using UnityEngine.Assertions;
+﻿using System;
+
+using UnityEngine.Assertions;
 
 namespace SevenDays.unLOC.Storage
 {
@@ -11,9 +13,17 @@ namespace SevenDays.unLOC.Storage
             _storage = new GlobalStorage();
         }
 
-        public void SetStorage<T>(T storage) where T : IStorageRepository
+        public void SetStorage<T>()
+            where T : IStorageRepository, new()
         {
-            _storage = storage;
+            _storage = Activator.CreateInstance(typeof(T)) as IStorageRepository;
+        }
+
+        public void SetStorage<T, V>(V creationParams)
+            where T : IStorageRepository
+            where V : StorageCreationParameters, new()
+        {
+            _storage = Activator.CreateInstance(typeof(T), creationParams) as IStorageRepository;
         }
 
         public void Save<T>(string key, T data)
@@ -54,10 +64,6 @@ namespace SevenDays.unLOC.Storage
             Assert.IsNotNull(key, $"[{nameof(StorageDecorator)}.{nameof(Remove)}] key is null");
 
             return _storage.IsExists(key);
-        }
-
-        public void SetProfileIndex(int index)
-        {
         }
     }
 }
