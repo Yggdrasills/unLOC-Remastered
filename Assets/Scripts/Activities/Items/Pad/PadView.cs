@@ -11,7 +11,7 @@ namespace SevenDays.unLOC.Activities.Items.Pad
     public class PadView : MonoBehaviour
     {
         [SerializeField]
-        private Canvas _canvas;
+        private Canvas[] _canvases;
 
         [SerializeField]
         private GameObject _content;
@@ -28,9 +28,9 @@ namespace SevenDays.unLOC.Activities.Items.Pad
 
         private void OnValidate()
         {
-            if (_canvas == null)
+            if (_canvases == null || _canvases.Length < 1)
             {
-                _canvas = GetComponent<Canvas>();
+                _canvases = GetComponentsInChildren<Canvas>();
             }
         }
 
@@ -41,7 +41,10 @@ namespace SevenDays.unLOC.Activities.Items.Pad
                 _content.SetActive(true);
             }
 
-            _canvas.worldCamera = _mainCamera;
+            for (int i = 0; i < _canvases.Length; i++)
+            {
+                _canvases[i].worldCamera = _mainCamera;
+            }
         }
 
         public void PickUp()
