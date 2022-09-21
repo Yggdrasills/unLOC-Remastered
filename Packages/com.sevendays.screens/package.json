@@ -1,7 +1,7 @@
 {
   "name": "com.sevendays.screens",
   "version": "1.0.0",
-  "displayName": "SevenDays.Screens",
+  "displayName": "SevenDays Screens",
   "description": "Popups and windows display service",
   "keywords": [
     "screen",

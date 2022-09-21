@@ -27,7 +27,7 @@
       "dependencies": {}
     },
     "com.sevendays.screens": {
-      "version": "file:sevendays.screens",
+      "version": "file:com.sevendays.screens",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
