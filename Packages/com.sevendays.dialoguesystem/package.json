@@ -14,5 +14,11 @@
     "name": "Yggdrasills",
     "email": "khamrokamalov@gmail.com",
     "url": "https://github.com/Yggdrasills"
-  }
+  },
+  "contributors": [
+    {
+      "name": "AndreyBirchenko",
+      "url": "https://github.com/AndreyBirchenko"
+    }
+  ]
 }
