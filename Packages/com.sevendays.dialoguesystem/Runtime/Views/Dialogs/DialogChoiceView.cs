@@ -9,7 +9,7 @@ namespace SevenDays.InkWrapper.Views.Dialogs
     public class DialogChoiceView : DialogView, IDialogChoiceView
     {
         [SerializeField]
-        private Transform _container;
+        private Transform _choiceContainer;
 
         [SerializeField]
         private ChoiceButtonView _choiceButtonPrefab;
@@ -31,7 +31,7 @@ namespace SevenDays.InkWrapper.Views.Dialogs
 
         IChoiceButtonView IDialogChoiceView.CreateChoice()
         {
-            var choiceButton = Instantiate(_choiceButtonPrefab, _container);
+            var choiceButton = Instantiate(_choiceButtonPrefab, _choiceContainer);
 
             _choices.Add(choiceButton.gameObject);
 

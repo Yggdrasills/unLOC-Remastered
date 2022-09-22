@@ -23,7 +23,7 @@ namespace SevenDays.InkWrapper.Example
 
             var dialog = DialogWrapper.CreateDialog()
                 .SetTextAsset(_dialogAsset)
-                .SetAction("key", delegate { })
+                .SetAction("key", () => { Debug.Log("action"); })
                 .WithGlobalParameter("key", null)
                 .WithGlobalObserver("key", null)
                 .OnComplete(() => { Debug.Log("end"); });

@@ -31,6 +31,16 @@ namespace SevenDays.InkWrapper.Views.Dialogs
         private CancellationTokenSource _cts;
         private CancellationToken _tokenOnDestroy;
 
+        private void OnValidate()
+        {
+            if (_dialogText == null)
+            {
+                _dialogText = GetComponentInChildren<TextMeshProUGUI>();
+            }
+
+            Validated();
+        }
+
         private void Awake()
         {
             _tokenOnDestroy = gameObject.GetCancellationTokenOnDestroy();
@@ -40,7 +50,7 @@ namespace SevenDays.InkWrapper.Views.Dialogs
 
         void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
         {
-            if (!CanClick())
+            if (!CanClick() || !IsTimerPassed())
             {
                 return;
             }
@@ -100,6 +110,19 @@ namespace SevenDays.InkWrapper.Views.Dialogs
             return UniTask.CompletedTask;
         }
 
+        protected virtual bool CanClick()
+        {
+            return true;
+        }
+
+        protected virtual void Awakened()
+        {
+        }
+
+        protected virtual void Validated()
+        {
+        }
+
         private void RevealImmediately()
         {
             if (IsRevealing())
@@ -115,7 +138,7 @@ namespace SevenDays.InkWrapper.Views.Dialogs
             return _cts is {IsCancellationRequested: false};
         }
 
-        private bool CanClick()
+        private bool IsTimerPassed()
         {
             if (Time.time > _lastClickTime + _clickInterval)
             {
@@ -123,10 +146,6 @@ namespace SevenDays.InkWrapper.Views.Dialogs
             }
 
             return false;
-        }
-
-        protected virtual void Awakened()
-        {
         }
     }
 }

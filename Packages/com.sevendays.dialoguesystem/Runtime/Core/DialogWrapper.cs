@@ -36,15 +36,22 @@ namespace SevenDays.InkWrapper.Core
             RevealStory(dialog, viewBase);
         }
 
-        private void RevealStory(Dialog dialog, IDialogView viewBase)
+        private void RevealStory(Dialog dialog, IDialogView view)
         {
             var story = dialog.Story;
+
+            if (story.currentChoices.Count > 0)
+            {
+                view.Reveal();
+
+                return;
+            }
 
             if (!story.canContinue)
             {
                 dialog.Complete();
 
-                viewBase.HideAsync().Forget();
+                view.HideAsync().Forget();
 
                 return;
             }
@@ -60,9 +67,9 @@ namespace SevenDays.InkWrapper.Core
 
             var textToReveal = _localization.GetLocalizedLine(storyText);
 
-            viewBase.RevealAsync(textToReveal).Forget();
+            view.RevealAsync(textToReveal).Forget();
 
-            if (viewBase is IDialogChoiceView choiceView)
+            if (view is IDialogChoiceView choiceView)
             {
                 ShowChoices(dialog, choiceView);
             }
@@ -82,7 +89,7 @@ namespace SevenDays.InkWrapper.Core
             }
         }
 
-        private void ShowChoices(Dialog dialog, IDialogChoiceView viewBase)
+        private void ShowChoices(Dialog dialog, IDialogChoiceView view)
         {
             var story = dialog.Story;
 
@@ -93,31 +100,30 @@ namespace SevenDays.InkWrapper.Core
             {
                 var choiceText = _localization.GetLocalizedLine(choice.text).Trim();
 
-                var choiceView = viewBase.CreateChoice();
+                var choiceView = view.CreateChoice();
 
                 choiceView.SetText(choiceText);
 
-                var choice1 = choice;
-                choiceView.SetClickAction(() => OnClickChoiceButton(dialog, viewBase, choice1));
+                choiceView.SetClickAction(() => OnChoiceClick(dialog, view, choice));
 
                 choiceView.Show();
             }
         }
 
-        private void OnClickChoiceButton(Dialog dialog, IDialogChoiceView viewBase, Choice choice)
+        private void OnChoiceClick(Dialog dialog, IDialogChoiceView view, Choice choice)
         {
-            if (viewBase.IsRevealing)
+            if (view.IsRevealing)
             {
-                viewBase.Reveal();
+                view.Reveal();
 
                 return;
             }
 
             dialog.Story.ChooseChoiceIndex(choice.index);
 
-            viewBase.RemoveChoices();
+            view.RemoveChoices();
 
-            RevealStory(dialog, viewBase);
+            RevealStory(dialog, view);
         }
     }
 }
