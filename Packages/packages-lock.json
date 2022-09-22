@@ -20,6 +20,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.sevendays.inkwrapper": {
+      "version": "file:com.sevendays.dialoguesystem",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.sevendays.localization_service": {
       "version": "file:sevendays.localization_service",
       "depth": 0,
