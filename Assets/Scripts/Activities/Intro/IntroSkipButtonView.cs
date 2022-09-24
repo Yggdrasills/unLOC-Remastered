@@ -1,18 +1,18 @@
 ﻿using Cysharp.Threading.Tasks;
 
-using SevenDays.DialogSystem.Runtime;
 using SevenDays.unLOC.Core.Loaders;
 
 using UnityEngine;
+using UnityEngine.UI;
 
 using VContainer;
 
 namespace SevenDays.unLOC.Activities.Intro
 {
-    public class IntroView : MonoBehaviour
+    public class IntroSkipButtonView : MonoBehaviour
     {
-        [field: SerializeField]
-        public DialogWindow DialogWindow { get; private set; }
+        [SerializeField]
+        private Button _skipButton;
 
         private SceneLoader _sceneLoader;
 
@@ -22,7 +22,12 @@ namespace SevenDays.unLOC.Activities.Intro
             _sceneLoader = sceneLoader;
         }
 
-        public void LoadWorkshop()
+        private void Start()
+        {
+            _skipButton.onClick.AddListener(LoadWorkshop);
+        }
+
+        private void LoadWorkshop()
         {
             _sceneLoader.LoadWorkshopAsync().Forget();
         }

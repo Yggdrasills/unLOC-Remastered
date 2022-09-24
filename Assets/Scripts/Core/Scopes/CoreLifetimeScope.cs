@@ -34,14 +34,12 @@ namespace SevenDays.unLOC.Core.Scopes
         protected override void Configure(IContainerBuilder builder)
         {
             IStorageDecorator storage = new StorageDecorator();
+            var localization = new LocalizationService();
 
             builder.Register<IScreenService, ScreenService>(Lifetime.Singleton)
                 .WithParameter(_screenCollection)
                 .WithParameter(_screenCanvasTransform);
 
-            builder.RegisterInstance<IStorageRepository>(storage);
-
-            builder.Register<LocalizationService>(Lifetime.Singleton).AsSelf();
             builder.Register<DialogService>(Lifetime.Singleton).AsSelf();
 
             builder.Register<ProfileService>(Lifetime.Singleton)
@@ -53,6 +51,9 @@ namespace SevenDays.unLOC.Core.Scopes
 
             builder.RegisterEntryPoint<CoreStartup>();
 
+
+            builder.RegisterInstance<IStorageRepository>(storage);
+            builder.RegisterInstance(localization);
             builder.RegisterInstance(_serviceData);
             builder.RegisterComponent(_mainCamera);
         }
