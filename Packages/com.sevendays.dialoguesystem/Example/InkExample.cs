@@ -1,6 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
-
-using SevenDays.InkWrapper.Core;
+﻿using SevenDays.InkWrapper.Core;
 using SevenDays.InkWrapper.Views.Dialogs;
 using SevenDays.Localization;
 
@@ -28,7 +26,7 @@ namespace SevenDays.InkWrapper.Example
                 .WithGlobalObserver("key", null)
                 .OnComplete(() => { Debug.Log("end"); });
 
-            wrapper.StartDialogue(dialog, _dialogViewBase).Forget();
+            wrapper.StartDialogueAsync(dialog, _dialogViewBase).Forget();
         }
     }
 }
