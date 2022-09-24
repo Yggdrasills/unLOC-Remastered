@@ -24,19 +24,19 @@ namespace SevenDays.InkWrapper.Core
             return new DialogBuilder();
         }
 
-        public async UniTask StartDialogue(Dialog dialog, IDialogView viewBase)
+        public async UniTaskVoid StartDialogueAsync(Dialog dialog, IDialogView viewBase)
         {
             Assert.IsNotNull(dialog.Story, $"Dialog story is null");
 
             await viewBase.ShowAsync();
 
             // todo: надо отписываться
-            viewBase.Clicked += () => RevealStory(dialog, viewBase);
+            viewBase.Clicked += () => RevealStory(dialog, viewBase).Forget();
 
-            RevealStory(dialog, viewBase);
+            RevealStory(dialog, viewBase).Forget();
         }
 
-        private void RevealStory(Dialog dialog, IDialogView view)
+        private async UniTaskVoid RevealStory(Dialog dialog, IDialogView view)
         {
             var story = dialog.Story;
 
@@ -71,7 +71,7 @@ namespace SevenDays.InkWrapper.Core
 
             if (view is IDialogChoiceView choiceView)
             {
-                ShowChoices(dialog, choiceView);
+                ShowChoices(dialog, choiceView).Forget();
             }
         }
 
@@ -89,18 +89,20 @@ namespace SevenDays.InkWrapper.Core
             }
         }
 
-        private void ShowChoices(Dialog dialog, IDialogChoiceView view)
+        private async UniTaskVoid ShowChoices(Dialog dialog, IDialogChoiceView view)
         {
             var story = dialog.Story;
 
             if (story.currentChoices.Count <= 0)
                 return;
 
+            await view.PrependShowAsync();
+
             foreach (var choice in story.currentChoices)
             {
                 var choiceText = _localization.GetLocalizedLine(choice.text).Trim();
 
-                var choiceView = view.CreateChoice();
+                var choiceView = view.GetChoice();
 
                 choiceView.SetText(choiceText);
 
@@ -121,7 +123,7 @@ namespace SevenDays.InkWrapper.Core
 
             dialog.Story.ChooseChoiceIndex(choice.index);
 
-            view.RemoveChoices();
+            view.HideChoices();
 
             RevealStory(dialog, view);
         }

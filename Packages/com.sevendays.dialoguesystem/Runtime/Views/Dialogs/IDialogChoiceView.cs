@@ -1,11 +1,15 @@
-﻿using SevenDays.InkWrapper.Views.Choices;
+﻿using Cysharp.Threading.Tasks;
+
+using SevenDays.InkWrapper.Views.Choices;
 
 namespace SevenDays.InkWrapper.Views.Dialogs
 {
     public interface IDialogChoiceView : IDialogView
     {
-        void RemoveChoices();
+        void HideChoices();
 
-        IChoiceButtonView CreateChoice();
+        UniTask PrependShowAsync();
+
+        IChoiceButtonView GetChoice();
     }
 }

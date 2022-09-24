@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+using Cysharp.Threading.Tasks;
+
 using SevenDays.InkWrapper.Views.Choices;
 
 using UnityEngine;
@@ -21,15 +23,24 @@ namespace SevenDays.InkWrapper.Views.Dialogs
             _choices = new List<GameObject>();
         }
 
-        void IDialogChoiceView.RemoveChoices()
+        void IDialogChoiceView.HideChoices()
         {
             for (int i = 0, k = _choices.Count; i < k; i++)
             {
                 Destroy(_choices[i]);
             }
+
+            _choiceContainer.gameObject.SetActive(false);
         }
 
-        IChoiceButtonView IDialogChoiceView.CreateChoice()
+        public UniTask PrependShowAsync()
+        {
+            _choiceContainer.gameObject.SetActive(true);
+
+            return UniTask.CompletedTask;
+        }
+
+        IChoiceButtonView IDialogChoiceView.GetChoice()
         {
             var choiceButton = Instantiate(_choiceButtonPrefab, _choiceContainer);
 

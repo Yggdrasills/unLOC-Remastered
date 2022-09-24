@@ -15,6 +15,10 @@ namespace SevenDays.InkWrapper.Views.Choices
                 {
                     _content = transform.GetChild(0).gameObject;
                 }
+                else
+                {
+                    _content = gameObject;
+                }
             }
         }
 
