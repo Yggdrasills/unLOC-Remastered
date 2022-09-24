@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 140361d5c2287f24b81b4e3050111847, type: 3}
+  m_Name: Mechanoid2_Data
+  m_EditorClassIdentifier: 
+  dataName: Mechanoid2
+  dragonBonesJSON: {fileID: 4900000, guid: 39ee36592efebf647a6c35bbf928a00e, type: 3}
+  textureAtlas:
+  - textureAtlasJSON: {fileID: 4900000, guid: 7d5e570dfe295e24ea6a8fab63c7b933, type: 3}
+    texture: {fileID: 2800000, guid: eca54fabf4aa5474899a8047ad50413f, type: 3}
+    material: {fileID: 2100000, guid: f0e5330dd999c4943950db01ad9c1aae, type: 2}
+    uiMaterial: {fileID: 0}
