@@ -30,10 +30,24 @@ namespace SevenDays.unLOC.Core.Scopes
             builder.RegisterInstance(_initializeConfig);
             IEnumerable<IInputModel> horizontalInput = new[] {new HorizontalInputModel()};
             builder.RegisterEntryPoint<InputController>().AsSelf().WithParameter(horizontalInput);
+            
+            var player = CreatePlayer();
+
+            builder.RegisterInstance(player);
+            
             builder.RegisterEntryPoint<PlayerCreator>()
                 .WithParameter(_camera)
                 .WithParameter(horizontalInput.First())
                 .AsSelf();
+        }
+        
+        private PlayerView CreatePlayer()
+        {
+            var player = Instantiate(_initializeConfig.PlayerViewPrefab,transform);
+            player.transform.position = _initializeConfig.PlayerInitPosition;
+
+            player.CharacterScale.SetScale(_initializeConfig.PlayerSize, _initializeConfig.PlayerColliderSize);
+            return player;
         }
     }
 }
