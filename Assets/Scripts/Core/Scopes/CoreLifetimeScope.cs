@@ -40,8 +40,6 @@ namespace SevenDays.unLOC.Core.Scopes
                 .WithParameter(_screenCollection)
                 .WithParameter(_screenCanvasTransform);
 
-            builder.Register<DialogService>(Lifetime.Singleton).AsSelf();
-
             builder.Register<ProfileService>(Lifetime.Singleton)
                 .WithParameter(storage)
                 .AsImplementedInterfaces();
