@@ -1,4 +1,8 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+
+using Activities.Dialogs;
+
+using Cysharp.Threading.Tasks;
 
 using JetBrains.Annotations;
 
@@ -41,9 +45,8 @@ namespace SevenDays.unLOC.Activities.Quests.RobotPainter
         [SerializeField]
         private int _correctPassword = 73326;
 
-        // todo: add dialogue after quest complete
         [SerializeField]
-        private string _questDoneDialogueBubbleText = "Так-то лучше. Теперь тебя не взломают.";
+        private DialogWrapperProxy _dialogWrapper;
 
         private IStorageRepository _storage;
 
@@ -135,7 +138,13 @@ namespace SevenDays.unLOC.Activities.Quests.RobotPainter
 
                 Complete();
 
+                _dialogWrapper.StartDialog();
+
                 _storage.Save(typeof(RobotPainterQuest).FullName, true);
+
+                await UniTask.Delay(TimeSpan.FromSeconds(3));
+
+                _dialogWrapper.HideDialogAsync().Forget();
             }
 
             _canEnterPassword = false;

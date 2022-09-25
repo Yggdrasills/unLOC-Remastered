@@ -37,6 +37,11 @@ namespace Activities.Dialogs
             StartDialogAsync().Forget();
         }
 
+        public async UniTask HideDialogAsync()
+        {
+            await _dialogView.HideAsync();
+        }
+
         private async UniTaskVoid StartDialogAsync()
         {
             await _dialogView.ShowAsync();
