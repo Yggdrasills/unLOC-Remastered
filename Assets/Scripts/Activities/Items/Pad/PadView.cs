@@ -1,5 +1,7 @@
 ﻿using JetBrains.Annotations;
 
+using SevenDays.Localization;
+using SevenDays.unLOC.Activities.Quests.Manager;
 using SevenDays.unLOC.Storage;
 
 using UnityEngine;
@@ -16,14 +18,21 @@ namespace SevenDays.unLOC.Activities.Items.Pad
         [SerializeField]
         private GameObject _content;
 
+        [SerializeField]
+        private ManagerDialogQuest _managerDialogQuest;
+
         private IStorageRepository _storage;
         private Camera _mainCamera;
 
         [Inject, UsedImplicitly]
-        private void Construct(IStorageRepository storage, Camera mainCamera)
+        private void Construct(LocalizationService localization,
+            IStorageRepository storage,
+            Camera mainCamera)
         {
             _storage = storage;
             _mainCamera = mainCamera;
+            
+            _managerDialogQuest.Setup(localization, storage);
         }
 
         private void OnValidate()
@@ -45,6 +54,8 @@ namespace SevenDays.unLOC.Activities.Items.Pad
             {
                 _canvases[i].worldCamera = _mainCamera;
             }
+            
+            _managerDialogQuest.Initialize();
         }
 
         public void PickUp()
