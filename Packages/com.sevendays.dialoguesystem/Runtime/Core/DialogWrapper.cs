@@ -1,4 +1,7 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+
+using Cysharp.Threading.Tasks;
 
 using Ink.Runtime;
 
@@ -13,10 +16,12 @@ namespace SevenDays.InkWrapper.Core
     public class DialogWrapper
     {
         private readonly LocalizationService _localization;
+        private readonly Dictionary<IDialogView, Action> _dialogSubscriptions;
 
         public DialogWrapper(LocalizationService localization)
         {
             _localization = localization;
+            _dialogSubscriptions = new Dictionary<IDialogView, Action>();
         }
 
         public static DialogBuilder CreateDialog()
@@ -24,16 +29,17 @@ namespace SevenDays.InkWrapper.Core
             return new DialogBuilder();
         }
 
-        public async UniTaskVoid StartDialogueAsync(Dialog dialog, IDialogView viewBase)
+        public async UniTaskVoid StartDialogueAsync(Dialog dialog, IDialogView view)
         {
             Assert.IsNotNull(dialog.Story, $"Dialog story is null");
 
-            await viewBase.ShowAsync();
+            await view.ShowAsync();
 
-            // todo: надо отписываться
-            viewBase.Clicked += () => RevealStory(dialog, viewBase).Forget();
+            _dialogSubscriptions[view] = () => RevealStory(dialog, view).Forget();
 
-            RevealStory(dialog, viewBase).Forget();
+            view.Clicked += _dialogSubscriptions[view];
+
+            RevealStory(dialog, view).Forget();
         }
 
         private async UniTaskVoid RevealStory(Dialog dialog, IDialogView view)
@@ -49,6 +55,11 @@ namespace SevenDays.InkWrapper.Core
 
             if (!story.canContinue)
             {
+                if (_dialogSubscriptions.ContainsKey(view))
+                {
+                    view.Clicked -= _dialogSubscriptions[view];
+                }
+
                 dialog.Complete();
 
                 view.HideAsync().Forget();
@@ -71,7 +82,7 @@ namespace SevenDays.InkWrapper.Core
 
             if (view is IDialogChoiceView choiceView)
             {
-                ShowChoices(dialog, choiceView).Forget();
+                await ShowChoices(dialog, choiceView);
             }
         }
 
@@ -89,7 +100,7 @@ namespace SevenDays.InkWrapper.Core
             }
         }
 
-        private async UniTaskVoid ShowChoices(Dialog dialog, IDialogChoiceView view)
+        private async UniTask ShowChoices(Dialog dialog, IDialogChoiceView view)
         {
             var story = dialog.Story;
 
