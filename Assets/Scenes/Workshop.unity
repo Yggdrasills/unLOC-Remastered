@@ -12168,10 +12168,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2102214945}
-  - component: {fileID: 2102214946}
   - component: {fileID: 2102214947}
+  - component: {fileID: 2102214946}
   m_Layer: 5
-  m_Name: Dialogue Window
+  m_Name: Mechanoid Dialog Window
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12205,15 +12205,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 2102214944}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e47e3dddb7c464180daac69796f013c, type: 3}
+  m_Script: {fileID: 11500000, guid: 8a4cdfcd1b114664a9b4eab0bd265972, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dialogueEnded:
-    m_PersistentCalls:
-      m_Calls: []
-  <DialogJson>k__BackingField: {fileID: 0}
-  ChoiceViews: []
-  _textArea: {fileID: 638585957}
+  _dialogText: {fileID: 638585957}
+  _revealInterval: 10
+  _clickInterval: 0.1
 --- !u!114 &2102214947
 MonoBehaviour:
   m_ObjectHideFlags: 0
