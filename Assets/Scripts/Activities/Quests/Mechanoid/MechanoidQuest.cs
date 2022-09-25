@@ -116,18 +116,18 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
 
                     SetWiresState();
 
-                    _textDisplayer.DisplaySelfPraise().Forget();
+                    _textDisplayer.DisplaySelfPraise();
 
                     _activeState = State.PowerButton;
                 }
                 else
                 {
-                    _textDisplayer.DisplayForgotWires().Forget();
+                    _textDisplayer.DisplayForgotWires();
                 }
             }
             else
             {
-                _textDisplayer.DisplayWiresOnPlace().Forget();
+                _textDisplayer.DisplayWiresOnPlace();
             }
         }
 
@@ -151,7 +151,7 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
                 }
                 else if (_activeState == State.Wires)
                 {
-                    _textDisplayer.DisplayTooEasySarcasm().Forget();
+                    _textDisplayer.DisplayTooEasySarcasm();
                 }
                 else if (_activeState == State.RunMechanoid)
                 {
@@ -163,7 +163,7 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
                 }
                 else
                 {
-                    _textDisplayer.DisplayCantTurnOn().Forget();
+                    _textDisplayer.DisplayCantTurnOn();
                 }
             }
 
@@ -187,11 +187,11 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
                     SetCondenserState();
 
                     _activeState = State.RunMechanoid;
-                    _textDisplayer.DisplayTimeToTurnOn().Forget();
+                    _textDisplayer.DisplayTimeToTurnOn();
                 }
                 else
                 {
-                    _textDisplayer.DisplayNoCondenser().Forget();
+                    _textDisplayer.DisplayNoCondenser();
                 }
             }
         }

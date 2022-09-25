@@ -34,16 +34,13 @@ namespace SevenDays.unLOC.Activities.Quests.Grandma
         private int _droppedAmount;
 
         private IInventoryService _inventory;
-        private DialogService _dialogService;
         private IStorageRepository _storage;
 
         [Inject, UsedImplicitly]
         private void Construct(IInventoryService inventory,
-            DialogService dialogService,
             IStorageRepository storage)
         {
             _inventory = inventory;
-            _dialogService = dialogService;
             _storage = storage;
         }
 
@@ -55,12 +52,7 @@ namespace SevenDays.unLOC.Activities.Quests.Grandma
             }
         }
 
-        public void SetDialogTag()
-        {
-            _dialogService.SubscribeTagAction(DialogTag.GrandmaQuestStart, StartQuest);
-        }
-
-        private void StartQuest()
+        public void StartQuest()
         {
             _camera.gameObject.SetActive(true);
             _content.SetActive(true);

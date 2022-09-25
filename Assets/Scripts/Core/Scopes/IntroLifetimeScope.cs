@@ -1,5 +1,6 @@
+using SevenDays.InkWrapper.Views.Dialogs;
 using SevenDays.unLOC.Activities.Intro;
-using SevenDays.unLOC.SaveSystem;
+using SevenDays.unLOC.Utils.Helpers;
 
 using UnityEngine;
 
@@ -8,19 +9,19 @@ using VContainer.Unity;
 
 namespace SevenDays.unLOC.Core.Scopes
 {
-    public class IntroLifetimeScope : LifetimeScope
+    public class IntroLifetimeScope : AutoInjectableLifetimeScope
     {
         [SerializeField]
-        private IntroConfig _introConfig;
+        private TextAsset _dialogAsset;
+
+        [SerializeField]
+        private DialogView _dialogViewBase;
 
         protected override void Configure(IContainerBuilder builder)
         {
-            builder.RegisterInstance(_introConfig);
-
-            builder.RegisterEntryPoint<IntroController>();
-            builder.RegisterComponentInHierarchy<IntroView>();
-            
-            builder.UseSaveSystem();
+            builder.RegisterEntryPoint<IntroController>()
+                .WithParameter(_dialogAsset)
+                .WithParameter(_dialogViewBase as IDialogView);
         }
     }
 }
