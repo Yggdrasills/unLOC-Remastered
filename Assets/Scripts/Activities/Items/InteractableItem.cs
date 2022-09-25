@@ -35,6 +35,7 @@ namespace SevenDays.unLOC.Activities.Items
             if (_collider == null)
             {
                 _collider = GetComponent<BoxCollider2D>();
+                _collider.isTrigger = true;
             }
 
             if (_iconView == null)
