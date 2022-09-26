@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MelissaRoom.unity
     guid: b4bb4ea99f60e5d44bbab206f5fc2c61
+  - enabled: 1
+    path: Assets/Scenes/Credits.unity
+    guid: b896ea6280575df4e96437495ca5e079
   m_configObjects: {}

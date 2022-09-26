@@ -16,16 +16,6 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
 {
     public class MechanoidQuest : QuestBase
     {
-        private enum State
-        {
-            None,
-            Wires,
-            PowerButton,
-            PullOffCondenser,
-            SetCondenser,
-            RunMechanoid
-        }
-
         [SerializeField]
         private MechanoidTextDisplayer _textDisplayer;
 
@@ -71,6 +61,7 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
                     case State.RunMechanoid:
                         gameObject.SetActive(false);
                         _mechanoidView.gameObject.SetActive(false);
+                        CompleteQuest();
                         break;
                     case State.SetCondenser:
                         SetPullOffCondenserState();
@@ -158,6 +149,8 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
                     // note: visual delay
                     await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
                     gameObject.SetActive(false);
+                    
+                    CompleteQuest();
 
                     // todo: enable mechanoid
                 }
@@ -218,6 +211,16 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
         {
             _wiresView.SetSprite();
             _powerButtonView.SetSprite();
+        }
+
+        private enum State
+        {
+            None,
+            Wires,
+            PowerButton,
+            PullOffCondenser,
+            SetCondenser,
+            RunMechanoid
         }
     }
 }

@@ -7348,7 +7348,6 @@ MonoBehaviour:
   - {fileID: 1218477878}
   - {fileID: 1365376785}
   - {fileID: 1450032826}
-  - {fileID: 1622522267}
   - {fileID: 1769733936}
   - {fileID: 1934538101}
   - {fileID: 2013810001}
@@ -13573,11 +13572,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1622522267}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e59810fc5cb4856bfd3c618b37a6752, type: 3}
+  m_Script: {fileID: 11500000, guid: e7c9ffdb7ec3472f94eea3c739fe48b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _quests:
-  - {fileID: 767040455}
 --- !u!1 &1640072922
 GameObject:
   m_ObjectHideFlags: 0

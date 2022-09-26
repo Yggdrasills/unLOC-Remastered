@@ -68,11 +68,16 @@ namespace SevenDays.unLOC.Core.Loaders
             await LoadSceneAsync(GameConstants.MelissaRoomSceneIndex);
         }
 
+        public async UniTask LoadCreditsAsync()
+        {
+            await LoadSceneAsync(GameConstants.CreditsSceneIndex);
+        }
+
         public async UniTask LoadSceneByBuildIndexAsync(int buildIndex)
         {
             await LoadSceneAsync(buildIndex);
         }
-        
+
 #if UNITY_EDITOR
         // note: set scope if run two scenes from editor
         public void SetOuterScope(LifetimeScope scope)
@@ -97,15 +102,24 @@ namespace SevenDays.unLOC.Core.Loaders
             {
                 case GameConstants.WorkshopSceneIndex:
                 case GameConstants.StreetSceneIndex:
+                case GameConstants.StreetStealthSceneIndex:
+                case GameConstants.MelissaRoomSceneIndex:
                     if (_outerScope == _parentScope)
                     {
                         _outerScope = GameServiceInstaller.UseServices(_parentScope, _serviceData);
                     }
 
                     break;
+
+                case GameConstants.CreditsSceneIndex:
+                    _outerScope.Dispose();
+                    _outerScope = _parentScope;
+                    break;
+
                 default:
                     // todo: тут должен быть баг, не разбирался
                     // todo: Думаю что при переходе в меню из геймплея будет что-то
+
                     _outerScope = _parentScope;
                     break;
             }

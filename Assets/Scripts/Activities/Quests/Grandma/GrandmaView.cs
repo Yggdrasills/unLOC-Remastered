@@ -1,5 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 
+using JetBrains.Annotations;
+
 using SevenDays.InkWrapper.Core;
 using SevenDays.InkWrapper.Views.Dialogs;
 using SevenDays.Localization;
@@ -24,7 +26,7 @@ namespace SevenDays.unLOC.Activities.Quests.Grandma
         private DialogWrapper _wrapper;
         private IDialogView _dialogView;
 
-        [Inject]
+        [Inject, UsedImplicitly]
         private void Construct(LocalizationService localization)
         {
             _wrapper = new DialogWrapper(localization);
