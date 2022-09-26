@@ -2,7 +2,6 @@
 
 using Cysharp.Threading.Tasks;
 
-using SevenDays.unLOC.Activities.Items;
 using SevenDays.unLOC.Core.Loaders;
 
 using UnityEngine;
@@ -11,8 +10,7 @@ using VContainer;
 
 namespace SevenDays.unLOC.Activities.Quests
 {
-    [RequireComponent(typeof(InteractableItem))]
-    public class ExitDoorView : MonoBehaviour
+    public class WorkshopExitDoorView : MonoBehaviour
     {
         [SerializeField]
         private QuestBase[] _quests;
@@ -36,15 +34,14 @@ namespace SevenDays.unLOC.Activities.Quests
             _sceneLoader.LoadStreetAsync().Forget();
         }
 
-        public void LoadWorkshop()
+        public void LoadStreetStealth()
         {
-            if (!CanPassNext())
-            {
-                // todo: dialogue about not all quests completed
-                return;
-            }
+            _sceneLoader.LoadStreetStealthAsync().Forget();
+        }
 
-            _sceneLoader.LoadWorkshopAsync().Forget();
+        public void LoadCredits()
+        {
+            _sceneLoader.LoadCreditsAsync().Forget();
         }
 
         private bool CanPassNext()
