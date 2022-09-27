@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace SevenDays.unLOC.Activities.Quests.Flower
 {
+    // todo: add localization
     public class FlowerQuestTextDisplayer : MonoBehaviour
     {
         [SerializeField]

@@ -35,6 +35,7 @@ namespace SevenDays.unLOC.Core.Scopes
 #endif
         }
 
+        // note: поддерживается только вторая сцена. Третью не добавляйте. Только Core + что-то
         void IStartable.Start()
         {
             SetEditorCase(out var canGoNext);
@@ -55,8 +56,20 @@ namespace SevenDays.unLOC.Core.Scopes
             {
                 canGoNext = false;
 
-                // note: поддерживается только вторая сцена. Третью не добавляйте. Только Core + что-то
                 var scene = SceneManager.GetSceneAt(SceneManager.sceneCount - 1);
+
+                if (scene.buildIndex > 1)
+                {
+                    // note: add profile for editor if not exist
+                    if (!_storage.IsExists(typeof(ProfileCollection).FullName))
+                    {
+                        _profileService.CreateProfile();
+                    }
+                    else
+                    {
+                        _profileService.SetActiveProfile(0);
+                    }
+                }
 
                 SceneManager.SetActiveScene(scene);
 
@@ -81,15 +94,6 @@ namespace SevenDays.unLOC.Core.Scopes
                         {
                             scope.Build();
                         }
-                    }
-                }
-
-                // note: add profile for editor if not exist
-                if (scene.buildIndex > 1)
-                {
-                    if (!_storage.IsExists(typeof(ProfileCollection).FullName))
-                    {
-                        _profileService.CreateProfile();
                     }
                 }
             }

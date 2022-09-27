@@ -17,7 +17,7 @@ namespace SevenDays.unLOC.Activities.Quests.Flower.Screwdriver
 
         private bool _isShown;
 
-        public void OnPointerClick(PointerEventData eventData)
+        void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
         {
             DoScale();
         }

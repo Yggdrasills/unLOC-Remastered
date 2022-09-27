@@ -140,12 +140,7 @@ namespace SevenDays.InkWrapper.Views.Dialogs
 
         private bool IsTimerPassed()
         {
-            if (Time.time > _lastClickTime + _clickInterval)
-            {
-                return true;
-            }
-
-            return false;
+            return Time.time > _lastClickTime + _clickInterval;
         }
     }
 }

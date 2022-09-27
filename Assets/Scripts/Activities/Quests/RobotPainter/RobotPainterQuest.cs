@@ -125,16 +125,16 @@ namespace SevenDays.unLOC.Activities.Quests.RobotPainter
 
             _text.text += num;
 
-            TryCompleteQuest().Forget();
+            TryCompleteQuestAsync().Forget();
         }
 
-        private async UniTaskVoid TryCompleteQuest()
+        private async UniTaskVoid TryCompleteQuestAsync()
         {
             if (_text.text.Length != _maxEnteredLenght) return;
 
             if (IsCorrectPassword(int.Parse(_text.text)))
             {
-                await _textBlinker.Blink(_correctColors);
+                await _textBlinker.BlinkAsync(_correctColors);
 
                 Complete();
 
@@ -149,7 +149,7 @@ namespace SevenDays.unLOC.Activities.Quests.RobotPainter
 
             _canEnterPassword = false;
 
-            await _textBlinker.Blink(_wrongColors);
+            await _textBlinker.BlinkAsync(_wrongColors);
 
             ResetToDefault();
         }

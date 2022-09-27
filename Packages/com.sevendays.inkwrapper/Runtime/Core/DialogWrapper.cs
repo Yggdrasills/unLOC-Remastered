@@ -35,14 +35,14 @@ namespace SevenDays.InkWrapper.Core
 
             await view.ShowAsync();
 
-            _dialogSubscriptions[view] = () => RevealStory(dialog, view).Forget();
+            _dialogSubscriptions[view] = () => RevealStoryAsync(dialog, view).Forget();
 
             view.Clicked += _dialogSubscriptions[view];
 
-            RevealStory(dialog, view).Forget();
+            RevealStoryAsync(dialog, view).Forget();
         }
 
-        private async UniTaskVoid RevealStory(Dialog dialog, IDialogView view)
+        private async UniTaskVoid RevealStoryAsync(Dialog dialog, IDialogView view)
         {
             var story = dialog.Story;
 
@@ -82,7 +82,7 @@ namespace SevenDays.InkWrapper.Core
 
             if (view is IDialogChoiceView choiceView)
             {
-                await ShowChoices(dialog, choiceView);
+                await ShowChoicesAsync(dialog, choiceView);
             }
         }
 
@@ -100,7 +100,7 @@ namespace SevenDays.InkWrapper.Core
             }
         }
 
-        private async UniTask ShowChoices(Dialog dialog, IDialogChoiceView view)
+        private async UniTask ShowChoicesAsync(Dialog dialog, IDialogChoiceView view)
         {
             var story = dialog.Story;
 
@@ -136,7 +136,7 @@ namespace SevenDays.InkWrapper.Core
 
             view.HideChoices();
 
-            RevealStory(dialog, view);
+            RevealStoryAsync(dialog, view).Forget();
         }
     }
 }

@@ -124,7 +124,7 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
 
         private void OnPowerClick()
         {
-            async UniTaskVoid OnClick()
+            async UniTaskVoid OnClickAsync()
             {
                 if (_activeState == State.PowerButton)
                 {
@@ -132,7 +132,7 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
 
                     gameObject.SetActive(false);
 
-                    await _mechanoidView.PlayExplosion();
+                    await _mechanoidView.PlayExplosionAsync();
 
                     // todo: await Loc replica
 
@@ -162,7 +162,7 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
                 }
             }
 
-            OnClick().Forget();
+            OnClickAsync().Forget();
         }
 
         private void OnCondenserClick()

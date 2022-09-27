@@ -108,18 +108,18 @@ namespace SevenDays.unLOC.Menu
                     profile.DateActivity);
 
                 profileLoadButton.Button.OnClickAsAsyncEnumerable().SubscribeAwait((_, __) =>
-                    OnProfileLoadButtonOnClicked(profile));
+                    OnProfileLoadButtonOnClickedAsync(profile));
             }
         }
 
-        private async UniTask OnProfileLoadButtonOnClicked(ProfileInfo info)
+        private async UniTask OnProfileLoadButtonOnClickedAsync(ProfileInfo info)
         {
             _profileService.SetActiveProfile(info.Index);
 
             var sceneIndex = _profileService.GetSceneIndex(info.Index);
 
             Assert.IsTrue(sceneIndex != -1,
-                $"[{nameof(MenuController)}.{nameof(OnProfileLoadButtonOnClicked)}] " +
+                $"[{nameof(MenuController)}.{nameof(OnProfileLoadButtonOnClickedAsync)}] " +
                 $"profile with index {info.Index} `not found");
 
             await _sceneLoader.LoadSceneByBuildIndexAsync(sceneIndex);

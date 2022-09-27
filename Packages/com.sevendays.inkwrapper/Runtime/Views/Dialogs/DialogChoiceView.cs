@@ -33,7 +33,7 @@ namespace SevenDays.InkWrapper.Views.Dialogs
             _choiceContainer.gameObject.SetActive(false);
         }
 
-        public UniTask PrependShowAsync()
+        UniTask IDialogChoiceView.PrependShowAsync()
         {
             _choiceContainer.gameObject.SetActive(true);
 

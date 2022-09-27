@@ -35,7 +35,7 @@ namespace SevenDays.unLOC.Activities.Quests.Flower.Screwdriver
         private float _targetPositionY = 220;
 
         [SerializeField]
-        private float _initPositionY = 0;
+        private float _initPositionY;
 
         [SerializeField]
         private TextMeshProUGUI _text;
@@ -76,7 +76,7 @@ namespace SevenDays.unLOC.Activities.Quests.Flower.Screwdriver
                 _moveTween.Kill();
         }
 
-        public void ShowAsync(Nozzle nozzle)
+        public void Show(Nozzle nozzle)
         {
             ShowAsync(nozzle, _duration).Forget();
         }
