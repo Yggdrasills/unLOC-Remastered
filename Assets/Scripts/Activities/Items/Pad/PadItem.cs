@@ -30,6 +30,7 @@ namespace SevenDays.unLOC.Activities.Items.Pad
             if (_storage.IsExists(typeof(PadItem).FullName))
             {
                 gameObject.SetActive(false);
+                _padView.PickUp();
             }
 
             _interactableItem.Clicked += OnClicked;

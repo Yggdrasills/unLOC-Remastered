@@ -1,80 +1,46 @@
-﻿using Cysharp.Threading.Tasks;
-
-using SevenDays.InkWrapper.Core;
-using SevenDays.InkWrapper.Views.Dialogs;
-using SevenDays.Localization;
-using SevenDays.unLOC.Activities.Workshop.Views;
-using SevenDays.unLOC.Storage;
+﻿using SevenDays.unLOC.Activities.Workshop.Views;
 
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace SevenDays.unLOC.Activities.Quests.Manager
 {
-    public class ManagerDialogQuest : QuestBase
+    public class ManagerDialogQuest : DialogQuest
     {
         [SerializeField]
         private Button _managerButton;
 
         [SerializeField]
-        private DialogView _dialogViewBehaviour;
+        private GameObject _content;
 
-        [SerializeField]
-        private TextAsset _dialogAsset;
-
-        private IStorageRepository _storage;
-        private IDialogView _dialogView;
-        private DialogWrapper _wrapper;
-
-        public void Setup(LocalizationService localization,
-            IStorageRepository storage)
+        protected override void Initialized()
         {
-            _wrapper = new DialogWrapper(localization);
-            _storage = storage;
-        }
-
-        public void Initialize()
-        {
-            _dialogView = _dialogViewBehaviour;
-
-            if (_storage.IsExists(nameof(ManagerDialogQuest)))
+            if (Storage.IsExists(GetType().FullName))
             {
                 _managerButton.gameObject.SetActive(false);
-                gameObject.SetActive(false);
 
                 return;
             }
 
-            _managerButton.onClick.AddListener(StartDialog);
+            _managerButton.onClick.AddListener(OnClick);
         }
 
-        private void StartDialog()
+        private void OnClick()
         {
-            if (!_storage.IsExists(typeof(NoteView).FullName))
+            _content.SetActive(false);
+            BeginDialog();
+        }
+
+        private void BeginDialog()
+        {
+            if (!Storage.IsExists(typeof(NoteView).FullName))
             {
                 return;
             }
 
             _managerButton.gameObject.SetActive(false);
-            _dialogView.ShowAsync().Forget();
-            StartDialogAsync().Forget();
-        }
 
-        private async UniTaskVoid StartDialogAsync()
-        {
-            await _dialogView.ShowAsync();
-
-            var dialog = DialogWrapper.CreateDialog()
-                .SetTextAsset(_dialogAsset)
-                .OnComplete(() =>
-                {
-                    _storage.Save(nameof(ManagerDialogQuest), true);
-                    _dialogView.HideAsync().Forget();
-
-                    CompleteQuest();
-                });
-
-            _wrapper.StartDialogueAsync(dialog, _dialogView).Forget();
+            StartDialog();
         }
     }
 }

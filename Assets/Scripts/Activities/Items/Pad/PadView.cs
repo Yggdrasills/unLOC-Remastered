@@ -1,7 +1,7 @@
 ﻿using JetBrains.Annotations;
 
 using SevenDays.Localization;
-using SevenDays.unLOC.Activities.Quests.Manager;
+using SevenDays.unLOC.Activities.Quests;
 using SevenDays.unLOC.Storage;
 
 using UnityEngine;
@@ -19,9 +19,11 @@ namespace SevenDays.unLOC.Activities.Items.Pad
         private GameObject _content;
 
         [SerializeField]
-        private ManagerDialogQuest _managerDialogQuest;
+        private DialogQuest _managerDialogQuest;
 
-        private IStorageRepository _storage;
+        [SerializeField]
+        private DialogQuest _lawyerDialogQuest;
+
         private Camera _mainCamera;
 
         [Inject, UsedImplicitly]
@@ -29,10 +31,10 @@ namespace SevenDays.unLOC.Activities.Items.Pad
             IStorageRepository storage,
             Camera mainCamera)
         {
-            _storage = storage;
             _mainCamera = mainCamera;
-            
+
             _managerDialogQuest.Setup(localization, storage);
+            _lawyerDialogQuest.Setup(localization, storage);
         }
 
         private void OnValidate()
@@ -45,23 +47,18 @@ namespace SevenDays.unLOC.Activities.Items.Pad
 
         private void Start()
         {
-            if (_storage.IsExists(typeof(PadItem).FullName))
-            {
-                _content.SetActive(true);
-            }
-
             for (int i = 0; i < _canvases.Length; i++)
             {
                 _canvases[i].worldCamera = _mainCamera;
             }
-            
+
             _managerDialogQuest.Initialize();
+            _lawyerDialogQuest.Initialize();
         }
 
         public void PickUp()
         {
             _content.SetActive(true);
-            _storage.Save(typeof(PadView).FullName, true);
         }
     }
 }

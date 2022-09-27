@@ -148,8 +148,10 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
                 {
                     // note: visual delay
                     await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
+
                     gameObject.SetActive(false);
-                    
+                    _mechanoidView.Disable();
+
                     CompleteQuest();
 
                     // todo: enable mechanoid
@@ -215,7 +217,6 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
 
         private enum State
         {
-            None,
             Wires,
             PowerButton,
             PullOffCondenser,
