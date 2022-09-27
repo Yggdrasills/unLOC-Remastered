@@ -1,6 +1,4 @@
-﻿using System.Threading;
-
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 
 using SevenDays.unLOC.Core.Loaders;
 using SevenDays.unLOC.Profiles.Models;
@@ -13,7 +11,7 @@ using VContainer.Unity;
 
 namespace SevenDays.unLOC.Core.Scopes
 {
-    public class CoreStartup : IAsyncStartable
+    public class CoreStartup : IStartable
     {
         private readonly SceneLoader _sceneLoader;
 #if UNITY_EDITOR
@@ -37,7 +35,7 @@ namespace SevenDays.unLOC.Core.Scopes
 #endif
         }
 
-        async UniTask IAsyncStartable.StartAsync(CancellationToken cancellation)
+        void IStartable.Start()
         {
             SetEditorCase(out var canGoNext);
 
@@ -46,7 +44,7 @@ namespace SevenDays.unLOC.Core.Scopes
                 return;
             }
 
-            await _sceneLoader.LoadMenuAsync();
+            _sceneLoader.LoadMenuAsync().Forget();
         }
 
         private void SetEditorCase(out bool canGoNext)
@@ -73,7 +71,7 @@ namespace SevenDays.unLOC.Core.Scopes
                         if (scene.buildIndex == 3 || scene.buildIndex == 4)
                         {
                             outerScope = GameServiceInstaller.UseServices(_parentScope, _serviceData);
-                            
+
                             SceneManager.MoveGameObjectToScene(outerScope.gameObject, SceneManager.GetSceneAt(0));
 
                             _sceneLoader.SetOuterScope(outerScope);
