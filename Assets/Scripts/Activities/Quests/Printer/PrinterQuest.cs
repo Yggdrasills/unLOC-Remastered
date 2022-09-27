@@ -31,19 +31,19 @@ namespace SevenDays.unLOC.Activities.Quests.Printer
         private int _bottlesAmount = 5;
 
         private IInventoryService _inventory;
-        private DataStorage _storage;
+        private IStorageRepository _storage;
 
         private int _droppedBottlesAmount;
 
         [Inject, UsedImplicitly]
         private void Construct(IInventoryService inventory,
-            DataStorage storage)
+            IStorageRepository storage)
         {
             _inventory = inventory;
             _storage = storage;
         }
 
-        private void Awake()
+        private void Start()
         {
             if (_storage.TryLoad(typeof(PrinterQuest).FullName, out _droppedBottlesAmount))
             {

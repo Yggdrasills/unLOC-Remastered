@@ -1,6 +1,4 @@
-﻿using System.Threading;
-
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 
 using SevenDays.unLOC.Core.Loaders;
 using SevenDays.unLOC.Profiles.Models;
@@ -13,27 +11,32 @@ using VContainer.Unity;
 
 namespace SevenDays.unLOC.Core.Scopes
 {
-    public class CoreStartup : IAsyncStartable
+    public class CoreStartup : IStartable
     {
         private readonly SceneLoader _sceneLoader;
 #if UNITY_EDITOR
         private readonly IProfileService _profileService;
-        private readonly DataStorage _storage;
+        private readonly IStorageRepository _storage;
         private readonly LifetimeScope _parentScope;
+        private readonly GameServiceData _serviceData;
 #endif
         public CoreStartup(SceneLoader sceneLoader,
             IProfileService profileService,
-            DataStorage storage, LifetimeScope parentScope)
+            IStorageRepository storage,
+            LifetimeScope parentScope,
+            GameServiceData serviceData)
         {
             _sceneLoader = sceneLoader;
 #if UNITY_EDITOR
             _profileService = profileService;
             _storage = storage;
             _parentScope = parentScope;
+            _serviceData = serviceData;
 #endif
         }
 
-        async UniTask IAsyncStartable.StartAsync(CancellationToken cancellation)
+        // note: поддерживается только вторая сцена. Третью не добавляйте. Только Core + что-то
+        void IStartable.Start()
         {
             SetEditorCase(out var canGoNext);
 
@@ -42,7 +45,7 @@ namespace SevenDays.unLOC.Core.Scopes
                 return;
             }
 
-            await _sceneLoader.LoadMenuAsync();
+            _sceneLoader.LoadMenuAsync().Forget();
         }
 
         private void SetEditorCase(out bool canGoNext)
@@ -55,33 +58,43 @@ namespace SevenDays.unLOC.Core.Scopes
 
                 var scene = SceneManager.GetSceneAt(SceneManager.sceneCount - 1);
 
-                SceneManager.SetActiveScene(scene);
-
-                for (int i = 1; i < SceneManager.sceneCount; i++)
+                if (scene.buildIndex > 1)
                 {
-                    var sceneRootObjects = scene.GetRootGameObjects();
-
-                    for (int k = 0; k < sceneRootObjects.Length; k++)
+                    // note: add profile for editor if not exist
+                    if (!_storage.IsExists(typeof(ProfileCollection).FullName))
                     {
-                        if (sceneRootObjects[k].TryGetComponent(out LifetimeScope scope))
-                        {
-                            using (LifetimeScope.EnqueueParent(_parentScope))
-                            {
-                                scope.Build();
-                            }
-                        }
+                        _profileService.CreateProfile();
+                    }
+                    else
+                    {
+                        _profileService.SetActiveProfile(0);
                     }
                 }
 
-                // note: add profile for editor if not exist
-                if (scene.name == "Menu")
-                {
-                    return;
-                }
+                SceneManager.SetActiveScene(scene);
 
-                if (!_storage.IsExists(typeof(ProfileCollection).FullName))
+                var sceneRootObjects = scene.GetRootGameObjects();
+
+                for (int k = 0; k < sceneRootObjects.Length; k++)
                 {
-                    _profileService.CreateProfile();
+                    if (sceneRootObjects[k].TryGetComponent(out LifetimeScope scope))
+                    {
+                        LifetimeScope outerScope = _parentScope;
+
+                        if (scene.buildIndex == 3 || scene.buildIndex == 4)
+                        {
+                            outerScope = GameServiceInstaller.UseServices(_parentScope, _serviceData);
+
+                            SceneManager.MoveGameObjectToScene(outerScope.gameObject, SceneManager.GetSceneAt(0));
+
+                            _sceneLoader.SetOuterScope(outerScope);
+                        }
+
+                        using (LifetimeScope.EnqueueParent(outerScope))
+                        {
+                            scope.Build();
+                        }
+                    }
                 }
             }
 #endif

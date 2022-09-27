@@ -22,13 +22,13 @@ namespace SevenDays.unLOC.Activities.Quests.Printer
         public override InventoryItem Type => InventoryItem.Bottle;
 
         private IInventoryService _inventory;
-        private DataStorage _storage;
+        private IStorageRepository _storage;
 
         private string _key;
 
         [Inject, UsedImplicitly]
         private void Construct(IInventoryService inventory,
-            DataStorage storage)
+            IStorageRepository storage)
         {
             _inventory = inventory;
             _storage = storage;
@@ -39,7 +39,7 @@ namespace SevenDays.unLOC.Activities.Quests.Printer
             _clickableItem ??= GetComponent<InteractableItem>();
         }
 
-        private void Awake()
+        private void Start()
         {
             _key = typeof(BottleView).FullName + gameObject.name;
 

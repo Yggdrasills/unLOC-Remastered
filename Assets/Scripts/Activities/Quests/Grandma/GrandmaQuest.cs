@@ -2,7 +2,6 @@
 
 using JetBrains.Annotations;
 
-using SevenDays.DialogSystem.Runtime;
 using SevenDays.unLOC.Activities.Items;
 using SevenDays.unLOC.Activities.Quests.Grandma.Visualization;
 using SevenDays.unLOC.Inventory.Services;
@@ -34,20 +33,17 @@ namespace SevenDays.unLOC.Activities.Quests.Grandma
         private int _droppedAmount;
 
         private IInventoryService _inventory;
-        private DialogService _dialogService;
-        private DataStorage _storage;
+        private IStorageRepository _storage;
 
         [Inject, UsedImplicitly]
         private void Construct(IInventoryService inventory,
-            DialogService dialogService,
-            DataStorage storage)
+            IStorageRepository storage)
         {
             _inventory = inventory;
-            _dialogService = dialogService;
             _storage = storage;
         }
 
-        private void Awake()
+        private void Start()
         {
             if (_storage.IsExists(typeof(GrandmaQuest).FullName))
             {
@@ -55,12 +51,7 @@ namespace SevenDays.unLOC.Activities.Quests.Grandma
             }
         }
 
-        public void SetDialogTag()
-        {
-            _dialogService.SubscribeTagAction(DialogTag.GrandmaQuestStart, StartQuest);
-        }
-
-        private void StartQuest()
+        public void StartQuest()
         {
             _camera.gameObject.SetActive(true);
             _content.SetActive(true);

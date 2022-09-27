@@ -14,6 +14,8 @@ using SevenDays.unLOC.Profiles.Services;
 
 using UnityEditor;
 
+using UnityEngine.Assertions;
+
 using VContainer.Unity;
 
 using Object = UnityEngine.Object;
@@ -90,7 +92,7 @@ namespace SevenDays.unLOC.Menu
                 Object.Destroy(child.gameObject);
             }
 
-            var profiles = _profileService.Profiles;
+            var profiles = _profileService.ProfileInfos;
 
             for (var i = 0; i < profiles.Length; i++)
             {
@@ -106,15 +108,21 @@ namespace SevenDays.unLOC.Menu
                     profile.DateActivity);
 
                 profileLoadButton.Button.OnClickAsAsyncEnumerable().SubscribeAwait((_, __) =>
-                    OnProfileLoadButtonOnClicked(profile));
+                    OnProfileLoadButtonOnClickedAsync(profile));
             }
         }
 
-        private async UniTask OnProfileLoadButtonOnClicked(Profile profile)
+        private async UniTask OnProfileLoadButtonOnClickedAsync(ProfileInfo info)
         {
-            _profileService.SetActiveProfile(profile.Index);
+            _profileService.SetActiveProfile(info.Index);
 
-            await _sceneLoader.LoadSceneByBuildIndexAsync(profile.SceneIndex);
+            var sceneIndex = _profileService.GetSceneIndex(info.Index);
+
+            Assert.IsTrue(sceneIndex != -1,
+                $"[{nameof(MenuController)}.{nameof(OnProfileLoadButtonOnClickedAsync)}] " +
+                $"profile with index {info.Index} `not found");
+
+            await _sceneLoader.LoadSceneByBuildIndexAsync(sceneIndex);
         }
     }
 }

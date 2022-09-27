@@ -1,4 +1,8 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+
+using Activities.Dialogs;
+
+using Cysharp.Threading.Tasks;
 
 using JetBrains.Annotations;
 
@@ -41,16 +45,15 @@ namespace SevenDays.unLOC.Activities.Quests.RobotPainter
         [SerializeField]
         private int _correctPassword = 73326;
 
-        // todo: add dialogue after quest complete
         [SerializeField]
-        private string _questDoneDialogueBubbleText = "Так-то лучше. Теперь тебя не взломают.";
+        private DialogWrapperProxy _dialogWrapper;
 
-        private DataStorage _storage;
+        private IStorageRepository _storage;
 
         private bool _canEnterPassword = true;
 
         [Inject, UsedImplicitly]
-        private void Construct(DataStorage storage)
+        private void Construct(IStorageRepository storage)
         {
             _storage = storage;
         }
@@ -86,7 +89,7 @@ namespace SevenDays.unLOC.Activities.Quests.RobotPainter
             }
         }
 
-        private void Awake()
+        private void Start()
         {
             if (_storage.IsExists(typeof(RobotPainterQuest).FullName))
             {
@@ -122,25 +125,31 @@ namespace SevenDays.unLOC.Activities.Quests.RobotPainter
 
             _text.text += num;
 
-            TryCompleteQuest().Forget();
+            TryCompleteQuestAsync().Forget();
         }
 
-        private async UniTaskVoid TryCompleteQuest()
+        private async UniTaskVoid TryCompleteQuestAsync()
         {
             if (_text.text.Length != _maxEnteredLenght) return;
 
             if (IsCorrectPassword(int.Parse(_text.text)))
             {
-                await _textBlinker.Blink(_correctColors);
+                await _textBlinker.BlinkAsync(_correctColors);
 
                 Complete();
 
+                _dialogWrapper.StartDialog();
+
                 _storage.Save(typeof(RobotPainterQuest).FullName, true);
+
+                await UniTask.Delay(TimeSpan.FromSeconds(3));
+
+                _dialogWrapper.HideDialogAsync().Forget();
             }
 
             _canEnterPassword = false;
 
-            await _textBlinker.Blink(_wrongColors);
+            await _textBlinker.BlinkAsync(_wrongColors);
 
             ResetToDefault();
         }

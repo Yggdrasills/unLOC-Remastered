@@ -4,7 +4,10 @@ using UnityEngine.UI;
 
 namespace SevenDays.unLOC.Activities.Quests.Flower.Screwdriver
 {
-    public class ScrewdriverBitSwitcher : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
+    public class ScrewdriverBitSwitcher : MonoBehaviour,
+        IPointerDownHandler,
+        IPointerUpHandler,
+        IPointerClickHandler
     {
         [SerializeField]
         private Nozzle _nozzle = Nozzle.None;
@@ -34,19 +37,19 @@ namespace SevenDays.unLOC.Activities.Quests.Flower.Screwdriver
                 _screwdriverView = GetComponentInParent<ScrewdriverView>();
         }
 
-        public void OnPointerDown(PointerEventData eventData)
+        void IPointerDownHandler.OnPointerDown(PointerEventData eventData)
         {
             Colorize(_targetColor);
         }
 
-        public void OnPointerUp(PointerEventData eventData)
+        void IPointerUpHandler.OnPointerUp(PointerEventData eventData)
         {
             Colorize(_initColor);
         }
 
-        public void OnPointerClick(PointerEventData eventData)
+        void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
         {
-            _screwdriverView.ShowAsync(_nozzle);
+            _screwdriverView.Show(_nozzle);
         }
 
         private void Colorize(Color color)

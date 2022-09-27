@@ -1,6 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 
-using SevenDays.DialogSystem.Runtime;
+using SevenDays.InkWrapper.Views.Dialogs;
 
 using UnityEngine;
 
@@ -9,7 +9,7 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
     public class MechanoidTextDisplayer : MonoBehaviour
     {
         [SerializeField]
-        private DialogWindow _dialogWindow;
+        private DialogView _dialogWindow;
 
         [SerializeField]
         private string _noWiresText = "Да, если бы ты включился, было бы слишком просто";
@@ -32,52 +32,60 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
         [SerializeField]
         private string _noCondenserText = "Где же у меня завалялся старенький конденсатор?..";
 
+        private IDialogView _dialogView;
+
+        private void Awake()
+        {
+            _dialogView = _dialogWindow;
+        }
+
         // todo: подумать на названием
-        public UniTask DisplayTooEasySarcasm()
+        public void DisplayTooEasySarcasm()
         {
-            return Display(_noWiresText);
+            DisplayAsync(_noWiresText).Forget();
         }
 
-        public UniTask DisplayForgotWires()
+        public void DisplayForgotWires()
         {
-            return Display(_forgotWiresText);
+            DisplayAsync(_forgotWiresText).Forget();
         }
 
-        public UniTask DisplayTimeToTurnOn()
+        public void DisplayTimeToTurnOn()
         {
-            return Display(_timeToTurnOnText);
+            DisplayAsync(_timeToTurnOnText).Forget();
         }
 
-        public UniTask DisplaySelfPraise()
+        public void DisplaySelfPraise()
         {
-            return Display(_selfPraiseText);
+            DisplayAsync(_selfPraiseText).Forget();
         }
 
-        public UniTask DisplayCantTurnOn()
+        public void DisplayCantTurnOn()
         {
-            return Display(_noPowerText);
+            DisplayAsync(_noPowerText).Forget();
         }
 
-        public UniTask DisplayWiresOnPlace()
+        public void DisplayWiresOnPlace()
         {
-            return Display(_wiresOnPlaceText);
+            DisplayAsync(_wiresOnPlaceText).Forget();
         }
 
-        public UniTask DisplayNoCondenser()
+        public void DisplayNoCondenser()
         {
-            return Display(_noCondenserText);
+            DisplayAsync(_noCondenserText).Forget();
         }
 
-        public void ResetToDefault()
+        private async UniTaskVoid DisplayAsync(string text)
         {
-            _dialogWindow.RevealImmediately();
-            _dialogWindow.ResetToDefault();
+            await ResetToDefaultAsync();
+            await _dialogView.ShowAsync();
+            _dialogView.RevealAsync(text).Forget();
         }
 
-        private async UniTask Display(string text)
+        private async UniTask ResetToDefaultAsync()
         {
-            ResetToDefault();
-            await _dialogWindow.ShowTextAsync(text);
+            _dialogView.Reveal();
+            await _dialogView.HideAsync();
         }
     }
 }

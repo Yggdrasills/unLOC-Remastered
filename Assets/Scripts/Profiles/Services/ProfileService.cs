@@ -14,28 +14,27 @@ namespace SevenDays.unLOC.Profiles.Services
     [UsedImplicitly]
     public class ProfileService : IProfileService, IInitializable, IStartable, IDisposable
     {
-        public Profile[] Profiles => _profileCollection.Profiles.ToArray();
+        public ProfileInfo[] ProfileInfos => _profileCollection.Profiles.Select(p => p.Info).ToArray();
+
+        private Profile _current;
 
         private ProfileCollection _profileCollection;
         private readonly SceneLoader _sceneLoader;
-        private readonly DataStorage _storage;
+        private readonly IStorageDecorator _storage;
 
-        public ProfileService(SceneLoader sceneLoader, DataStorage storage)
+        public ProfileService(SceneLoader sceneLoader, IStorageDecorator storage)
         {
             _sceneLoader = sceneLoader;
-
             _storage = storage;
         }
 
         void IInitializable.Initialize()
         {
+            _storage.SetStorage<GlobalStorage>();
+
             if (!_storage.TryLoad(typeof(ProfileCollection).FullName, out _profileCollection))
             {
                 _profileCollection = new ProfileCollection();
-            }
-            else
-            {
-                _storage.SetProfileIndex(_profileCollection.ActiveProfile.Index);
             }
         }
 
@@ -48,53 +47,72 @@ namespace SevenDays.unLOC.Profiles.Services
         {
             _sceneLoader.Loaded -= OnSceneLoaded;
 
+            _storage.SetStorage<GlobalStorage>();
+
             _storage.Save(typeof(ProfileCollection).FullName, _profileCollection);
+
+            if (_current != null)
+            {
+                _storage.SetStorage<LocalStorage, LocalStorageCreationParameters>(
+                    new LocalStorageCreationParameters(_current.Info.Index));
+            }
         }
 
         private void OnSceneLoaded(int sceneBuildIndex)
         {
-            if (_profileCollection.ActiveProfile == null)
+            if (_current == null)
             {
                 return;
             }
 
-            _profileCollection.ActiveProfile.SceneIndex = sceneBuildIndex;
-            _profileCollection.ActiveProfile.DateActivity = DateTime.UtcNow;
+            _current.SceneIndex = sceneBuildIndex;
+            _current.Info.DateActivity = DateTime.UtcNow;
         }
 
         void IProfileService.CreateProfile()
         {
-            var profileIndex = _profileCollection.Profiles.LastOrDefault()?.Index + 1 ?? 0;
+            var profileIndex = _profileCollection.Profiles.LastOrDefault()?.Info.Index + 1 ?? 0;
 
             var profile = new Profile()
             {
-                Index = profileIndex,
                 SceneIndex = 1,
-                DateCreation = DateTime.UtcNow,
-                DateActivity = DateTime.UtcNow
+                Info = new ProfileInfo()
+                {
+                    Index = profileIndex,
+                    DateCreation = DateTime.UtcNow,
+                    DateActivity = DateTime.UtcNow
+                }
             };
 
             _profileCollection.Profiles.Add(profile);
 
-            SetActiveProfile(profile);
+            SetCurrent(profile);
         }
 
         void IProfileService.SetActiveProfile(int profileIndex)
         {
-            var profile = _profileCollection.Profiles.SingleOrDefault(p => p.Index == profileIndex);
+            var profile = _profileCollection.Profiles.SingleOrDefault(p => p.Info.Index == profileIndex);
 
             if (profile == null)
             {
                 return;
             }
 
-            SetActiveProfile(profile);
+            SetCurrent(profile);
         }
 
-        private void SetActiveProfile(Profile profile)
+        int IProfileService.GetSceneIndex(int profileIndex)
         {
-            _profileCollection.ActiveProfile = profile;
-            _storage.SetProfileIndex(_profileCollection.ActiveProfile.Index);
+            var profile = _profileCollection.Profiles.SingleOrDefault(p => p.Info.Index == profileIndex);
+
+            return profile?.SceneIndex ?? -1;
+        }
+
+        private void SetCurrent(Profile profile)
+        {
+            _current = profile;
+            _storage.SetStorage<LocalStorage, LocalStorageCreationParameters>(
+                new LocalStorageCreationParameters(_current.Info.Index));
         }
     }
 }

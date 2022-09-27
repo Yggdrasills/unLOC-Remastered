@@ -23,6 +23,9 @@ namespace SevenDays.unLOC.Activities.Quests.Flower.Screwdriver
         public Nozzle ActiveNozzle { get; private set; } = Nozzle.None;
 
         [SerializeField]
+        private Canvas _canvas;
+
+        [SerializeField]
         private GameObject _content;
 
         [SerializeField]
@@ -32,7 +35,7 @@ namespace SevenDays.unLOC.Activities.Quests.Flower.Screwdriver
         private float _targetPositionY = 220;
 
         [SerializeField]
-        private float _initPositionY = 0;
+        private float _initPositionY;
 
         [SerializeField]
         private TextMeshProUGUI _text;
@@ -44,14 +47,26 @@ namespace SevenDays.unLOC.Activities.Quests.Flower.Screwdriver
 
         private IInventoryService _inventory;
 
+        private Camera _mainCamera;
+
         [Inject, UsedImplicitly]
-        private void Construct(IInventoryService inventory)
+        private void Construct(IInventoryService inventory, Camera mainCamera)
         {
             _inventory = inventory;
+            _mainCamera = mainCamera;
+        }
+
+        private void OnValidate()
+        {
+            if (_canvas == null)
+            {
+                _canvas = GetComponent<Canvas>();
+            }
         }
 
         private void Start()
         {
+            _canvas.worldCamera = _mainCamera;
             _inventory.SetClickStrategy(InventoryItem.Screwdriver, ActivateContent);
         }
 
@@ -61,7 +76,7 @@ namespace SevenDays.unLOC.Activities.Quests.Flower.Screwdriver
                 _moveTween.Kill();
         }
 
-        public void ShowAsync(Nozzle nozzle)
+        public void Show(Nozzle nozzle)
         {
             ShowAsync(nozzle, _duration).Forget();
         }

@@ -14,8 +14,8 @@
       "dependencies": {},
       "hash": "adb145f538d83254b34864897a5aaeb0b054abdc"
     },
-    "com.sevendays.dialogsystem": {
-      "version": "file:sevendays.dialog_system",
+    "com.sevendays.inkwrapper": {
+      "version": "file:com.sevendays.inkwrapper",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
@@ -27,7 +27,7 @@
       "dependencies": {}
     },
     "com.sevendays.screens": {
-      "version": "file:sevendays.screens",
+      "version": "file:com.sevendays.screens",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}

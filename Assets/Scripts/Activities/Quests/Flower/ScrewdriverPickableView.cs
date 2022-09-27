@@ -26,12 +26,12 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
 
         private IInventoryService _inventory;
 
-        private DataStorage _storage;
+        private IStorageRepository _storage;
 
         private Action _inventoryAddAction;
 
         [Inject, UsedImplicitly]
-        private void Construct(IInventoryService inventory, DataStorage storage)
+        private void Construct(IInventoryService inventory, IStorageRepository storage)
         {
             _inventory = inventory;
             _storage = storage;
