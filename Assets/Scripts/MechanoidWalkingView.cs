@@ -5,8 +5,6 @@ using AmayaSoft.Core.Utils.Extensions;
 
 using Cysharp.Threading.Tasks;
 
-using DG.Tweening;
-
 using DragonBones;
 
 using JetBrains.Annotations;
@@ -37,6 +35,12 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
         public static readonly string Talk_Left = "Talk_Left";
     }
 
+    enum RobotState
+    {
+        MoveToPlayer,
+        Stay
+    }
+
     public class MechanoidWalkingView : MonoBehaviour
     {
         [SerializeField]
@@ -49,19 +53,61 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
         private float _playerRadius;
 
         [SerializeField]
-        private Vector2 _timeRangeToSleep;
+        private Vector2 _timeRangeToBorring = new Vector2(6, 9);
+
+        [SerializeField]
+        private Vector2 _timeRangeMoveWhenBorring = new Vector2(2f, 3f);
 
         [SerializeField]
         private float _playerCheckTime = 1;
 
+        [SerializeField]
+        private float _fadeInAnimationTime = .5f;
+
+        private CancellationTokenSource _secondIdleToken = new CancellationTokenSource();
+
         private PlayerView _followingPlayer;
-        private CancellationTokenSource _sleepToken = new CancellationTokenSource();
+
         private int _currentDirection;
-        private bool _isMove;
+
+        private float _playerTargetOffset;
+
+        private RobotState _state;
+
+        private float _timeCheckPlayerMove;
+
+        private float _timeToBoring;
+
+        private float _currentTimeInStay;
+
+        private float _timeToSecondIdleAnimation;
 
         private void Start()
         {
-            StartMoveAsync().Forget();
+            SetStateMove();
+            _timeToBoring = Random.Range(_timeRangeToBorring.x, _timeRangeToBorring.y);
+        }
+
+        private void Update()
+        {
+            if (_followingPlayer is null)
+            {
+                return;
+            }
+
+            switch (_state)
+            {
+                case RobotState.MoveToPlayer:
+                    OnMove();
+                    break;
+                case RobotState.Stay:
+                    OnStay();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            _armatureComponent.armature.flipX = _currentDirection == 1;
         }
 
 
@@ -72,58 +118,142 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
             _followingPlayer = followingPlayer;
         }
 
-        private async UniTaskVoid StartMoveAsync()
+        private void OnMove()
         {
-            while (gameObject)
+            var distance = GetDistance();
+            var direction = GetDistanceDirection(distance);
+
+            if (direction != _currentDirection)
             {
-                await UniTask.Delay(TimeSpan.FromSeconds(_playerCheckTime));
+                SetWalkAnimation();
+            }
 
-                if (Mathf.Abs(transform.position.x - _followingPlayer.transform.position.x) < _playerRadius)
-                {
-                    if (_isMove)
-                    {
-                        IdleAsync().Forget();
-                        _isMove = false;
-                    }
-                    continue;
-                }
+            _currentDirection = direction;
 
-                _sleepToken?.Cancel();
-                _sleepToken?.Dispose();
+            if (Mathf.Abs(distance) <= .1f)
+            {
+                SetStateStay();
+                return;
+            }
 
-                _sleepToken = new CancellationTokenSource();
+            transform.Translate(Vector2.right * _currentDirection * _speedMove * Time.deltaTime);
+        }
 
-                var position = _followingPlayer.transform.position;
-                var distance = position.x - transform.position.x;
+        private void OnStay()
+        {
+            _timeCheckPlayerMove += Time.deltaTime;
+            _currentTimeInStay += Time.deltaTime;
 
-                var direction = Math.Sign(distance);
+            if (_currentTimeInStay > _timeToSecondIdleAnimation)
+            {
+                SetSecondIdleAnimationAsync().Forget();
+            }
 
-                if (_currentDirection == direction && _isMove) continue;
+            if (_currentTimeInStay > _timeToBoring)
+            {
+                SetStateMove();
+                _timeToBoring = Random.Range(_timeRangeMoveWhenBorring.x, _timeRangeMoveWhenBorring.y);
+                _currentTimeInStay = 0;
+            }
 
-                _currentDirection = direction;
+            if (_timeCheckPlayerMove < _playerCheckTime)
+            {
+                return;
+            }
 
-                _armatureComponent.armature.flipX = _currentDirection == 1;
+            _timeCheckPlayerMove = 0;
+            var distanceToPlayer = _followingPlayer.transform.position.x - transform.position.x;
 
-                _armatureComponent.animation.Play(_currentDirection > 0
-                    ? MechanoidAnimationKeys.Walk_Right
-                    : MechanoidAnimationKeys.Walk_Left);
-
-                var targetPoint = position.x + _playerRadius * Random.Range(0, 2) * 2 - 1; // random -1 / 1 
-
-                transform.DOMoveX(targetPoint, Mathf.Abs(distance) / _speedMove)
-                    .SetEase(Ease.Linear);
-                _isMove = true;
+            if (Mathf.Abs(distanceToPlayer) > _playerRadius)
+            {
+                SetStateMove();
+                _timeToBoring = Random.Range(_timeRangeToBorring.x, _timeRangeToBorring.y);
+                _currentTimeInStay = 0;
             }
         }
 
-        private async UniTaskVoid IdleAsync()
+        private int GetDistanceDirection(float distance)
         {
-            _armatureComponent.animation.Play(_currentDirection > 0
-                ? new[] { MechanoidAnimationKeys.Idle_1_Right, MechanoidAnimationKeys.Idle_2_Right }.GetRandomElement()
-                : new[] { MechanoidAnimationKeys.Idle_1_Left, MechanoidAnimationKeys.Idle_2_Left }.GetRandomElement());
+            var direction = Math.Sign(distance);
+            return direction;
+        }
 
-            // await UniTask.Delay(TimeSpan.FromSeconds(Random.Range(_timeRangeToSleep.x, _timeRangeToSleep.x)),
-            // cancellationToken: _sleepToken.Token);
+        private float GetDistance()
+        {
+            var positionX = _followingPlayer.transform.position.x + _playerTargetOffset;
+            return positionX - transform.position.x;
+        }
+
+        private void SetStateStay()
+        {
+            _state = RobotState.Stay;
+            _timeToSecondIdleAnimation = Random.Range(_timeRangeMoveWhenBorring.y, _timeRangeToBorring.x);
+
+            SetIdleAnimation();
+        }
+
+        private void SetStateMove()
+        {
+            _state = RobotState.MoveToPlayer;
+            _playerTargetOffset = PickRandomOffset();
+
+            if (!_secondIdleToken.IsCancellationRequested)
+            {
+                _secondIdleToken?.Cancel();
+                _secondIdleToken?.Dispose();
+            }
+
+            SetWalkAnimation();
+        }
+
+        private void SetIdleAnimation()
+        {
+            var animationName = _currentDirection == 1
+                ? MechanoidAnimationKeys.Idle_1_Right
+                : MechanoidAnimationKeys.Idle_1_Left;
+            _armatureComponent.animation.FadeIn(animationName, _fadeInAnimationTime);
+        }
+
+        private async UniTaskVoid SetSecondIdleAnimationAsync()
+        {
+            var animationName = _currentDirection == 1
+                ? MechanoidAnimationKeys.Idle_2_Right
+                : MechanoidAnimationKeys.Idle_2_Left;
+            if (_armatureComponent.animation.lastAnimationName == animationName)
+            {
+                return;
+            }
+
+            _armatureComponent.animation.FadeIn(animationName, _fadeInAnimationTime);
+
+            _secondIdleToken = new CancellationTokenSource();
+            try
+            {
+                await UniTask.Delay(TimeSpan.FromMilliseconds(_armatureComponent.animation.animationConfig.duration),
+                    cancellationToken: _secondIdleToken.Token);
+                SetIdleAnimation();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+        }
+
+        private void SetWalkAnimation()
+        {
+            var previousDirection = _currentDirection;
+            _currentDirection = GetDistanceDirection(GetDistance());
+            var animationName = _currentDirection == 1
+                ? MechanoidAnimationKeys.Walk_Right
+                : MechanoidAnimationKeys.Walk_Left;
+
+            _armatureComponent.animation.FadeIn(animationName,
+                previousDirection == _currentDirection ? _fadeInAnimationTime : 0);
+        }
+
+        private float PickRandomOffset()
+        {
+            return Random.Range(-_playerRadius, _playerRadius);
         }
     }
 }
