@@ -1,9 +1,12 @@
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 using AmayaSoft.Core.Utils.Extensions;
 
 using Cysharp.Threading.Tasks;
+
+using DG.Tweening;
 
 using DragonBones;
 
@@ -19,30 +22,11 @@ using Random = UnityEngine.Random;
 
 namespace SevenDays.unLOC.Activities.Quests.Mechanoid
 {
-    struct MechanoidAnimationKeys
-    {
-        public static readonly string Walk_Left = "Walk_Left";
-        public static readonly string TMP_Sit_down = "TMP_Sit_down";
-        public static readonly string Switch_off = "Switch_off";
-        public static readonly string Standup = "Standup";
-        public static readonly string Idle_1_Left = "Idle_1_Left";
-        public static readonly string Idle_2_Left = "Idle_2_Left";
-        public static readonly string Walk_Right = "Walk_Right";
-        public static readonly string Idle_2_Right = "Idle_2_Right";
-        public static readonly string Idle_1_Right = "Idle_1_Right";
-        public static readonly string Talk_Left_tmp_2 = "Talk_Left_tmp_2";
-        public static readonly string Talk_Left_tmp = "Talk_Left_tmp";
-        public static readonly string Talk_Left = "Talk_Left";
-    }
-
-    enum RobotState
-    {
-        MoveToPlayer,
-        Stay
-    }
-
     public class MechanoidWalkingView : MonoBehaviour
     {
+        private const float CloserValue = .1f;
+        private const float StartAnimationMultipier = .7f;
+
         [SerializeField]
         private float _speedMove = 12;
 
@@ -60,6 +44,9 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
 
         [SerializeField]
         private float _playerCheckTime = 1;
+
+        [SerializeField]
+        private Vector3 _jumpPosition = new Vector3(-25, -3.6f, 0);
 
         [SerializeField]
         private float _fadeInAnimationTime = .5f;
@@ -82,10 +69,11 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
 
         private float _timeToSecondIdleAnimation;
 
-        private void Start()
+        [Inject]
+        [UsedImplicitly]
+        public void Inject(PlayerView followingPlayer)
         {
-            SetStateMove();
-            _timeToBoring = Random.Range(_timeRangeToBorring.x, _timeRangeToBorring.y);
+            _followingPlayer = followingPlayer;
         }
 
         private void Update()
@@ -103,6 +91,8 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
                 case RobotState.Stay:
                     OnStay();
                     break;
+                case RobotState.Enabling:
+                    return;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -111,11 +101,22 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
         }
 
 
-        [Inject]
-        [UsedImplicitly]
-        public void Inject(PlayerView followingPlayer)
+        public async UniTaskVoid EnableAsync()
         {
-            _followingPlayer = followingPlayer;
+            _state = RobotState.Enabling;
+
+            _armatureComponent.animation.FadeIn(MechanoidAnimationKeys.Standup);
+            await UniTask.Yield();
+            await UniTask.Delay(TimeSpan.FromSeconds(_armatureComponent.animation.lastAnimationState._duration * StartAnimationMultipier));
+
+            _armatureComponent.animation.FadeIn(MechanoidAnimationKeys.Idle_2_Left, _fadeInAnimationTime);
+            await UniTask.Yield();
+            await UniTask.Delay(TimeSpan.FromSeconds(_armatureComponent.animation.lastAnimationState._duration * StartAnimationMultipier));
+            
+            await transform.DOJump(_jumpPosition, 6, 1, .5f);
+
+            SetStateMove();
+            _timeToBoring = Random.Range(_timeRangeToBorring.x, _timeRangeToBorring.y);
         }
 
         private void OnMove()
@@ -130,7 +131,7 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
 
             _currentDirection = direction;
 
-            if (Mathf.Abs(distance) <= .1f)
+            if (Mathf.Abs(distance) <= CloserValue)
             {
                 SetStateStay();
                 return;
@@ -229,7 +230,7 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
             _secondIdleToken = new CancellationTokenSource();
             try
             {
-                await UniTask.Delay(TimeSpan.FromMilliseconds(_armatureComponent.animation.animationConfig.duration),
+                await UniTask.Delay(TimeSpan.FromSeconds(_armatureComponent.animation.lastAnimationState._duration),
                     cancellationToken: _secondIdleToken.Token);
                 SetIdleAnimation();
             }
