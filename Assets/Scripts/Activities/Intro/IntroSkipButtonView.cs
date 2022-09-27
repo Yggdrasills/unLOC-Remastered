@@ -1,5 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 
+using JetBrains.Annotations;
+
 using SevenDays.unLOC.Core.Loaders;
 
 using UnityEngine;
@@ -16,7 +18,7 @@ namespace SevenDays.unLOC.Activities.Intro
 
         private SceneLoader _sceneLoader;
 
-        [Inject]
+        [Inject, UsedImplicitly]
         private void Construct(SceneLoader sceneLoader)
         {
             _sceneLoader = sceneLoader;

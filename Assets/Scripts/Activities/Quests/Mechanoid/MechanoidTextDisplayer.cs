@@ -42,47 +42,47 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
         // todo: подумать на названием
         public void DisplayTooEasySarcasm()
         {
-            Display(_noWiresText).Forget();
+            DisplayAsync(_noWiresText).Forget();
         }
 
         public void DisplayForgotWires()
         {
-            Display(_forgotWiresText).Forget();
+            DisplayAsync(_forgotWiresText).Forget();
         }
 
         public void DisplayTimeToTurnOn()
         {
-            Display(_timeToTurnOnText).Forget();
+            DisplayAsync(_timeToTurnOnText).Forget();
         }
 
         public void DisplaySelfPraise()
         {
-            Display(_selfPraiseText).Forget();
+            DisplayAsync(_selfPraiseText).Forget();
         }
 
         public void DisplayCantTurnOn()
         {
-            Display(_noPowerText).Forget();
+            DisplayAsync(_noPowerText).Forget();
         }
 
         public void DisplayWiresOnPlace()
         {
-            Display(_wiresOnPlaceText).Forget();
+            DisplayAsync(_wiresOnPlaceText).Forget();
         }
 
         public void DisplayNoCondenser()
         {
-            Display(_noCondenserText).Forget();
+            DisplayAsync(_noCondenserText).Forget();
         }
 
-        private async UniTaskVoid Display(string text)
+        private async UniTaskVoid DisplayAsync(string text)
         {
-            await ResetToDefault();
+            await ResetToDefaultAsync();
             await _dialogView.ShowAsync();
             _dialogView.RevealAsync(text).Forget();
         }
 
-        private async UniTask ResetToDefault()
+        private async UniTask ResetToDefaultAsync()
         {
             _dialogView.Reveal();
             await _dialogView.HideAsync();

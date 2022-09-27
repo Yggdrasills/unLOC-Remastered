@@ -29,11 +29,11 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
             }
             else
             {
-                WaitForManagerQuestCompleted().Forget();
+                WaitForManagerQuestCompletedAsync().Forget();
             }
         }
 
-        private async UniTaskVoid WaitForManagerQuestCompleted()
+        private async UniTaskVoid WaitForManagerQuestCompletedAsync()
         {
             await UniTask.WaitUntil(() => _managerDialogQuest.IsCompleted);
 
@@ -45,7 +45,7 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
             _content.SetActive(false);
         }
 
-        public async UniTask PlayExplosion()
+        public async UniTask PlayExplosionAsync()
         {
             for (int i = 0; i < _explosionAnimationFrames.Length; i++)
             {

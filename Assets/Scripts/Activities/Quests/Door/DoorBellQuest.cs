@@ -75,7 +75,7 @@ namespace SevenDays.unLOC.Activities.Quests
             }
             else
             {
-                WaitForMechanoidQuestCompleted().Forget();
+                WaitForMechanoidQuestCompletedAsync().Forget();
             }
 
             _interactableItem.Clicked += _doorView.LoadStreet;
@@ -90,7 +90,7 @@ namespace SevenDays.unLOC.Activities.Quests
             _cts?.Dispose();
         }
 
-        private async UniTaskVoid WaitForMechanoidQuestCompleted()
+        private async UniTaskVoid WaitForMechanoidQuestCompletedAsync()
         {
             await UniTask.WaitUntil(() => _mechanoidQuest.IsCompleted);
 
