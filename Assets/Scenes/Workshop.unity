@@ -8637,7 +8637,7 @@ GameObject:
   - component: {fileID: 1308296394}
   - component: {fileID: 1308296396}
   m_Layer: 0
-  m_Name: Washin Machine
+  m_Name: Washing Machine
   m_TagString: Untagged
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -8726,7 +8726,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 936b76ca37744ce589d9b00871a36cf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dialogAsset: {fileID: 4900000, guid: 43daa6247e28d6542b2916b7b614a6db, type: 3}
+  _dialogAsset: {fileID: 4900000, guid: 2f481e74cb942f8488cf5f0089d31ba6, type: 3}
   _dialogViewBehaviour: {fileID: 927134216661351131}
 --- !u!1 &1308355246
 GameObject:
