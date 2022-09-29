@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Core.unity
     guid: 529950b21ae7f1b48973661c18e43b14
   - enabled: 1
+    path: Assets/Scenes/Menu.unity
+    guid: 12ad262d49c05824c9b0f8447e3ade8f
+  - enabled: 1
     path: Assets/Scenes/Intro.unity
     guid: e54674f06ab8720479e6896346529637
   - enabled: 1
@@ -20,4 +23,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Street Stealth.unity
     guid: c7750c7588d2444428f78e198048459a
+  - enabled: 1
+    path: Assets/Scenes/MelissaRoom.unity
+    guid: b4bb4ea99f60e5d44bbab206f5fc2c61
+  - enabled: 1
+    path: Assets/Scenes/Credits.unity
+    guid: b896ea6280575df4e96437495ca5e079
   m_configObjects: {}

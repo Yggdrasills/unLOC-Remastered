@@ -5,8 +5,12 @@ using UnityEngine.EventSystems;
 
 namespace SevenDays.unLOC.Activities.Quests.Grandma.Visualization
 {
-    public class DraggableItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler,
-        IPointerEnterHandler, IPointerExitHandler
+    public class DraggableItemView : MonoBehaviour,
+        IBeginDragHandler,
+        IDragHandler,
+        IEndDragHandler,
+        IPointerEnterHandler,
+        IPointerExitHandler
     {
         public event Action Dropped = delegate { };
 
@@ -25,27 +29,27 @@ namespace SevenDays.unLOC.Activities.Quests.Grandma.Visualization
         private SmoothDisplacerView _displacement;
         private GarbageDropHandler _dropHandler;
 
-        public void OnBeginDrag(PointerEventData eventData)
+        void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
         {
             Create(_camera.ScreenToWorldPoint(eventData.position));
         }
 
-        public void OnDrag(PointerEventData eventData)
+        void IDragHandler.OnDrag(PointerEventData eventData)
         {
             TranslatePosition(_camera.ScreenToWorldPoint(eventData.position));
         }
 
-        public void OnEndDrag(PointerEventData eventData)
+        void IEndDragHandler.OnEndDrag(PointerEventData eventData)
         {
             Drop();
         }
 
-        public void OnPointerEnter(PointerEventData eventData)
+        void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
         {
             _textDescription.SetActive(true);
         }
 
-        public void OnPointerExit(PointerEventData eventData)
+        void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
         {
             _textDescription.SetActive(false);
         }

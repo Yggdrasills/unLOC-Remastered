@@ -2,7 +2,7 @@
 
 using DG.Tweening;
 
-using SevenDays.unLOC.Core;
+using SevenDays.unLOC.Core.Player;
 
 using UnityEngine;
 using UnityEngine.Events;
@@ -35,6 +35,7 @@ namespace SevenDays.unLOC.Activities.Items
             if (_collider == null)
             {
                 _collider = GetComponent<BoxCollider2D>();
+                _collider.isTrigger = true;
             }
 
             if (_iconView == null)

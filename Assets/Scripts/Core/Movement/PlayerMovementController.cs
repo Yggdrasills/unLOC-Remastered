@@ -6,13 +6,14 @@ using Cysharp.Threading.Tasks.Linq;
 
 using DG.Tweening;
 
+using SevenDays.unLOC.Core.Loaders;
 using SevenDays.unLOC.Core.Player;
 
 using UnityEngine;
 
 namespace SevenDays.unLOC.Core.Movement
 {
-    public class PlayerMovementController : IInitialize, IDisposable
+    public class PlayerMovementController : IInstallable, IDisposable
     {
         private readonly TapZoneView _tapZoneView;
         private readonly IInputModel _inputModel;
@@ -30,7 +31,7 @@ namespace SevenDays.unLOC.Core.Movement
             _playerTransform = player.transform;
         }
 
-        public void Initialize()
+        public void Install()
         {
             _tapZoneView.Clicked += OnClickedToTapZone;
             _inputModel.Input.WithoutCurrent().Subscribe(OnHorizontalInputChange);

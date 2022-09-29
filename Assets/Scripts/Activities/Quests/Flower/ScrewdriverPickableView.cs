@@ -8,6 +8,7 @@ using SevenDays.unLOC.Activities.Items;
 using SevenDays.unLOC.Inventory;
 using SevenDays.unLOC.Inventory.Services;
 using SevenDays.unLOC.Inventory.Views;
+using SevenDays.unLOC.Storage;
 
 using UnityEngine;
 
@@ -18,15 +19,23 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
     [RequireComponent(typeof(ClickableItem))]
     public class ScrewdriverPickableView : PickableBase
     {
+        public override InventoryItem Type => InventoryItem.Screwdriver;
+
         [SerializeField]
         private ClickableItem _clickableItem;
 
-        [SerializeField]
-        private GameObject _screwdriverContent;
-
         private IInventoryService _inventory;
 
+        private IStorageRepository _storage;
+
         private Action _inventoryAddAction;
+
+        [Inject, UsedImplicitly]
+        private void Construct(IInventoryService inventory, IStorageRepository storage)
+        {
+            _inventory = inventory;
+            _storage = storage;
+        }
 
         private void OnValidate()
         {
@@ -34,32 +43,29 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
                 _clickableItem = GetComponent<ClickableItem>();
         }
 
-        [Inject, UsedImplicitly]
-        private void Construct(IInventoryService inventory)
+        private void Start()
         {
-            _inventory = inventory;
-        }
+            if (_storage.IsExists(typeof(ScrewdriverPickableView).FullName))
+            {
+                gameObject.SetActive(false);
 
-        private void Awake()
-        {
-            _inventoryAddAction = () => _inventory.AddAsync(this).Forget();
-        }
+                return;
+            }
 
-        private void OnEnable()
-        {
+            _inventoryAddAction = () =>
+            {
+                _inventory.AddAsync(this).Forget();
+
+                gameObject.SetActive(false);
+                _storage.Save(typeof(ScrewdriverPickableView).FullName, true);
+            };
+
             _clickableItem.Clicked += _inventoryAddAction;
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
             _clickableItem.Clicked -= _inventoryAddAction;
-        }
-
-        public override InventoryItem Type => InventoryItem.Screwdriver;
-
-        public override Action GetInventoryClickStrategy()
-        {
-            return () => _screwdriverContent.gameObject.SetActive(true);
         }
     }
 }

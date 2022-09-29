@@ -1,8 +1,7 @@
-﻿namespace SaveSystem
+﻿namespace SevenDays.unLOC.SaveSystem
 {
     public struct SaveData
     {
-        public string SceneName;
         public int ProfileIndex;
     }
 }

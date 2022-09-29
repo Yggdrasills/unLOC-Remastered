@@ -5,9 +5,16 @@ using Cysharp.Threading.Tasks;
 
 using DG.Tweening;
 
+using JetBrains.Annotations;
+
+using SevenDays.unLOC.Inventory;
+using SevenDays.unLOC.Inventory.Services;
+
 using TMPro;
 
 using UnityEngine;
+
+using VContainer;
 
 namespace SevenDays.unLOC.Activities.Quests.Flower.Screwdriver
 {
@@ -16,13 +23,19 @@ namespace SevenDays.unLOC.Activities.Quests.Flower.Screwdriver
         public Nozzle ActiveNozzle { get; private set; } = Nozzle.None;
 
         [SerializeField]
+        private Canvas _canvas;
+
+        [SerializeField]
+        private GameObject _content;
+
+        [SerializeField]
         private NozzlePair[] _nozzlePairs;
 
         [SerializeField]
         private float _targetPositionY = 220;
 
         [SerializeField]
-        private float _initPositionY = 0;
+        private float _initPositionY;
 
         [SerializeField]
         private TextMeshProUGUI _text;
@@ -32,13 +45,43 @@ namespace SevenDays.unLOC.Activities.Quests.Flower.Screwdriver
 
         private Tween _moveTween;
 
+        private IInventoryService _inventory;
+
+        private Camera _mainCamera;
+
+        [Inject, UsedImplicitly]
+        private void Construct(IInventoryService inventory, Camera mainCamera)
+        {
+            _inventory = inventory;
+            _mainCamera = mainCamera;
+        }
+
+        private void OnValidate()
+        {
+            if (_canvas == null)
+            {
+                _canvas = GetComponent<Canvas>();
+            }
+        }
+
+        private void Start()
+        {
+            _canvas.worldCamera = _mainCamera;
+            _inventory.SetClickStrategy(InventoryItem.Screwdriver, ActivateContent);
+        }
+
         private void OnDisable()
         {
-            if (_moveTween != null && _moveTween.IsActive())
+            if (_moveTween.IsActive())
                 _moveTween.Kill();
         }
 
-        public async UniTaskVoid ShowAsync(Nozzle nozzle)
+        public void Show(Nozzle nozzle)
+        {
+            ShowAsync(nozzle, _duration).Forget();
+        }
+
+        private async UniTaskVoid ShowAsync(Nozzle nozzle, float duration)
         {
             if (ActiveNozzle == nozzle || _moveTween != null && _moveTween.IsActive())
             {
@@ -47,26 +90,31 @@ namespace SevenDays.unLOC.Activities.Quests.Flower.Screwdriver
 
             if (ActiveNozzle != Nozzle.None)
             {
-                await AnimateAsync(ActiveNozzle, _initPositionY);
+                await AnimateAsync(ActiveNozzle, _initPositionY, duration);
             }
 
-            AnimateAsync(nozzle, _targetPositionY).Forget();
+            AnimateAsync(nozzle, _targetPositionY, duration).Forget();
         }
 
-        private async UniTask AnimateAsync(Nozzle nozzle, float positionY)
+        private async UniTask AnimateAsync(Nozzle nozzle, float positionY, float duration)
         {
             var targetPair = _nozzlePairs.First(t => t.Nozzle == nozzle);
 
             if (targetPair.Transform == null)
                 return;
 
-            _moveTween = targetPair.Transform.DOAnchorPosY(positionY, _duration);
+            _moveTween = targetPair.Transform.DOAnchorPosY(positionY, duration);
 
             ActiveNozzle = nozzle;
 
             _text.text = ActiveNozzle.ToString();
 
             await _moveTween.AsyncWaitForCompletion();
+        }
+
+        private void ActivateContent()
+        {
+            _content.SetActive(true);
         }
 
         [Serializable]

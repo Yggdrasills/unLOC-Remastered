@@ -1,48 +1,107 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Cysharp.Threading.Tasks;
 
+using Newtonsoft.Json;
+
 using SevenDays.unLOC.Inventory.Views;
+using SevenDays.unLOC.Storage;
+using SevenDays.unLOC.Utils.Helpers;
+
+using UnityEngine;
+
+using VContainer.Unity;
 
 using Object = UnityEngine.Object;
 
 namespace SevenDays.unLOC.Inventory.Services
 {
-    public class InventoryService : IInventoryService
+    public class ItemClickStrategy
     {
-        private readonly Dictionary<InventoryItem, InventoryCellView> _inventoryItems;
+        public InventoryItem Type { get; set; } = InventoryItem.None;
+
+        public Action ClickStrategy { get; set; }
+    }
+
+    public class InventoryService : IInventoryService, IStartable, IDisposable
+    {
+        private readonly List<ItemClickStrategy> _clickStrategies;
+
+        private readonly Dictionary<Item, InventoryCellView> _inventory;
 
         private readonly InventoryCellView _cellPrefab;
 
         private readonly InventoryView _inventoryView;
 
-        private readonly List<PickableBase> _pickableBaseViews;
+        private readonly IStorageRepository _storage;
 
         public InventoryService(
             InventoryCellView cellPrefab,
-            InventoryView inventoryView)
+            InventoryView inventoryView,
+            IStorageRepository storage)
         {
-            _inventoryItems = new Dictionary<InventoryItem, InventoryCellView>();
-            _pickableBaseViews = new List<PickableBase>();
+            _clickStrategies = new List<ItemClickStrategy>()
+            {
+                new ItemClickStrategy() {Type = InventoryItem.None},
+                new ItemClickStrategy() {Type = InventoryItem.Screwdriver},
+                new ItemClickStrategy() {Type = InventoryItem.ScrewEdge3},
+                new ItemClickStrategy() {Type = InventoryItem.ScrewRadiation},
+                new ItemClickStrategy() {Type = InventoryItem.ScrewSpanner},
+                new ItemClickStrategy() {Type = InventoryItem.Bottle},
+                new ItemClickStrategy() {Type = InventoryItem.Wires},
+                new ItemClickStrategy() {Type = InventoryItem.Glasses},
+                new ItemClickStrategy() {Type = InventoryItem.Condenser},
+            };
+
+            _inventory = new Dictionary<Item, InventoryCellView>();
+            _storage = storage;
+
             _cellPrefab = cellPrefab;
             _inventoryView = inventoryView;
         }
 
+        void IStartable.Start()
+        {
+            if (!_storage.TryLoad(typeof(InventoryService).FullName, out Item[] items))
+            {
+                return;
+            }
+
+            for (int i = 0; i < items.Length; i++)
+            {
+                items[i].Icon = SpriteConverter.GetSprite(items[i].SerializableTexture);
+
+                Add(items[i]);
+            }
+        }
+
+        void IDisposable.Dispose()
+        {
+            var keys = _inventory.Keys.ToArray();
+
+            _storage.Save(typeof(InventoryService).FullName, keys);
+        }
+
         bool IInventoryService.Contains(InventoryItem type)
         {
-            return _inventoryItems.ContainsKey(type);
+            return _inventory.Keys.Any(k => k.Type == type);
         }
 
         void IInventoryService.Use(InventoryItem type)
         {
-            if (_inventoryItems.ContainsKey(type))
+            if (TryGetCellItem(type, out var cellItem))
             {
-                _inventoryItems[type].DecrementAmount();
+                var amount = --cellItem.item.Amount;
 
-                if (_inventoryItems[type].Amount <= 0)
+                if (amount <= 0)
                 {
-                    RemoveItem(type);
+                    RemoveItem(cellItem);
+                }
+                else
+                {
+                    cellItem.view.SetCounterText(amount);
                 }
             }
             else
@@ -52,52 +111,92 @@ namespace SevenDays.unLOC.Inventory.Services
             }
         }
 
+        void IInventoryService.SetClickStrategy(InventoryItem type, Action strategy)
+        {
+            var itemStrategy = _clickStrategies.FirstOrDefault(it => it.Type == type);
+
+            if (itemStrategy == null)
+            {
+                return;
+            }
+
+            itemStrategy.ClickStrategy = strategy;
+        }
+
         async UniTask IInventoryService.AddAsync(PickableBase pickable)
         {
-            await AddPickableAsync(pickable);
+            await pickable.VisualisePickAsync();
+
+            var item = _inventory.Keys.SingleOrDefault(i => i.Type == pickable.Type) ??
+                       new Item()
+                       {
+                           SerializableTexture = SpriteConverter.GetTexture(pickable.Icon),
+                           Icon = pickable.Icon,
+                           Type = pickable.Type
+                       };
+
+            item.Amount++;
+
+            Add(item);
         }
 
         void IInventoryService.Remove(InventoryItem type)
         {
-            if (_inventoryItems.ContainsKey(type))
+            if (TryGetCellItem(type, out var cellItem))
             {
-                RemoveItem(type);
+                RemoveItem(cellItem);
             }
         }
 
-        private void RemoveItem(InventoryItem type)
+        private void RemoveItem((Item item, InventoryCellView view) cellItem)
         {
-            Object.Destroy(_inventoryItems[type].gameObject);
-            _inventoryItems.Remove(type);
+            Object.Destroy(cellItem.view.gameObject);
+
+            _inventory.Remove(cellItem.item);
         }
 
-        private async UniTask AddPickableAsync(PickableBase pickableBase)
+        private void Add(Item item)
         {
-            await pickableBase.VisualisePickAsync();
-
-            var key = pickableBase.Type;
-
-            if (!_inventoryItems.ContainsKey(key))
+            if (!_inventory.ContainsKey(item))
             {
-                var cellItem = CreateItemAsync(pickableBase);
-                _inventoryItems.Add(key, cellItem);
+                var cellView = CreateView(item);
+
+                _inventory.Add(item, cellView);
             }
 
-            _inventoryItems[key].IncrementAmount();
-
-            if (!_pickableBaseViews.Contains(pickableBase))
-                _pickableBaseViews.Add(pickableBase);
+            _inventory[item].SetCounterText(item.Amount);
         }
 
-        private InventoryCellView CreateItemAsync(PickableBase pickableBase)
+        private InventoryCellView CreateView(Item item)
         {
             var cellItem = Object.Instantiate(_cellPrefab, _inventoryView.Container);
 
-            cellItem.SetIcon(pickableBase.Icon);
-
-            cellItem.SetClickAction(pickableBase.GetInventoryClickStrategy());
+            cellItem.SetIcon(item.Icon);
+            cellItem.SetClickAction(_clickStrategies
+                .FirstOrDefault(it => it.Type == item.Type));
 
             return cellItem;
+        }
+
+        private bool TryGetCellItem(InventoryItem type, out (Item item, InventoryCellView view) cellView)
+        {
+            var key = _inventory.Keys.SingleOrDefault(k => k.Type == type);
+
+            cellView = key is null ? (null, null) : (key, _inventory[key]);
+
+            return key != null;
+        }
+
+        private class Item
+        {
+            [JsonIgnore]
+            public Sprite Icon { get; set; }
+
+            public SerializableTexture SerializableTexture { get; set; }
+
+            public InventoryItem Type { get; set; }
+
+            public int Amount { get; set; }
         }
     }
 }

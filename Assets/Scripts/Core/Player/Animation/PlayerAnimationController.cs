@@ -3,6 +3,7 @@ using System.Threading;
 
 using Cysharp.Threading.Tasks;
 
+using SevenDays.unLOC.Core.Loaders;
 using SevenDays.unLOC.Core.Movement;
 using SevenDays.unLOC.Core.Player.Animations.Config;
 
@@ -12,7 +13,7 @@ using Random = UnityEngine.Random;
 
 namespace SevenDays.unLOC.Core.Player.Animations
 {
-    public class PlayerAnimationController : IInitialize, IDisposable
+    public class PlayerAnimationController : IInstallable, IDisposable
     {
         private readonly PlayerView _playerView;
         private readonly Animator _playerAnimator;
@@ -30,7 +31,7 @@ namespace SevenDays.unLOC.Core.Player.Animations
             _movementModel = playerMovement;
         }
 
-        public void Initialize()
+        public void Install()
         {
             _movementModel.StartMove += OnPlayerStartMove;
             _movementModel.StopMove += OnPlayerStay;

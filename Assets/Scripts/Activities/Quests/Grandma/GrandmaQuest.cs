@@ -1,13 +1,11 @@
-﻿using System;
-
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 
 using JetBrains.Annotations;
 
-using SevenDays.DialogSystem.Runtime;
 using SevenDays.unLOC.Activities.Items;
 using SevenDays.unLOC.Activities.Quests.Grandma.Visualization;
 using SevenDays.unLOC.Inventory.Services;
+using SevenDays.unLOC.Storage;
 
 using UnityEngine;
 
@@ -17,6 +15,9 @@ namespace SevenDays.unLOC.Activities.Quests.Grandma
 {
     public class GrandmaQuest : QuestBase
     {
+        [SerializeField]
+        private GameObject _content;
+
         [SerializeField]
         private GlassesView _glassesPrefab;
 
@@ -32,23 +33,28 @@ namespace SevenDays.unLOC.Activities.Quests.Grandma
         private int _droppedAmount;
 
         private IInventoryService _inventory;
-        private DialogService _dialogService;
+        private IStorageRepository _storage;
 
         [Inject, UsedImplicitly]
-        private void Construct(IInventoryService inventory, DialogService dialogService)
+        private void Construct(IInventoryService inventory,
+            IStorageRepository storage)
         {
             _inventory = inventory;
-            _dialogService = dialogService;
+            _storage = storage;
         }
 
-        public void SetDialogTag()
+        private void Start()
         {
-            _dialogService.SubscribeTagAction(DialogTag.GrandmaQuestStart, StartQuest);
+            if (_storage.IsExists(typeof(GrandmaQuest).FullName))
+            {
+                Complete();
+            }
         }
 
-        private void StartQuest()
+        public void StartQuest()
         {
             _camera.gameObject.SetActive(true);
+            _content.SetActive(true);
         }
 
         private void OnEnable()
@@ -73,17 +79,28 @@ namespace SevenDays.unLOC.Activities.Quests.Grandma
 
             if (_droppedAmount >= _draggables.Length)
             {
-                _grandmaView.Disable();
+                GiveGlassItem();
 
-                gameObject.SetActive(false);
-                _camera.gameObject.SetActive(false);
-
-                var glasses = Instantiate(_glassesPrefab);
-                _inventory.AddAsync(glasses).Forget();
-
-                // todo: start dialogue
-                CompleteQuest();
+                Complete();
+                _storage.Save(typeof(GrandmaQuest).FullName, true);
             }
+        }
+
+        private void Complete()
+        {
+            _grandmaView.Disable();
+
+            gameObject.SetActive(false);
+            _camera.gameObject.SetActive(false);
+
+            // todo: start dialogue
+            CompleteQuest();
+        }
+
+        private void GiveGlassItem()
+        {
+            var glasses = Instantiate(_glassesPrefab);
+            _inventory.AddAsync(glasses).Forget();
         }
     }
 }

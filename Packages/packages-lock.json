@@ -14,14 +14,20 @@
       "dependencies": {},
       "hash": "adb145f538d83254b34864897a5aaeb0b054abdc"
     },
-    "com.sevendays.dialogsystem": {
-      "version": "file:sevendays.dialog_system",
+    "com.sevendays.inkwrapper": {
+      "version": "file:com.sevendays.inkwrapper",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
     },
     "com.sevendays.localization_service": {
       "version": "file:sevendays.localization_service",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.sevendays.screens": {
+      "version": "file:com.sevendays.screens",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}

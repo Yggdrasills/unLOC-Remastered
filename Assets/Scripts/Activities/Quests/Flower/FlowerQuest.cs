@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using JetBrains.Annotations;
 
@@ -7,6 +6,7 @@ using SevenDays.unLOC.Activities.Items;
 using SevenDays.unLOC.Activities.Quests.Flower.Screwdriver;
 using SevenDays.unLOC.Inventory;
 using SevenDays.unLOC.Inventory.Services;
+using SevenDays.unLOC.Storage;
 
 using UnityEngine;
 
@@ -16,6 +16,9 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
 {
     public class FlowerQuest : QuestBase
     {
+        private static readonly string BrokenPlugKey = typeof(FlowerQuest).FullName + nameof(_brokenPlugIndexes);
+        private static readonly string EmptyPlugKey = typeof(FlowerQuest).FullName + nameof(_emptyPlugIndexes);
+
         public bool FirstStagePassed { get; private set; }
 
         [SerializeField]
@@ -26,9 +29,6 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
 
         [SerializeField]
         private FlowerQuestTextDisplayer _textDisplayer;
-
-        [SerializeField]
-        private ScrewdriverView _screwdriver;
 
         [SerializeField]
         private ClickableItem[] _brokenPlugs;
@@ -47,28 +47,69 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
 
         private IInventoryService _inventory;
 
-        private List<ClickableItem> _brokenPlugList;
-        private List<EmptyPlugView> _emptyPlugList;
+        private IStorageRepository _storage;
+
+        private ScrewdriverView _screwdriver;
+
+        private List<int> _brokenPlugIndexes;
+        private List<int> _emptyPlugIndexes;
 
         [Inject, UsedImplicitly]
-        private void Construct(IInventoryService inventory)
+        private void Construct(IInventoryService inventory,
+            IStorageRepository storage,
+            ScrewdriverView screwdriverView)
         {
             _inventory = inventory;
+            _screwdriver = screwdriverView;
+            _storage = storage;
         }
 
-        private void Awake()
+        private void Start()
         {
-            _brokenPlugList = new List<ClickableItem>(_brokenPlugs);
-            _emptyPlugList = new List<EmptyPlugView>(_emptyPlugs);
+            if (!_storage.TryLoad(BrokenPlugKey, out _brokenPlugIndexes))
+            {
+                _brokenPlugIndexes = new List<int>(_brokenPlugs.Length);
+            }
+            else
+            {
+                for (int i = 0, k = _brokenPlugIndexes.Count; i < k; i++)
+                {
+                    RemoveBrokenPlug(_brokenPlugIndexes[i]);
+                }
+            }
 
-            _brokenPlugList.ForEach(cI => cI.Clicked += () => OnBrokenPlugClicked(cI));
-            _emptyPlugList.ForEach(cI => cI.Clicked += () => OnEmptyPlugClicked(cI));
+            if (!_storage.TryLoad(EmptyPlugKey, out _emptyPlugIndexes))
+            {
+                _emptyPlugIndexes = new List<int>(_emptyPlugs.Length);
+            }
+            else
+            {
+                for (int i = 0, k = _emptyPlugIndexes.Count; i < k; i++)
+                {
+                    ReplaceEmptyPlug(_emptyPlugIndexes[i]);
+                }
+            }
+
+            for (int i = 0; i < _brokenPlugs.Length; i++)
+            {
+                var closure = i;
+                _brokenPlugs[i].Clicked += () => OnBrokenPlugClicked(closure);
+            }
+
+            for (int i = 0; i < _emptyPlugs.Length; i++)
+            {
+                var closure = i;
+                _emptyPlugs[i].Clicked += () => OnEmptyPlugClicked(closure);
+            }
 
             _flowerView.Clicked += ActivateSelf;
         }
 
         private void OnDestroy()
         {
+            _storage.Save(BrokenPlugKey, _brokenPlugIndexes);
+            _storage.Save(EmptyPlugKey, _emptyPlugIndexes);
+
             _flowerView.Clicked -= ActivateSelf;
         }
 
@@ -77,7 +118,7 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
             _content.SetActive(true);
         }
 
-        private void OnBrokenPlugClicked(ClickableItem plug)
+        private void OnBrokenPlugClicked(int brokenPlugIndex)
         {
             if (!_inventory.Contains(InventoryItem.Screwdriver))
             {
@@ -93,13 +134,21 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
                 return;
             }
 
-            _brokenPlugList.Remove(plug);
+            _brokenPlugIndexes.Add(brokenPlugIndex);
 
-            plug.gameObject.SetActive(false);
+            RemoveBrokenPlug(brokenPlugIndex);
+        }
 
-            if (!_brokenPlugList.Any())
+        private void RemoveBrokenPlug(int brokenPlugIndex)
+        {
+            _brokenPlugs[brokenPlugIndex].gameObject.SetActive(false);
+
+            if (_brokenPlugIndexes.Count >= _brokenPlugs.Length)
             {
-                _inventory.Use(InventoryItem.Screwdriver);
+                if (_inventory.Contains(InventoryItem.Screwdriver))
+                {
+                    _inventory.Use(InventoryItem.Screwdriver);
+                }
 
                 _textDisplayer.DisplayScrewsDescription();
 
@@ -110,31 +159,36 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
             }
         }
 
-        private void OnEmptyPlugClicked(EmptyPlugView plug)
+        private void OnEmptyPlugClicked(int emptyPlugIndex)
         {
             if (_inventory.Contains(InventoryItem.ScrewSpanner))
             {
                 _inventory.Use(InventoryItem.ScrewSpanner);
 
-                plug.ActivateBolt();
+                _emptyPlugIndexes.Add(emptyPlugIndex);
 
-                _emptyPlugList.Remove(plug);
-
-                if (_emptyPlugList.Any())
-                    return;
-
-                CompleteQuest();
-                _flowerView.SetFlowerRepairedSprite();
-                gameObject.SetActive(false);
-
-                _inventory.Remove(InventoryItem.ScrewEdge3);
-                _inventory.Remove(InventoryItem.ScrewRadiation);
+                ReplaceEmptyPlug(emptyPlugIndex);
             }
 
             else if (_inventory.Contains(InventoryItem.ScrewEdge3) ||
                      _inventory.Contains(InventoryItem.ScrewRadiation))
             {
                 _textDisplayer.DisplayIncorrectBolt();
+            }
+        }
+
+        private void ReplaceEmptyPlug(int emptyPlugIndex)
+        {
+            _emptyPlugs[emptyPlugIndex].ActivateBolt();
+
+            if (_emptyPlugIndexes.Count >= _emptyPlugs.Length)
+            {
+                CompleteQuest();
+                _flowerView.SetFlowerRepairedSprite();
+                gameObject.SetActive(false);
+
+                _inventory.Remove(InventoryItem.ScrewEdge3);
+                _inventory.Remove(InventoryItem.ScrewRadiation);
             }
         }
     }

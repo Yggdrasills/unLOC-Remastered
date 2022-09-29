@@ -32,7 +32,7 @@ namespace SevenDays.unLOC.Activities.Quests.Flower
             }
             else
             {
-                // todo: play dialogue
+                // todo: play dialog
             }
         }
     }

@@ -11,12 +11,20 @@ namespace SevenDays.unLOC.Activities.Quests.RobotPainter
     public class TextColorBlinker : MonoBehaviour
     {
         [SerializeField]
-        private TextMeshPro _text;
+        private TextMeshProUGUI _text;
 
         [SerializeField]
         private float _duration = 1f;
 
         private Sequence _blinkTween;
+
+        private void OnValidate()
+        {
+            if (_text == null)
+            {
+                _text = GetComponentInChildren<TextMeshProUGUI>();
+            }
+        }
 
         private void OnDisable()
         {
@@ -24,7 +32,7 @@ namespace SevenDays.unLOC.Activities.Quests.RobotPainter
                 _blinkTween.Kill();
         }
 
-        public UniTask Blink(Color[] colors)
+        public async UniTask BlinkAsync(Color[] colors)
         {
             int blinksCount = colors.Length;
             float stepDuration = _duration / blinksCount;
@@ -38,7 +46,7 @@ namespace SevenDays.unLOC.Activities.Quests.RobotPainter
             }
 #pragma warning restore
 
-            return UniTask.CompletedTask;
+            await _blinkTween.ToUniTask();
         }
     }
 }

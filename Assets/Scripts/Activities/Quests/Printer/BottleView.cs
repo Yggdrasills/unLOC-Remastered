@@ -6,6 +6,7 @@ using SevenDays.unLOC.Activities.Items;
 using SevenDays.unLOC.Inventory;
 using SevenDays.unLOC.Inventory.Services;
 using SevenDays.unLOC.Inventory.Views;
+using SevenDays.unLOC.Storage;
 
 using UnityEngine;
 
@@ -21,16 +22,31 @@ namespace SevenDays.unLOC.Activities.Quests.Printer
         public override InventoryItem Type => InventoryItem.Bottle;
 
         private IInventoryService _inventory;
+        private IStorageRepository _storage;
+
+        private string _key;
 
         [Inject, UsedImplicitly]
-        private void Construct(IInventoryService inventory)
+        private void Construct(IInventoryService inventory,
+            IStorageRepository storage)
         {
             _inventory = inventory;
+            _storage = storage;
         }
 
         private void OnValidate()
         {
             _clickableItem ??= GetComponent<InteractableItem>();
+        }
+
+        private void Start()
+        {
+            _key = typeof(BottleView).FullName + gameObject.name;
+
+            if (_storage.IsExists(_key))
+            {
+                gameObject.SetActive(false);
+            }
         }
 
         private void OnEnable()
@@ -45,6 +61,7 @@ namespace SevenDays.unLOC.Activities.Quests.Printer
 
         private void OnClick()
         {
+            _storage.Save(_key, true);
             _inventory.AddAsync(this).Forget();
         }
     }

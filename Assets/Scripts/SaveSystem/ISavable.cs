@@ -1,4 +1,4 @@
-﻿namespace SaveSystem
+﻿namespace SevenDays.unLOC.SaveSystem
 {
     public interface ISavable
     {

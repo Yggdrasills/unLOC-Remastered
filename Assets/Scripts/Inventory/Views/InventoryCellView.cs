@@ -1,8 +1,9 @@
-﻿using System;
+﻿using SevenDays.unLOC.Inventory.Services;
 
 using TMPro;
 
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.UI;
 
 namespace SevenDays.unLOC.Inventory.Views
@@ -18,33 +19,22 @@ namespace SevenDays.unLOC.Inventory.Views
         [SerializeField]
         private TextMeshProUGUI _counterText;
 
-        public int Amount { get; private set; }
-
         public void SetIcon(Sprite icon)
         {
             _icon.sprite = icon;
         }
 
-        public void SetClickAction(Action action)
+        public void SetClickAction(ItemClickStrategy itemClickStrategy)
         {
-            _button.onClick.AddListener(() => action?.Invoke());
+            _button.onClick.AddListener(() => itemClickStrategy?.ClickStrategy?.Invoke());
         }
 
-        public void IncrementAmount()
+        public void SetCounterText(int amount)
         {
-            SetCounterText(true);
-        }
+            Assert.IsTrue(amount > 0,
+                $"[{nameof(InventoryCellView)}] Items amount should be more than zero");
 
-        public void DecrementAmount()
-        {
-            SetCounterText(false);
-        }
-
-        private void SetCounterText(bool increase)
-        {
-            Amount = increase ? Amount + 1 : Amount - 1;
-
-            _counterText.text = Amount.ToString();
+            _counterText.text = amount == 1 ? string.Empty : amount.ToString();
         }
     }
 }

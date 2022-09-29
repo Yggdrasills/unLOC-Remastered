@@ -16,7 +16,6 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
     {
         public override InventoryItem Type => InventoryItem.Condenser;
 
-
         private IInventoryService _inventory;
 
         [Inject]
@@ -26,7 +25,7 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
             _inventory = inventory;
         }
 
-        public void OnPointerClick(PointerEventData eventData)
+        void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
         {
             _inventory.AddAsync(this).Forget();
         }

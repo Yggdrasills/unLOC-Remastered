@@ -1,13 +1,26 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+
+using Activities.Dialogs;
+
+using Cysharp.Threading.Tasks;
+
+using JetBrains.Annotations;
+
+using SevenDays.unLOC.Storage;
 
 using TMPro;
 
 using UnityEngine;
 
+using VContainer;
+
 namespace SevenDays.unLOC.Activities.Quests.RobotPainter
 {
     public class RobotPainterQuest : QuestBase
     {
+        [SerializeField]
+        private GameObject _content;
+
         [SerializeField]
         private RobotPainterButtonView[] _buttons;
 
@@ -18,7 +31,7 @@ namespace SevenDays.unLOC.Activities.Quests.RobotPainter
         private TextColorBlinker _textBlinker;
 
         [SerializeField]
-        private TextMeshPro _text;
+        private TextMeshProUGUI _text;
 
         [SerializeField]
         private Color[] _correctColors;
@@ -32,21 +45,56 @@ namespace SevenDays.unLOC.Activities.Quests.RobotPainter
         [SerializeField]
         private int _correctPassword = 73326;
 
-        // todo: add dialogue after quest complete
         [SerializeField]
-        private string _questDoneDialogueBubbleText = "Так-то лучше. Теперь тебя не взломают.";
+        private DialogWrapperProxy _dialogWrapper;
+
+        private IStorageRepository _storage;
 
         private bool _canEnterPassword = true;
 
+        [Inject, UsedImplicitly]
+        private void Construct(IStorageRepository storage)
+        {
+            _storage = storage;
+        }
+
         private void OnValidate()
         {
-            _buttons ??= GetComponentsInChildren<RobotPainterButtonView>();
+            if (_content == null)
+            {
+                if (transform.childCount > 0)
+                {
+                    _content = transform.GetChild(0).gameObject;
+                }
+            }
 
-            _text ??= GetComponentInChildren<TextMeshPro>();
+            if (_buttons == null)
+            {
+                _buttons = GetComponentsInChildren<RobotPainterButtonView>();
+            }
 
-            _textBlinker ??= GetComponentInChildren<TextColorBlinker>();
+            if (_text == null)
+            {
+                _text = GetComponentInChildren<TextMeshProUGUI>();
+            }
 
-            _robotView ??= FindObjectOfType<RobotPainterView>();
+            if (_textBlinker == null)
+            {
+                _textBlinker = GetComponentInChildren<TextColorBlinker>();
+            }
+
+            if (_robotView == null)
+            {
+                _robotView = GetComponentInChildren<RobotPainterView>();
+            }
+        }
+
+        private void Start()
+        {
+            if (_storage.IsExists(typeof(RobotPainterQuest).FullName))
+            {
+                Complete();
+            }
         }
 
         private void OnEnable()
@@ -61,35 +109,58 @@ namespace SevenDays.unLOC.Activities.Quests.RobotPainter
             }
         }
 
+        public void Enable()
+        {
+            _content.SetActive(true);
+        }
+
+        public void Disable()
+        {
+            _content.SetActive(false);
+        }
+
         private void EnterNumber(string num)
         {
             if (!_canEnterPassword) return;
 
             _text.text += num;
 
-            TryCompleteQuest().Forget();
+            TryCompleteQuestAsync().Forget();
         }
 
-        private async UniTaskVoid TryCompleteQuest()
+        private async UniTaskVoid TryCompleteQuestAsync()
         {
             if (_text.text.Length != _maxEnteredLenght) return;
 
             if (IsCorrectPassword(int.Parse(_text.text)))
             {
-                await _textBlinker.Blink(_correctColors);
+                await _textBlinker.BlinkAsync(_correctColors);
 
-                CompleteQuest();
+                Complete();
 
-                _robotView.Play();
+                _dialogWrapper.StartDialog();
 
-                gameObject.SetActive(false);
+                _storage.Save(typeof(RobotPainterQuest).FullName, true);
+
+                await UniTask.Delay(TimeSpan.FromSeconds(3));
+
+                _dialogWrapper.HideDialogAsync().Forget();
             }
 
             _canEnterPassword = false;
 
-            await _textBlinker.Blink(_wrongColors);
+            await _textBlinker.BlinkAsync(_wrongColors);
 
             ResetToDefault();
+        }
+
+        private void Complete()
+        {
+            CompleteQuest();
+
+            _robotView.Play();
+
+            gameObject.SetActive(false);
         }
 
         private void ResetToDefault()

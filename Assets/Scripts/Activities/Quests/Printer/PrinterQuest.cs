@@ -5,16 +5,19 @@ using JetBrains.Annotations;
 using SevenDays.unLOC.Activities.Items;
 using SevenDays.unLOC.Inventory;
 using SevenDays.unLOC.Inventory.Services;
+using SevenDays.unLOC.Storage;
 
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 using VContainer;
 
 namespace SevenDays.unLOC.Activities.Quests.Printer
 {
-    public class PrinterQuest : QuestBase, IPointerClickHandler
+    public class PrinterQuest : QuestBase
     {
+        [SerializeField]
+        private GameObject _content;
+
         [SerializeField]
         private WiresView _wiresPrefab;
 
@@ -22,22 +25,45 @@ namespace SevenDays.unLOC.Activities.Quests.Printer
         private InteractableItem _printerView;
 
         [SerializeField]
-        private GameObject _container;
+        private ClickableItem _clickableItem;
 
         [SerializeField]
         private int _bottlesAmount = 5;
 
         private IInventoryService _inventory;
+        private IStorageRepository _storage;
 
         private int _droppedBottlesAmount;
 
         [Inject, UsedImplicitly]
-        private void Construct(IInventoryService inventory)
+        private void Construct(IInventoryService inventory,
+            IStorageRepository storage)
         {
             _inventory = inventory;
+            _storage = storage;
         }
 
-        public void OnPointerClick(PointerEventData eventData)
+        private void Start()
+        {
+            if (_storage.TryLoad(typeof(PrinterQuest).FullName, out _droppedBottlesAmount))
+            {
+                if (_droppedBottlesAmount >= _bottlesAmount)
+                {
+                    Complete();
+                }
+            }
+
+            _clickableItem.Clicked += OnClick;
+        }
+
+        private void OnDestroy()
+        {
+            _clickableItem.Clicked -= OnClick;
+
+            _storage.Save(typeof(PrinterQuest).FullName, _droppedBottlesAmount);
+        }
+
+        public void OnClick()
         {
             if (!_inventory.Contains(InventoryItem.Bottle))
                 return;
@@ -49,15 +75,23 @@ namespace SevenDays.unLOC.Activities.Quests.Printer
             if (_droppedBottlesAmount < _bottlesAmount)
                 return;
 
+            GiveWires();
+            Complete();
+        }
+
+        private void Complete()
+        {
+            _printerView.Disable();
+            _content.SetActive(false);
+
+            CompleteQuest();
+        }
+
+        private void GiveWires()
+        {
             var wires = Instantiate(_wiresPrefab);
 
             _inventory.AddAsync(wires).Forget();
-
-            _printerView.Disable();
-
-            _container.SetActive(false);
-
-            CompleteQuest();
         }
     }
 }
