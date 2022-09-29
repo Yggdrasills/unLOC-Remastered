@@ -19,30 +19,31 @@ namespace SevenDays.unLOC.Core.Player
         private readonly InitializeConfig _initializeConfig;
         private readonly Camera _camera;
         private readonly IInputModel _inputModel;
+        private readonly PlayerView _player;
 
         private IInstallable[] _initializes;
         private IDisposable[] _disposables;
 
-        public PlayerCreator(InitializeConfig initializeConfig, Camera camera, IInputModel inputModel)
+        public PlayerCreator(InitializeConfig initializeConfig, Camera camera, IInputModel inputModel, PlayerView player)
         {
             _initializeConfig = initializeConfig;
             _camera = camera;
             _inputModel = inputModel;
+            _player = player;
         }
 
         void IStartable.Start()
         {
-            var player = CreatePlayer();
 
-            CreateCamera(player.transform);
+            CreateCamera(_player.transform);
 
             var tapZone = CreateTapZone();
             tapZone.enabled = !_initializeConfig.DisableTapZone;
-            var playerMovement = PlayerMovement(tapZone, player);
+            var playerMovement = PlayerMovement(tapZone, _player);
 
-            var playerAnimationController = new PlayerAnimationController(playerMovement, player);
+            var playerAnimationController = new PlayerAnimationController(playerMovement, _player);
             var movementController =
-                new PlayerMovementController(tapZone, _inputModel, playerMovement, player);
+                new PlayerMovementController(tapZone, _inputModel, playerMovement, _player);
 
             _initializes = new IInstallable[] { playerAnimationController, movementController };
             _disposables = new IDisposable[] { playerAnimationController, movementController };
@@ -72,15 +73,6 @@ namespace SevenDays.unLOC.Core.Player
             var cameraConfig = Object.Instantiate(_initializeConfig.CameraSettingsPrefab);
             SetUpTrack(cameraConfig.Track);
             cameraConfig.VCam.Follow = player;
-        }
-
-        private PlayerView CreatePlayer()
-        {
-            var player = Object.Instantiate(_initializeConfig.PlayerViewPrefab);
-            player.transform.position = _initializeConfig.PlayerInitPosition;
-
-            player.CharacterScale.SetScale(_initializeConfig.PlayerSize, _initializeConfig.PlayerColliderSize);
-            return player;
         }
 
         private void SetUpTrack(CinemachineSmoothPath track)

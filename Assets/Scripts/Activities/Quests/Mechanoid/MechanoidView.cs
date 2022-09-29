@@ -1,4 +1,6 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+
+using Cysharp.Threading.Tasks;
 
 using SevenDays.unLOC.Activities.Quests.Manager;
 
@@ -16,6 +18,9 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
 
         [SerializeField]
         private Sprite[] _explosionAnimationFrames;
+
+        [SerializeField]
+        private MechanoidWalkingView _mechanoidWalkingView;
 
         private ManagerDialogQuest _managerDialogQuest;
 
@@ -53,6 +58,14 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
 
                 await UniTask.WaitForEndOfFrame(this);
             }
+        }
+
+        [ContextMenu(nameof(EnableMechanoid))]
+        public void EnableMechanoid()
+        {
+            _content.gameObject.SetActive(false);
+            _mechanoidWalkingView.gameObject.SetActive(true);
+            _mechanoidWalkingView.EnableAsync().Forget();
         }
     }
 }

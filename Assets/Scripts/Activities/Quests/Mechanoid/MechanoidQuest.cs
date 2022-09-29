@@ -154,7 +154,7 @@ namespace SevenDays.unLOC.Activities.Quests.Mechanoid
 
                     CompleteQuest();
 
-                    // todo: enable mechanoid
+                    _mechanoidView.EnableMechanoid();
                 }
                 else
                 {
