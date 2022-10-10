@@ -13,7 +13,7 @@ namespace SevenDays.Screens.Models
 {
     [CreateAssetMenu(
         fileName = "new " + nameof(ScreenCollection),
-        menuName = "SevenDays/unLOC/" + nameof(ScreenCollection))]
+        menuName = "SevenDays/Screens/" + nameof(ScreenCollection))]
     public class ScreenCollection : ScriptableObject
     {
         internal ScreenData[] Collection => _collection;
