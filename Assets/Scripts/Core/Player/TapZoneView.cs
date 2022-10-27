@@ -3,7 +3,7 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace SevenDays.unLOC.Core.Movement
+namespace SevenDays.unLOC.Core.Player
 {
     public class TapZoneView : MonoBehaviour, IPointerClickHandler
     {

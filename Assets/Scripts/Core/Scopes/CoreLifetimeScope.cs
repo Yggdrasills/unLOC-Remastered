@@ -48,7 +48,6 @@ namespace SevenDays.unLOC.Core.Scopes
 
             builder.RegisterEntryPoint<CoreStartup>();
 
-
             builder.RegisterInstance<IStorageRepository>(storage);
             builder.RegisterInstance(localization);
             builder.RegisterInstance(_serviceData);
