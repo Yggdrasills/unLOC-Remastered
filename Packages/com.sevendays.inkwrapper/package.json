@@ -1,0 +1,24 @@
+{
+  "name": "com.sevendays.inkwrapper",
+  "version": "1.0.0",
+  "displayName": "SevenDays Ink Wrapper",
+  "description": "ink-Unity plugin wrapper",
+  "keywords": [
+    "ink",
+    "inky",
+    "inkle",
+    "story",
+    "narrative"
+  ],
+  "author": {
+    "name": "Yggdrasills",
+    "email": "khamrokamalov@gmail.com",
+    "url": "https://github.com/Yggdrasills"
+  },
+  "contributors": [
+    {
+      "name": "AndreyBirchenko",
+      "url": "https://github.com/AndreyBirchenko"
+    }
+  ]
+}

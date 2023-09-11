@@ -2,20 +2,26 @@
 
 using DG.Tweening;
 
-using SevenDays.unLOC.Core;
+using SevenDays.unLOC.Core.Player;
 
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine.Events;
 
 namespace SevenDays.unLOC.Activities.Items
 {
-    [RequireComponent(typeof(Collider2D))]
-    public class InteractableItem : MonoBehaviour, IPointerClickHandler
+    [RequireComponent(typeof(BoxCollider2D))]
+    public class InteractableItem : MonoBehaviour
     {
         public event Action Clicked = delegate { };
 
         [SerializeField]
-        private SpriteRenderer _iconRenderer;
+        private UnityEvent _clickedUnityEvent;
+
+        [SerializeField]
+        private IconView _iconView;
+
+        [SerializeField]
+        private BoxCollider2D _collider;
 
         [SerializeField]
         private float _fadeDuration = 0.5f;
@@ -24,21 +30,47 @@ namespace SevenDays.unLOC.Activities.Items
 
         private bool _canClick;
 
+        private void OnValidate()
+        {
+            if (_collider == null)
+            {
+                _collider = GetComponent<BoxCollider2D>();
+                _collider.isTrigger = true;
+            }
+
+            if (_iconView == null)
+            {
+                _iconView = GetComponentInChildren<IconView>();
+            }
+
+            Validated();
+        }
+
         private void Awake()
         {
             DoFade(0, 0);
         }
 
-        void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
+        private void OnEnable()
         {
-            if (!_canClick)
-                return;
+            _iconView.Clicked += OnClick;
 
-            _canClick = false;
+            Enabled();
+        }
 
-            DoFade(0, 0);
+        private void OnDisable()
+        {
+            _iconView.Clicked -= OnClick;
 
-            Clicked.Invoke();
+            ClearTween();
+            Disabled();
+        }
+
+        public void Disable()
+        {
+            _iconView.gameObject.SetActive(false);
+            _collider.enabled = false;
+            enabled = false;
         }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -46,9 +78,7 @@ namespace SevenDays.unLOC.Activities.Items
             if (!other.GetComponent<PlayerTag>())
                 return;
 
-            DoFade(1, _fadeDuration);
-
-            _canClick = true;
+            ToggleEntry(true);
         }
 
         private void OnTriggerExit2D(Collider2D other)
@@ -56,17 +86,53 @@ namespace SevenDays.unLOC.Activities.Items
             if (!other.GetComponent<PlayerTag>())
                 return;
 
-            DoFade(0, _fadeDuration);
+            ToggleEntry(false);
+        }
+
+        private void OnClick()
+        {
+            if (!_canClick)
+                return;
 
             _canClick = false;
+
+            ToggleEntry(false);
+
+            Clicked.Invoke();
+            _clickedUnityEvent.Invoke();
+        }
+
+        private void ToggleEntry(bool isEnter)
+        {
+            DoFade(isEnter ? 1 : 0, _fadeDuration);
+
+            _canClick = isEnter;
+            _iconView.CanInteract = isEnter;
         }
 
         private void DoFade(float value, float duration)
         {
+            ClearTween();
+
+            _fadeTween = _iconView.Icon.DOFade(value, duration);
+        }
+
+        private void ClearTween()
+        {
             if (_fadeTween != null && _fadeTween.IsActive())
                 _fadeTween.Kill();
+        }
 
-            _fadeTween = _iconRenderer.DOFade(value, duration);
+        protected virtual void Enabled()
+        {
+        }
+
+        protected virtual void Disabled()
+        {
+        }
+
+        protected virtual void Validated()
+        {
         }
     }
 }
